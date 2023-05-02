@@ -19,7 +19,7 @@
       device = "/dev/mmcblk0p1";
       fsType = "vfat";
     };
-    "/Backups" = {
+    "/home/dawidd6/Backups" = {
       device = "/dev/disk/by-label/Backups";
       fsType = "ext4";
       options = [
