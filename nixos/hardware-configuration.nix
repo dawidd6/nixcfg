@@ -19,6 +19,13 @@
       device = "/dev/mmcblk0p1";
       fsType = "vfat";
     };
+    "/Backups" = {
+      device = "/dev/disk/by-label/Backups";
+      fsType = "ext4";
+      options = [
+        "nofail"
+      ];
+    };
   };
 
   nixpkgs = {
