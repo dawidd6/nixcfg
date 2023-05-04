@@ -7,6 +7,11 @@
   nix.nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
   nix.settings.experimental-features = "nix-command flakes";
   nix.settings.auto-optimise-store = true;
+  nix.gc.automatic = true;
+  nix.gc.dates = "weekly";
+  nix.gc.options = "--delete-older-than 30d";
+  nix.optimise.automatic = true;
+
 
   boot.cleanTmpDir = true;
   boot.loader.systemd-boot.enable = true;
@@ -42,6 +47,11 @@
   services.openssh.enable = true;
 
   virtualisation.podman.enable = true;
+
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.allowReboot = true;
+  system.autoUpgrade.dates = "03:00";
+  system.autoUpgrade.flake = "github:dawidd6/nixos";
 
   system.stateVersion = "22.11";
 }
