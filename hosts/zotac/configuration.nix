@@ -43,6 +43,8 @@
   programs.neovim.viAlias = true;
   programs.neovim.vimAlias = true;
   programs.git.enable = true;
+  programs.fish.enable = true;
+
 
   services.openssh.enable = true;
 
