@@ -9,7 +9,7 @@
     nixosConfigurations = {
       zotac = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
-        modules = [ ./nixos/configuration.nix ];
+        modules = [ ./hosts/zotac/configuration.nix ];
       };
     };
   };
