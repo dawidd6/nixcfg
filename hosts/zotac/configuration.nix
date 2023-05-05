@@ -34,6 +34,7 @@
 
   environment.systemPackages = with pkgs; [
     borgbackup
+    file
     htop
     lm_sensors
   ];
