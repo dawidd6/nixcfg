@@ -38,6 +38,7 @@
     htop
     lm_sensors
     tmux
+    udisks
   ];
 
   programs.neovim.enable = true;
