@@ -12,7 +12,6 @@
   nix.gc.options = "--delete-older-than 14d";
   nix.optimise.automatic = true;
 
-
   boot.cleanTmpDir = true;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -45,7 +44,6 @@
   programs.neovim.vimAlias = true;
   programs.git.enable = true;
   programs.fish.enable = true;
-
 
   services.openssh.enable = true;
 
