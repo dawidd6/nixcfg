@@ -53,7 +53,7 @@
 
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = true;
-  system.autoUpgrade.dates = "03:00";
+  system.autoUpgrade.dates = "06:00";
   system.autoUpgrade.flake = "github:dawidd6/nixos";
 
   system.stateVersion = "22.11";
