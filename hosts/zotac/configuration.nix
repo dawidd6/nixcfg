@@ -26,6 +26,7 @@
 
   i18n.defaultLocale = "en_GB.UTF-8";
 
+  users.defaultUserShell = pkgs.fish;
   users.users.dawidd6.description = "dawidd6";
   users.users.dawidd6.initialPassword = "dawidd6";
   users.users.dawidd6.isNormalUser = true;
