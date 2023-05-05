@@ -17,3 +17,5 @@ jobs:
 
       - name: Update flake
         uses: DeterminateSystems/update-flake-lock@v19
+        with:
+          token: ${{ secrets.TOKEN }}
