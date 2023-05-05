@@ -37,6 +37,7 @@
     file
     htop
     lm_sensors
+    tmux
   ];
 
   programs.neovim.enable = true;
