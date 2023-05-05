@@ -38,7 +38,7 @@
     htop
     lm_sensors
     tmux
-    udisks
+
   ];
 
   programs.neovim.enable = true;
@@ -49,6 +49,7 @@
   programs.fish.enable = true;
 
   services.openssh.enable = true;
+  services.udisks2.enable = true;
 
   virtualisation.podman.enable = true;
 
