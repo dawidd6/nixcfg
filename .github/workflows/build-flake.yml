@@ -13,15 +13,6 @@ jobs:
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v2
-        with:
-          extra-conf: store = /tmp/nix
-          
-      - name: Cache store
-
-        uses: actions/cache@v3
-        with:
-          path: /tmp/nix
-          key: nix
 
       - name: Build flake
         run: |
