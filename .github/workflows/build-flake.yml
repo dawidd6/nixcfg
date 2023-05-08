@@ -17,6 +17,8 @@ jobs:
       - name: Check flake
         run: nix flake check .#
 
-      - name: Build flake
-        run: |
-          nix build .#nixosConfigurations.zotac.config.system.build.toplevel
+      - name: Build NixOS
+        run: nix build .#nixosConfigurations.zotac.config.system.build.toplevel
+
+      - name: Build home-manager
+        run: nix run .#homeConfigurations.dawidd6.activationPackage
