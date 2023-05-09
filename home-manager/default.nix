@@ -1,5 +1,5 @@
 { config, pkgs, ... }: {
-  nix.registry.nixpkgs.flake = pkgs
+  nix.registry.nixpkgs.flake = pkgs;
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreePredicate = (_: true);
