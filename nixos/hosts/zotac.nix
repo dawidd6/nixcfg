@@ -96,7 +96,7 @@
     enable = true;
     allowReboot = true;
     dates = "06:00";
-    flake = "github:dawidd6/nixos";
+    flake = "github:dawidd6/nix";
   };
   system.stateVersion = "22.11";
 }
