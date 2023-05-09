@@ -36,7 +36,7 @@
     pkgs.keepassxc
     pkgs.lazygit
     pkgs.libvirt
-    pkgs.lm-sensors
+    pkgs.lm_sensors
     pkgs.ncdu
     pkgs.nmap
     pkgs.pavucontrol
