@@ -10,23 +10,27 @@
   };
 
   outputs = { nixpkgs, home-manager, ... }@inputs: {
-    nixosModules = import ./nixos/modules;
+    nixosModules = {
+      #test = import ./nixos/modules/test.nix
+    };
     nixosConfigurations = {
       "zotac" = nixpkgs.lib.nixosSystem {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         specialArgs = { inherit inputs; };
         modules = [
-          ./nixos/hosts/zotac
+          ./nixos/hosts/zotac.nix
         ];
       };
     };
-    homeManagerModules = import ./home-manager/modules;
+    homeManagerModules = {
+      #test = import ./home-manager/modules/test.nix
+    };
     homeConfigurations = {
       "dawidd6" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = { inherit inputs; };
         modules = [
-          ./home-manager/users/dawidd6
+          ./home-manager/users/dawidd6.nix
         ];
       };
     };
