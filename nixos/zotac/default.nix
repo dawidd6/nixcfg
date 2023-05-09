@@ -8,7 +8,6 @@
 
   nix = {
     optimise.automatic = true;
-    registry.nixpkgs.flake = pkgs;
     gc = {
       automatic = true;
       dates = "weekly";

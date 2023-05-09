@@ -21,6 +21,7 @@
       "zotac" = nixpkgs.lib.nixosSystem {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
+          ({...}: { nix.registry.nixpkgs.flake = nixpkgs; })
           ./nixos/zotac
         ];
       };
@@ -29,12 +30,14 @@
       "dawidd6" = home-manager-unstable.lib.homeManagerConfiguration {
         pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
         modules = [
+          ({...}: { nix.registry.nixpkgs.flake = nixpkgs-unstable; })
           ./home-manager
         ];
       };
       "dawid" = home-manager-unstable.lib.homeManagerConfiguration {
         pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
         modules = [
+          ({...}: { nix.registry.nixpkgs.flake = nixpkgs-unstable; })
           ./home-manager
         ];
       };
