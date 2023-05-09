@@ -4,6 +4,7 @@
   hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.hostPlatform = "x86_64-linux";
 
   nix = {
     optimise.automatic = true;
