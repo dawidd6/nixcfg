@@ -1,10 +1,8 @@
 { config, pkgs, ... }: {
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = (_: true);
-    };
-  };
+  nix.registry.nixpkgs.flake = pkgs
+
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfreePredicate = (_: true);
 
   targets.genericLinux.enable = true;
 

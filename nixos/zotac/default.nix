@@ -1,4 +1,4 @@
-{ inputs, lib, config, pkgs, modulesPath, ... }: {
+{ lib, config, pkgs, modulesPath, ... }: {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
@@ -7,8 +7,7 @@
 
   nix = {
     optimise.automatic = true;
-    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+    registry.nixpkgs.flake = pkgs;
     gc = {
       automatic = true;
       dates = "weekly";
