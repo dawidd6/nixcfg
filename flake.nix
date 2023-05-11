@@ -8,24 +8,37 @@
       url = "github:nix-community/home-manager/release-22.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    home-manager-unstable = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, ... }@inputs: {
+  outputs = { nixpkgs, nixpkgs-unstable, home-manager, home-manager-unstable, ... }@inputs: {
     nixosConfigurations = {
       "zotac" = nixpkgs.lib.nixosSystem {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         specialArgs = { inherit inputs; };
         modules = [
-          ./nixos/hosts/zotac.nix
+          ./nixos/zotac.nix
         ];
       };
     };
     homeConfigurations = {
-      "dawidd6" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      "dawidd6" = home-manager-unstable.lib.homeManagerConfiguration {
+        pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
         extraSpecialArgs = { inherit inputs; };
         modules = [
-          ./home-manager/users/dawidd6.nix
+          ./home-manager/dawidd6.nix
+          ./home-manager/common.nix
+        ];
+      };
+      "dawid" = home-manager-unstable.lib.homeManagerConfiguration {
+        pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
+        extraSpecialArgs = { inherit inputs; };
+        modules = [
+          ./home-manager/dawid.nix
+          ./home-manager/common.nix
         ];
       };
     };

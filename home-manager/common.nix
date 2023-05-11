@@ -1,12 +1,11 @@
 { inputs, config, pkgs, ... }: {
-  nix.registry.nixpkgs.flake = inputs.nixpkgs;
+  nix.registry.nixpkgs.flake = inputs.nixpkgs-unstable;
+  nix.registry.home-manager.flake = inputs.home-manager-unstable;
 
   nixpkgs.config = {
     allowUnfree = true;
     allowUnfreePredicate = (_: true);
   };
-
-  targets.genericLinux.enable = true;
 
   xdg.configFile = {
     "containers/policy.json".text = ''
@@ -19,6 +18,7 @@
 
   programs.neovim = {
     enable = true;
+    defaultEditor = true;
     viAlias = true;
     vimAlias = true;
   };
@@ -72,7 +72,5 @@
     xsel
     zoxide
   ];
-  home.username = "dawidd6";
-  home.homeDirectory = "/home/dawidd6";
   home.stateVersion = "22.11";
 }
