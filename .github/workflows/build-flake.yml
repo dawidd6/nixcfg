@@ -33,4 +33,4 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v2
 
       - name: Build flake
-        run: nix run .#homeConfigurations.dawidd6.activationPackage
+        run: nix build .#homeConfigurations.dawidd6.activationPackage
