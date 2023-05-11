@@ -34,6 +34,7 @@
     curl
   #  copyq
     diff-so-fancy
+    diffoscopeMinimal
     distrobox
     dos2unix
   #  filezilla
