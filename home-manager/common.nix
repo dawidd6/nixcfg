@@ -32,35 +32,33 @@
     btop
     cpio
     curl
-  #  copyq
+    copyq
     diff-so-fancy
     diffoscopeMinimal
     distrobox
     dos2unix
-  #  filezilla
+    filezilla
     fish
     fzf
     gh
     ghorg
-  #  gimp
     git
     glab
-  #  google-chrome
-  #  gpick
+    google-chrome
+    gpick
     htop
-  #  inkscape
     ipcalc
     jq
-  #  keepassxc
+    keepassxc
     lazygit
-  #  libvirt
+    libvirt
     lm_sensors
     ncdu
     neovim
     nmap
-  #  pavucontrol
+    pavucontrol
     podman
-  #  qemu
+    qemu
     sshpass
     spotify
     starship
@@ -68,8 +66,8 @@
     tealdeer
     trash-cli
     tree
-  #  virt-manager
-  #  vorta
+    virt-manager
+    vorta
     vscode
     xsel
     zoxide
