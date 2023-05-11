@@ -14,16 +14,15 @@
     "containers/registries.conf".text = ''
       unqualified-search-registries=["docker.io"]
     '';
+    "containers/storage.conf".text = ''
+      [storage]
+      driver = "overlay"
+    '';
   };
 
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-  };
-  programs.fish.enable = true;
-  programs.git.enable = true;
+  targets.genericLinux.enable = true;
+
+  programs.bash.enable = true;
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
@@ -33,32 +32,33 @@
     btop
     cpio
     curl
-    copyq
+  #  copyq
     diff-so-fancy
-    diffoscope
     distrobox
     dos2unix
-    filezilla
+  #  filezilla
+    fish
     fzf
     gh
     ghorg
-    gimp
+  #  gimp
+    git
     glab
-    google-chrome
-    gpick
+  #  google-chrome
+  #  gpick
     htop
-    inkscape
+  #  inkscape
     ipcalc
     jq
-    keepassxc
+  #  keepassxc
     lazygit
-    libvirt
+  #  libvirt
     lm_sensors
     ncdu
     nmap
-    pavucontrol
+  #  pavucontrol
     podman
-    qemu
+  #  qemu
     sshpass
     spotify
     starship
@@ -66,8 +66,8 @@
     tealdeer
     trash-cli
     tree
-    virt-manager
-    vorta
+  #  virt-manager
+  #  vorta
     vscode
     xsel
     zoxide
