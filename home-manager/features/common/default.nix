@@ -53,7 +53,6 @@
     lazygit
     lm_sensors
     ncdu
-    neovim
     nmap
     pavucontrol
     podman

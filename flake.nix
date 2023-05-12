@@ -20,7 +20,7 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         specialArgs = { inherit inputs; };
         modules = [
-          ./nixos/zotac.nix
+          ./nixos/hosts/zotac.nix
         ];
       };
     };
@@ -29,16 +29,17 @@
         pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
         extraSpecialArgs = { inherit inputs; };
         modules = [
-          ./home-manager/dawidd6.nix
-          ./home-manager/common.nix
+          ./home-manager/users/dawidd6.nix
+          ./home-manager/features/common
         ];
       };
       "dawid" = home-manager-unstable.lib.homeManagerConfiguration {
         pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
         extraSpecialArgs = { inherit inputs; };
         modules = [
-          ./home-manager/dawid.nix
-          ./home-manager/common.nix
+          ./home-manager/users/dawid.nix
+          ./home-manager/features/common
+          ./home-manager/features/neovim
         ];
       };
     };
