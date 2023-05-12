@@ -51,14 +51,13 @@
     jq
     keepassxc
     lazygit
-    libvirt
     lm_sensors
     ncdu
     neovim
     nmap
     pavucontrol
     podman
-    qemu
+    quickemu
     sshpass
     spotify
     starship
@@ -66,7 +65,6 @@
     tealdeer
     trash-cli
     tree
-    virt-manager
     vorta
     vscode
     xsel
