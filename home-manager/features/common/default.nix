@@ -20,9 +20,6 @@
     '';
   };
 
-  targets.genericLinux.enable = true;
-
-  programs.bash.enable = true;
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
@@ -32,40 +29,30 @@
     btop
     cpio
     curl
-    copyq
     diff-so-fancy
     diffoscopeMinimal
     distrobox
     dos2unix
-    filezilla
     fish
     fzf
     gh
     ghorg
     git
     glab
-    google-chrome
-    gpick
     htop
     ipcalc
     jq
-    keepassxc
     lazygit
     lm_sensors
     ncdu
     nmap
-    pavucontrol
     podman
-    quickemu
     sshpass
-    spotify
     starship
     strace
     tealdeer
     trash-cli
     tree
-    vorta
-    vscode
     xsel
     zoxide
   ];
