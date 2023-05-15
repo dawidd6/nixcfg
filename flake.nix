@@ -20,7 +20,7 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         specialArgs = { inherit inputs; };
         modules = [
-          ./nixos/zotac.nix
+          ./nixos/hosts/zotac.nix
         ];
       };
     };
