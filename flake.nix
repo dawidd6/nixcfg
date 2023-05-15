@@ -38,6 +38,7 @@
           ./home-manager/features/htop.nix
           ./home-manager/features/jq.nix
           ./home-manager/features/less.nix
+          ./home-manager/features/manual.nix
           ./home-manager/features/neovim.nix
           ./home-manager/features/podman.nix
           ./home-manager/features/starship.nix
