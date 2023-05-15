@@ -59,7 +59,6 @@
   home.sessionVariables = {
     BAT_THEME = "TwoDark";
     ELECTRON_TRASH = "gvfs-trash";
-    GPG_TTY = "(tty)";
   };
 
   home.sessionPath = [

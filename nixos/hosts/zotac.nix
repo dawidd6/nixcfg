@@ -1,22 +1,9 @@
 { inputs, lib, config, pkgs, modulesPath, ... }: {
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
   hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
-
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.hostPlatform = "x86_64-linux";
-
-  nix.registry.nixpkgs.flake = inputs.nixpkgs;
-  nix.optimise.automatic = true;
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
-  };
-  nix.settings = {
-    auto-optimise-store = true;
-    experimental-features = "nix-command flakes";
-  };
 
   fileSystems = {
     "/" = {
@@ -44,10 +31,6 @@
   networking.hostName = "zotac";
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.powersave = false;
-
-  time.timeZone = "Europe/Warsaw";
-
-  i18n.defaultLocale = "en_GB.UTF-8";
 
   users = {
     defaultUserShell = pkgs.fish;
