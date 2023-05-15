@@ -20,26 +20,30 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         specialArgs = { inherit inputs; };
         modules = [
-          ./nixos/hosts/zotac.nix
+          ./nixos/zotac.nix
         ];
       };
     };
     homeConfigurations = {
-      "dawidd6" = home-manager-unstable.lib.homeManagerConfiguration {
-        pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
-        extraSpecialArgs = { inherit inputs; };
-        modules = [
-          ./home-manager/users/dawidd6.nix
-          ./home-manager/features/common
-        ];
-      };
       "dawid" = home-manager-unstable.lib.homeManagerConfiguration {
         pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
         extraSpecialArgs = { inherit inputs; };
         modules = [
           ./home-manager/users/dawid.nix
-          ./home-manager/features/common
-          ./home-manager/features/neovim
+          ./home-manager/features/bat.nix
+          ./home-manager/features/fish.nix
+          ./home-manager/features/fzf.nix
+          ./home-manager/features/gh.nix
+          ./home-manager/features/git.nix
+          ./home-manager/features/htop.nix
+          ./home-manager/features/jq.nix
+          ./home-manager/features/less.nix
+          ./home-manager/features/neovim.nix
+          ./home-manager/features/podman.nix
+          ./home-manager/features/starship.nix
+          ./home-manager/features/tealdeer.nix
+          ./home-manager/features/tools.nix
+          ./home-manager/features/zoxide.nix
         ];
       };
     };
