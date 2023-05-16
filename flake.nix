@@ -3,84 +3,41 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/release-22.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    home-manager-unstable = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    hardware.url = "github:nixos/nixos-hardware";
   };
 
-  outputs = { nixpkgs, nixpkgs-unstable, home-manager, home-manager-unstable, ... }@inputs: {
-    nixosConfigurations = {
-      "zotac" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./nixos/hosts/zotac.nix
-          ./nixos/features/locale.nix
-          ./nixos/features/nixpkgs.nix
-        ];
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+    let
+      inherit (self) outputs;
+      forEachSystem = nixpkgs.lib.genAttrs ["x86_64-linux" "aarch64-linux"];
+      forEachPkgs = f: forEachSystem (sys: f nixpkgs.legacyPackages.${sys});
+      mkNixos = hostname: nixpkgs.lib.nixosSystem {
+        modules = [ ./nixos/hosts/${hostname} ];
+        specialArgs = { inherit inputs outputs; };
       };
-      "t440s" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./nixos/hosts/t440s.nix
-          ./nixos/features/locale.nix
-          ./nixos/features/nixpkgs.nix
-        ];
+      mkHome = username: system: home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
+        modules = [ ./home-manager/users/${username} ];
+        extraSpecialArgs = { inherit inputs outputs; };
       };
-    };
-    homeConfigurations = {
-      "dawidd6" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = { inherit inputs; };
-        modules = [
-          ./home-manager/users/dawidd6.nix
-          ./home-manager/features/apps.nix
-          ./home-manager/features/bat.nix
-          ./home-manager/features/fish.nix
-          ./home-manager/features/font.nix
-          ./home-manager/features/fzf.nix
-          ./home-manager/features/gh.nix
-          ./home-manager/features/git.nix
-          ./home-manager/features/gnome.nix
-          ./home-manager/features/htop.nix
-          ./home-manager/features/jq.nix
-          ./home-manager/features/less.nix
-          ./home-manager/features/manual.nix
-          ./home-manager/features/neovim.nix
-          ./home-manager/features/podman.nix
-          ./home-manager/features/starship.nix
-          ./home-manager/features/tealdeer.nix
-          ./home-manager/features/tools.nix
-          ./home-manager/features/zoxide.nix
-        ];
+    in rec {
+      packages = forEachPkgs (pkgs: import ./pkgs {inherit pkgs;});
+      devShells = forEachPkgs (pkgs: import ./shell.nix {inherit pkgs;});
+      overlays = import ./overlays {inherit inputs outputs;};
+      nixosModules = import ./modules/nixos;
+      nixosConfigurations = {
+        "zotac" = mkNixos "zotac";
+        "t440s" = mkNixos "t440s";
       };
-      "dawid" = home-manager-unstable.lib.homeManagerConfiguration {
-        pkgs = nixpkgs-unstable.legacyPackages.x86_64-linux;
-        extraSpecialArgs = { inherit inputs; };
-        modules = [
-          ./home-manager/users/dawid.nix
-          ./home-manager/features/bat.nix
-          ./home-manager/features/fish.nix
-          ./home-manager/features/fzf.nix
-          ./home-manager/features/gh.nix
-          ./home-manager/features/git.nix
-          ./home-manager/features/htop.nix
-          ./home-manager/features/jq.nix
-          ./home-manager/features/less.nix
-          ./home-manager/features/manual.nix
-          ./home-manager/features/neovim.nix
-          ./home-manager/features/podman.nix
-          ./home-manager/features/starship.nix
-          ./home-manager/features/tealdeer.nix
-          ./home-manager/features/tools.nix
-          ./home-manager/features/zoxide.nix
-        ];
+      homeManagerModules = import ./modules/home-manager;
+      homeConfigurations = {
+        "dawidd6" = mkHome "dawidd6" "x86_64-linux";
+        "dawid" = mkHome "dawid" "x86_64-linux";
       };
     };
-  };
 }

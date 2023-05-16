@@ -1,10 +1,34 @@
-{ inputs, config, pkgs, modulesPath, ... }: {
+{ inputs, config, pkgs, ... }: {
   imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
+     inputs.hardware.nixosModules.lenovo-thinkpad-t440s
+     inputs.hardware.nixosModules.common-pc-ssd
+    ./hardware-configuration.nix
   ];
 
-  # Hardware
-  hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
+  # Nixpkgs
+  nixpkgs = {
+    overlays = [
+      outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
+    ];
+    config.allowUnfree = true;
+  };
+
+  # Nix
+  nix = {
+    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
+    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+    settings = {
+      experimental-features = "nix-command flakes";
+      auto-optimise-store = true;
+    };
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
+  };
 
   # Bootloader
   boot.initrd.secrets = {
@@ -13,33 +37,21 @@
   boot.initrd.luks.devices."luks-4af00ef3-9f52-4447-9f2b-fcffedb33cde".device = "/dev/sda2";
   boot.initrd.luks.devices."luks-47d56822-d64c-4b0d-b454-b1cbf08d3b7c".device = "/dev/sda3";
   boot.initrd.luks.devices."luks-47d56822-d64c-4b0d-b454-b1cbf08d3b7c".keyFile = "/crypto_keyfile.bin";
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" ];
   boot.initrd.systemd.enable = true;
-  boot.kernelModules = [ "kvm-intel" ];
   boot.kernelParams = [ "quiet" ];
   boot.plymouth.enable = true;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
-  # Filesystems
-  fileSystems = {
-    "/" = {
-      device = "/dev/dm-1";
-      fsType = "ext4";
-    };
-    "/boot/efi" = {
-      device = "/dev/sda1";
-      fsType = "vfat";
-    };
+  # Locale
+  time.timeZone = "Europe/Warsaw";
+  i18n.defaultLocale = "en_GB.UTF-8";
+  console.keyMap = "pl2";
+  services.xserver = {
+    layout = "pl";
+    xkbVariant = "";
   };
-
-  # Swap
-  swapDevices = [
-    {
-      device = "/dev/dm-0";
-    }
-  ];
 
   # Users
   users.users.dawidd6 = {
