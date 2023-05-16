@@ -21,6 +21,7 @@
   ]) ++ (with pkgs.gnomeExtensions; [
     appindicator
     gtk-title-bar
+    hibernate-status-button
   ]);
 
   dconf.settings = {
@@ -28,6 +29,7 @@
       enabled-extensions = map (extension: extension.extensionUuid) (with pkgs.gnomeExtensions; [
         appindicator
         gtk-title-bar
+        hibernate-status-button
       ]);
       disabled-extensions = [];
     };
