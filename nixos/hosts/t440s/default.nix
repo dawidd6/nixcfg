@@ -72,6 +72,10 @@
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
+  # Power
+  services.power-profiles-daemon.enable = false;
+  services.tlp.enable = true;
+
   # Print
   services.printing.enable = true;
 
