@@ -46,5 +46,5 @@ jobs:
 
       - name: Build flake
         run: |
-          nix build .#homeConfigurations.dawid@t14.activationPackage
-          nix build .#homeConfigurations.dawidd6@t440s.activationPackage
+          nix build .#homeConfigurations.dawid.activationPackage
+          nix build .#homeConfigurations.dawidd6.activationPackage
