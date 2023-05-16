@@ -32,9 +32,22 @@
       font-name = "Ubuntu 11";
       document-font-name = "FreeSans 11";
       monospace-font-name = "Ubuntu Mono 13";
+      clock-show-weekday = true;
+      clock-show-seconds = true;
+      show-battery-percentage = true;
+    };
+    "org/gnome/desktop/calendar" = {
+      show-weekdate = true;
     };
     "org/gnome/desktop/wm/preferences" = {
       titlebar-font = "Ubuntu Bold 11";
+      button-layout = "appmenu:minimize,maximize,close";
+    };
+    "org/gnome/desktop/wm/keybindings" = {
+      switch-applications = [];
+      switch-applications-backward = [];
+      switch-windows = ["<Alt>Tab"];
+      switch-windows-backward = ["<Shift><Alt>Tab"];
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
       custom-keybindings = [
