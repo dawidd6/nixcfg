@@ -19,7 +19,7 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v2
 
       - name: Check flake
-        run: nix flake check .#
+        run: nix flake check
   hosts:
     runs-on: ubuntu-latest
     needs: check
