@@ -83,7 +83,7 @@
   users.users.dawidd6 = {
     isNormalUser = true;
     description = "dawidd6";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
     initialPassword = "dawidd6";
     shell = pkgs.fish;
   };
@@ -97,6 +97,7 @@
   systemd.services."autovt@tty1".enable = false;
 
   # Enable relevant programs
+  programs.dconf.enable = true;
   programs.fish.enable = true;
   programs.gnupg.agent = {
     enable = true;
