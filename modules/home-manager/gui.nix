@@ -7,7 +7,7 @@
     keepassxc
     vorta
     vscode
-    outputs.packages.ubuntu-font
+    outputs.packages.x86_64-linux.ubuntu-font
   ];
 
   dconf.settings = {
