@@ -58,18 +58,18 @@
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#your-username@your-hostname'
       homeConfigurations = {
-        "dawidd6@t440s" = home-manager.lib.homeManagerConfiguration {
+        "dawidd6" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [
-            (./users + "/dawidd6@t440s.nix")
+            ./users/dawidd6.nix
           ];
         };
-        "dawid@t14" = home-manager.lib.homeManagerConfiguration {
+        "dawid" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [
-            (./users + "/dawid@t14.nix")
+            ./users/dawid.nix
           ];
         };
       };

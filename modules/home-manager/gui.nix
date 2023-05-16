@@ -1,16 +1,27 @@
 { inputs, outputs, lib, config, pkgs, ... }: {
   fonts.fontconfig.enable = true;
 
-  home.packages = with pkgs; [
+  home.packages = (with pkgs; [
     gnome.gnome-tweaks
     google-chrome
     keepassxc
     vorta
     vscode
-    outputs.packages.x86_64-linux.ubuntu-font
-  ];
+  ]) ++ (with outputs.packages.x86_64-linux; [
+    ubuntu-font
+  ]) ++ (with pkgs.gnomeExtensions; [
+    appindicator
+    gtk-title-bar
+  ]);
 
   dconf.settings = {
+    "org/gnome/shell" = {
+      enabled-extensions = map (extension: extension.extensionUuid) (with pkgs.gnomeExtensions; [
+        appindicator
+        gtk-title-bar
+      ]);
+      disabled-extensions = [];
+    };
     "org/gnome/desktop/peripherals/touchpad" = {
       tap-to-click = true;
       two-finger-scrolling-enabled = true;
