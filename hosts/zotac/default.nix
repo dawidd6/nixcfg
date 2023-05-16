@@ -1,4 +1,8 @@
 { inputs, lib, config, pkgs, ... }: {
+  imports = [
+    ./hardware-configuration.nix
+  ];
+
   # Drive
   fileSystems."/home/dawidd6/Backups" = {
     device = "/dev/disk/by-label/Backups";
@@ -101,5 +105,7 @@
     flake = "github:dawidd6/nix";
     flags = [ "--verbose" ];
   };
+
+  # DO NOT CHANGE
   system.stateVersion = "22.11";
 }

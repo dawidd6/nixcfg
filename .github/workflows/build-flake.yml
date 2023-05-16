@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  nixos:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,11 +20,9 @@ jobs:
 
       - name: Check flake
         run: nix flake check .#
-
-      - name: Build flake
-        run: nix build .#nixosConfigurations.zotac.config.system.build.toplevel
-  home-manager:
+  hosts:
     runs-on: ubuntu-latest
+    needs: check
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -33,4 +31,20 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v2
 
       - name: Build flake
-        run: nix build .#homeConfigurations.dawid.activationPackage
+        run: |
+          nix build .#nixosConfigurations.zotac.config.system.build.toplevel
+          nix build .#nixosConfigurations.t440s.config.system.build.toplevel
+  users:
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v2
+
+      - name: Build flake
+        run: |
+          nix build .#homeConfigurations.dawid@t14.activationPackage
+          nix build .#homeConfigurations.dawidd6@t440s.activationPackage
