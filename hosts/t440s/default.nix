@@ -5,16 +5,6 @@
     ./hardware-configuration.nix
   ];
 
-  # Allow unfree packages and define nixpkgs overlays
-  nixpkgs = {
-    overlays = [
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-    ];
-    config.allowUnfree = true;
-  };
-
   # Set nix package manager options
   nix = {
     registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
