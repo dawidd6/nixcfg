@@ -11,7 +11,7 @@
       enable = true;
       shellAliases = {
         sudo = "sudo -E env \"PATH=$PATH\"";
-        ls = "command ls --color=always";
+        ls = "ls --color=always";
         rm = "trash";
         dotfiles = "git --git-dir=$HOME/.dotfiles --work-tree=$HOME";
         ssh = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no";
