@@ -1,8 +1,4 @@
 { inputs, lib, config, pkgs, ... }: {
-  imports = [
-    ./hardware-configuration.nix
-  ];
-
   # Drive
   fileSystems."/home/dawidd6/Backups" = {
     device = "/dev/disk/by-label/Backups";

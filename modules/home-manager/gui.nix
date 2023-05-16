@@ -16,8 +16,9 @@
     vscode
   ]) ++ (with pkgs.gnome; [
     gnome-tweaks
-  ]) ++ (with outputs.packages.x86_64-linux; [
-    ubuntu-font
+  ]) ++ (with pkgs; [
+    # TODO: pin to v0.83
+    ubuntu_font_family
   ]) ++ (with pkgs.gnomeExtensions; [
     appindicator
     gtk-title-bar

@@ -11,67 +11,43 @@
     hardware.url = "github:nixos/nixos-hardware";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { nixpkgs, home-manager, hardware,  ... }@inputs:
     let
-      inherit (self) outputs;
-      forAllSystems = nixpkgs.lib.genAttrs [
-        "aarch64-linux"
-        "x86_64-linux"
-      ];
-    in rec {
-      # Your custom packages
-      # Acessible through 'nix build', 'nix shell', etc
-      packages = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages.${system};
-        in import ./packages { inherit pkgs; }
-      );
-      # Devshell for bootstrapping
-      # Acessible through 'nix develop' or 'nix-shell' (legacy)
-      devShells = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages.${system};
-        in import ./shell.nix { inherit pkgs; }
-      );
-      # Your custom packages and modifications, exported as overlays
-      overlays = import ./overlays { inherit inputs; };
-      # Reusable nixos modules you might want to export
-      # These are usually stuff you would upstream into nixpkgs
-      nixosModules = import ./modules/nixos;
-      # Reusable home-manager modules you might want to export
-      # These are usually stuff you would upstream into home-manager
-      homeManagerModules = import ./modules/home-manager;
-      # NixOS configuration entrypoint
-      # Available through 'nixos-rebuild --flake .#your-hostname'
-      nixosConfigurations = {
-        "zotac" = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/zotac/configuration.nix
-          ];
-        };
-        "t440s" = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/t440s/configuration.nix
-          ];
-        };
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+      mkNixos = modules: nixpkgs.lib.nixosSystem {
+        inherit modules;
+        specialArgs = { inherit inputs; };
       };
-      # Standalone home-manager configuration entrypoint
-      # Available through 'home-manager --flake .#your-username@your-hostname'
+      mkHome = modules: home-manager.lib.homeManagerConfiguration {
+        inherit modules pkgs;
+        extraSpecialArgs = { inherit inputs; };
+      };
+    in {
+      devShells.${system} = import ./shell.nix { inherit pkgs; };
+      formatter.${system} = pkgs.alejandra;
+      nixosConfigurations = {
+        "zotac" = mkNixos [
+          ./hardware/zotac.nix
+          ./hosts/zotac.nix
+        ];
+        "t440s" = mkNixos [
+          hardware.nixosModules.lenovo-thinkpad-t440s
+          hardware.nixosModules.common-pc-ssd
+          ./hardware/t440s.nix
+          ./hosts/t440s.nix
+        ];
+      };
       homeConfigurations = {
-        "dawidd6" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [
-            ./users/dawidd6.nix
-          ];
-        };
-        "dawid" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [
-            ./users/dawid.nix
-          ];
-        };
+        "dawidd6" = mkHome [
+          ./users/dawidd6.nix
+          ./modules/home-manager/cli.nix
+          ./modules/home-manager/gui.nix
+        ];
+        "dawid" = mkHome [
+          ./users/dawid.nix
+          ./modules/home-manager/cli.nix
+        ];
       };
     };
 }

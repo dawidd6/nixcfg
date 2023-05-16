@@ -1,10 +1,4 @@
 { inputs, lib, config, pkgs, ... }: {
-  imports = [
-     inputs.hardware.nixosModules.lenovo-thinkpad-t440s
-     inputs.hardware.nixosModules.common-pc-ssd
-    ./hardware-configuration.nix
-  ];
-
   # Set nix package manager options
   nix = {
     registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
