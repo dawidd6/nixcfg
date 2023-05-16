@@ -1,29 +1,40 @@
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   fonts.fontconfig.enable = true;
 
-  home.packages = (with pkgs; [
-    copyq
-    filezilla
-    gimp
-    google-chrome
-    gpick
-    inkscape
-    keepassxc
-    pavucontrol
-    spotify
-    virt-manager
-    vorta
-    vscode
-  ]) ++ (with pkgs.gnome; [
-    gnome-tweaks
-  ]) ++ (with pkgs; [
-    # TODO: pin to v0.83
-    ubuntu_font_family
-  ]) ++ (with pkgs.gnomeExtensions; [
-    appindicator
-    gtk-title-bar
-    hibernate-status-button
-  ]);
+  home.packages =
+    (with pkgs; [
+      copyq
+      filezilla
+      gimp
+      google-chrome
+      gpick
+      inkscape
+      keepassxc
+      pavucontrol
+      spotify
+      virt-manager
+      vorta
+      vscode
+    ])
+    ++ (with pkgs.gnome; [
+      gnome-tweaks
+    ])
+    ++ (with pkgs; [
+      # TODO: pin to v0.83
+      ubuntu_font_family
+    ])
+    ++ (with pkgs.gnomeExtensions; [
+      appindicator
+      gtk-title-bar
+      hibernate-status-button
+    ]);
 
   dconf.settings = {
     "org/gnome/shell" = {

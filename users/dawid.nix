@@ -1,4 +1,8 @@
-{ inputs, outputs, ... }: {
+{
+  inputs,
+  outputs,
+  ...
+}: {
   home = {
     username = "dawid";
     homeDirectory = "/home/dawid";

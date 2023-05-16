@@ -1,4 +1,11 @@
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   programs = {
     bat = {
       enable = true;
@@ -248,34 +255,36 @@
     };
     zoxide = {
       enable = true;
-      options = [ "--cmd=cd" ];
+      options = ["--cmd=cd"];
     };
   };
 
-  home.packages = with pkgs; [
-    ansible
-    ansible-lint
-    btop
-    cpio
-    curl
-    diffoscopeMinimal
-    distrobox
-    dos2unix
-    ghorg
-    glab
-    ipcalc
-    lazygit
-    lm_sensors
-    ncdu
-    nmap
-    sshpass
-    strace
-    trash-cli
-    tree
-    xsel
-  ] ++ [
-    unstable.podman
-  ];
+  home.packages = with pkgs;
+    [
+      ansible
+      ansible-lint
+      btop
+      cpio
+      curl
+      diffoscopeMinimal
+      distrobox
+      dos2unix
+      ghorg
+      glab
+      ipcalc
+      lazygit
+      lm_sensors
+      ncdu
+      nmap
+      sshpass
+      strace
+      trash-cli
+      tree
+      xsel
+    ]
+    ++ [
+      unstable.podman
+    ];
 
   home.sessionPath = [
     "${config.home.homeDirectory}/bin"
@@ -296,7 +305,8 @@
 
   nixpkgs = {
     overlays = [
-      (final: _prev: {
+      (
+        final: _prev: {
           unstable = import inputs.nixpkgs-unstable {
             system = final.system;
             config.allowUnfree = true;
@@ -306,7 +316,7 @@
     ];
     config = {
       allowUnfree = true;
-      allowUnfreePredicate = (_: true);
+      allowUnfreePredicate = _: true;
     };
   };
 

@@ -1,7 +1,13 @@
-{ inputs, lib, config, pkgs, ... }: {
+{
+  inputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   # Set nix package manager options
   nix = {
-    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
+    registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
     nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
     settings = {
       experimental-features = "nix-command flakes";
@@ -21,7 +27,7 @@
 
   # Splash boot screen
   boot.initrd.systemd.enable = true;
-  boot.kernelParams = [ "quiet" ];
+  boot.kernelParams = ["quiet"];
   boot.plymouth.enable = true;
 
   # Setup encryption keyfile, not touched
@@ -77,7 +83,7 @@
   users.users.dawidd6 = {
     isNormalUser = true;
     description = "dawidd6";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
+    extraGroups = ["networkmanager" "wheel" "libvirtd"];
     initialPassword = "dawidd6";
     shell = pkgs.fish;
   };
