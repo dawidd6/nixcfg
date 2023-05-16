@@ -2,11 +2,20 @@
   fonts.fontconfig.enable = true;
 
   home.packages = (with pkgs; [
-    gnome.gnome-tweaks
+    copyq
+    filezilla
+    gimp
     google-chrome
+    gpick
+    inkscape
     keepassxc
+    pavucontrol
+    spotify
+    virt-manager
     vorta
     vscode
+  ]) ++ (with pkgs.gnome; [
+    gnome-tweaks
   ]) ++ (with outputs.packages.x86_64-linux; [
     ubuntu-font
   ]) ++ (with pkgs.gnomeExtensions; [

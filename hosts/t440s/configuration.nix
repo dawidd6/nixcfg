@@ -107,6 +107,9 @@
   services.power-profiles-daemon.enable = false;
   services.tlp.enable = true;
 
+  # Enable libvirt
+  services.libvirt.enable = true;
+
   # DO NOT CHANGE
   system.stateVersion = "22.11";
 }
