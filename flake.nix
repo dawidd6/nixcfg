@@ -45,13 +45,13 @@
         "zotac" = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/zotac
+            ./hosts/zotac/configuration.nix
           ];
         };
         "t440s" = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/t440s
+            ./hosts/t440s/configuration.nix
           ];
         };
       };
@@ -62,14 +62,14 @@
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [
-            (./users + "/dawidd6@t440s")
+            (./users + "/dawidd6@t440s.nix")
           ];
         };
         "dawid@t14" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [
-            (./users + "/dawid@t14")
+            (./users + "/dawid@t14.nix")
           ];
         };
       };
