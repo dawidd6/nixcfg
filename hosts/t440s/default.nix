@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ inputs, lib, config, pkgs, ... }: {
   imports = [
      inputs.hardware.nixosModules.lenovo-thinkpad-t440s
      inputs.hardware.nixosModules.common-pc-ssd
