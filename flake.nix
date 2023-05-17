@@ -9,12 +9,17 @@
     };
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     hardware.url = "github:nixos/nixos-hardware";
+    formatter-pack = {
+      url = "github:Gerschtli/nix-formatter-pack";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
     nixpkgs,
     home-manager,
     hardware,
+    formatter-pack,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -29,9 +34,21 @@
         inherit modules pkgs;
         extraSpecialArgs = {inherit inputs;};
       };
-  in {
+  in rec {
     devShells.${system} = import ./shell.nix {inherit pkgs;};
-    formatter.${system} = pkgs.alejandra;
+    formatter.${system} = formatter-pack.lib.mkFormatter {
+      inherit pkgs;
+      config.tools = {
+        alejandra.enable = true;
+        deadnix.enable = true;
+        statix.enable = true;
+      };
+    };
+    checks.${system} = let
+      os = nixpkgs.lib.mapAttrs (_: c: c.config.system.build.toplevel) nixosConfigurations;
+      hm = nixpkgs.lib.mapAttrs (_: c: c.activationPackage) homeConfigurations;
+    in
+      os // hm;
     nixosConfigurations = {
       "zotac" = mkNixos [
         ./hardware/zotac.nix

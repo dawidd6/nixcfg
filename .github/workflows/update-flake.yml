@@ -5,6 +5,10 @@ on:
   schedule:
     - cron: '0 0 * * 0' # runs weekly on Sunday at 00:00
 
+concurrency:
+  group: update-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   update-flake:
     runs-on: ubuntu-latest
