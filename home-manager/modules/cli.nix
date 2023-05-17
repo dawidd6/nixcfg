@@ -60,6 +60,10 @@
         docker = "podman";
         d = "podman";
         p = "podman";
+        hm = "home-manager";
+        hms = "home-manager switch --flake $HOME/nix#$USER";
+        hmb = "home-manager build --flake $HOME/nix#$USER";
+        hmd = "home-manager build --flake $HOME/nix#$USER && nix store diff-closures /nix/var/nix/profiles/per-user/$USER/home-manager $HOME/nix/result";
       };
       interactiveShellInit = ''
         set fish_color_command green
