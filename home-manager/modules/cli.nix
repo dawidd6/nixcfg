@@ -2,6 +2,7 @@
   inputs,
   config,
   pkgs,
+  lib,
   ...
 }: {
   programs = {
@@ -300,10 +301,7 @@
 
   manual.html.enable = true;
 
-  nix.registry = {
-    nixpkgs.flake = inputs.nixpkgs;
-    home-manager.flake = inputs.home-manager;
-  };
+  nix.registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
 
   nixpkgs = {
     overlays = [
