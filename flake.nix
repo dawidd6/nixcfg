@@ -51,25 +51,25 @@
       os // hm;
     nixosConfigurations = {
       "zotac" = mkNixos [
-        ./hardware/zotac.nix
-        ./hosts/zotac.nix
+        ./nixos/hardware/zotac.nix
+        ./nixos/hosts/zotac.nix
       ];
       "t440s" = mkNixos [
         hardware.nixosModules.lenovo-thinkpad-t440s
         hardware.nixosModules.common-pc-ssd
-        ./hardware/t440s.nix
-        ./hosts/t440s.nix
+        ./nixos/hardware/t440s.nix
+        ./nixos/hosts/t440s.nix
       ];
     };
     homeConfigurations = {
       "dawidd6" = mkHome [
-        ./users/dawidd6.nix
-        ./modules/home-manager/cli.nix
-        ./modules/home-manager/gui.nix
+        ./home-manager/users/dawidd6.nix
+        ./home-manager/modules/cli.nix
+        ./home-manager/modules/gui.nix
       ];
       "dawid" = mkHome [
-        ./users/dawid.nix
-        ./modules/home-manager/cli.nix
+        ./home-manager/users/dawid.nix
+        ./home-manager/modules/cli.nix
       ];
     };
   };
