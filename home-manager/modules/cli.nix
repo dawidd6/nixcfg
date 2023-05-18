@@ -80,6 +80,7 @@
     };
     gh = {
       enable = true;
+      package = pkgs.unstable.gh;
     };
     git = {
       enable = true;
