@@ -229,9 +229,9 @@
         " Delete, don't cut
         nnoremap x "_x
         nnoremap X "_X
-        "nnoremap d "_d
-        "nnoremap D "_D
-        "vnoremap d "_d
+        nnoremap d "_d
+        nnoremap D "_D
+        vnoremap d "_d
         " Don't copy on paste
         vnoremap p "_dP
       '';
