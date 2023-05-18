@@ -27,6 +27,7 @@
       appindicator
       gtk-title-bar
       hibernate-status-button
+      pano
     ]);
 
   dconf.settings = {
@@ -35,6 +36,7 @@
         appindicator
         gtk-title-bar
         hibernate-status-button
+        pano
       ]);
       disabled-extensions = [];
     };
