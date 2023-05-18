@@ -104,9 +104,9 @@
     enableSSHSupport = true;
   };
 
-  # Enable tlp and disable conflicting service
-  services.power-profiles-daemon.enable = false;
-  services.tlp.enable = true;
+  # Enable thermald and upower
+  services.thermald.enable = true;
+  services.upower.enable = true;
 
   # Enable libvirtd for virt-manager
   virtualisation.libvirtd.enable = true;
