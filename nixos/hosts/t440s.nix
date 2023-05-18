@@ -104,9 +104,10 @@
     enableSSHSupport = true;
   };
 
-  # Enable thermald and upower
+  # Enable thermald and upower and powertop
   services.thermald.enable = true;
   services.upower.enable = true;
+  powerManagement.powertop.enable = true;
 
   # Enable libvirtd for virt-manager
   virtualisation.libvirtd.enable = true;
