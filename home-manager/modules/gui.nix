@@ -3,7 +3,6 @@
 
   home.packages =
     (with pkgs; [
-      copyq
       filezilla
       gimp
       google-chrome
