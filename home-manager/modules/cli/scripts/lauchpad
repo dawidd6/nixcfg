@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'json'
+require 'net/http'
+require 'optparse'
+
+exit if ARGV.empty?
+
+OptionParser.new do |parser|
+  parser.on('-u USER', '--user USER', 'launchpad user') do |user|
+    @user = user
+  end
+  parser.on('-p PPA', '--ppa PPA', 'launchpad PPA') do |ppa|
+    @ppa = ppa
+  end
+  parser.on('-a', '--all', 'print all binaries, not only published') do
+    @all = true
+  end
+end.parse!
+
+info = {}
+uri = URI("https://api.launchpad.net/devel/~#{@user}/+archive/ubuntu/#{@ppa}?ws.op=getPublishedBinaries")
+published_binaries = Net::HTTP.get(uri)
+published_binaries = JSON.parse(published_binaries)
+published_binaries['entries'].each do |binary|
+  next if binary['status'] != 'Published' && !@all
+
+  uri = URI(binary['self_link'] + '?ws.op=getDownloadCount')
+  download_count = Net::HTTP.get(uri)
+  info[binary['display_name']] = download_count.to_i
+end
+
+longest_name = info.keys.max_by(&:length)
+info.sort_by { |_k, v| -v }.each do |name, count|
+  printf "%-#{longest_name.length}s  %s\n", name, count
+end

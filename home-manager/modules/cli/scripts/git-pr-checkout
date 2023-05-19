@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+require "octokit"
+
+number = ARGV[0]
+remote = ARGV[1] || "origin"
+
+unless number
+  puts "Usage: #{$PROGRAM_NAME} NUMBER [REMOTE]"
+  exit 1
+end
+
+url = `git config remote.#{remote}.url`.chomp
+repo = url.match(/github\.com[:\/](?<repo>.+\/.+)\.git/).named_captures["repo"]
+branch = ""
+
+begin
+  github = Octokit::Client.new(auth_token: ENV["HOMEBREW_GITHUB_API_TOKEN"])
+  pull = github.pull_request(repo, number)
+  remote = pull["head"]["repo"]["ssh_url"]
+  branch = pull["head"]["ref"]
+rescue Octokit::NotFound
+  puts "Branch not found on remote"
+  exit 1
+end
+
+exit 1 unless system("git fetch -f #{remote} #{branch}:#{branch}")
+exit 1 unless system("git checkout #{branch}")
+exit 1 unless system("git config branch.#{branch}.remote #{remote}")
+exit 1 unless system("git config branch.#{branch}.merge refs/heads/#{branch}")
+

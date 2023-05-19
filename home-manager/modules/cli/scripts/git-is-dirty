@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if test -n "$(git status -s 2>/dev/null)"; then
+    echo dirty
+    exit 1
+fi

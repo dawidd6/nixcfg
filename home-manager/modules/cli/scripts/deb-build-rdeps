@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -euo pipefail
+
+PKG="$1"
+QUERY="
+SELECT DISTINCT source, component FROM sources
+WHERE build_depends LIKE '%$PKG%' OR build_depends_indep LIKE '%$PKG%' OR build_depends_arch LIKE '%$PKG%';
+"
+
+PGPASSWORD=udd-mirror psql \
+    --host=udd-mirror.debian.net \
+    --user=udd-mirror \
+    -qAtX \
+    -c "$QUERY" \
+    udd

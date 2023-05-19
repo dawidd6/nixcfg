@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -euo pipefail
+
+scp -r -P 1234 "$1" "$2:"

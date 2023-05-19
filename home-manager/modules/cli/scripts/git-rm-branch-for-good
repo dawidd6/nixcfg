@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -u
+
+git push "$1" --delete "$2"
+git branch -D "$2"

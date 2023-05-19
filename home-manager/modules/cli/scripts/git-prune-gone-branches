@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -eu
+
+git branch --format='%(refname:short) %(upstream:track)' | grep '\[gone\]' | awk '{print $1}' | xargs -r git branch -D

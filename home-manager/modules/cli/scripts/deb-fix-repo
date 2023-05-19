@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -eu
+
+package="$(dpkg-parsechangelog -S Source)"
+
+git remote set-url origin "git@salsa.debian.org:go-team/packages/$package"
+git branch -D pristine-tar | true
+git branch -m debian/sid

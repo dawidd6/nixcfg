@@ -1,0 +1,144 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "optparse"
+require "json"
+
+# Get user and editor
+user = ENV["HOMEBREW_GITHUB_USER"] || ENV["USER"]
+editor = ENV["HOMEBREW_EDITOR"] || ENV["EDITOR"]
+
+# Define safe system method, will exit with code 1 if command wasn"t successful
+def safe_system(*cmd)
+  exit 1 unless system(*cmd)
+end
+
+# Parse options
+parser = OptionParser.new
+parser.on("--fix FORMULA", "checkout, edit and commit fixed formula") do |formula|
+  branch = system("git", "show-ref", "--verify", "--quiet", "refs/heads/#{formula}")
+  safe_system("git", "checkout", "master")
+  if branch
+    safe_system("git", "checkout", formula)
+  else
+    safe_system("git", "checkout", "-b", formula)
+  end
+  safe_system(editor, "Formula/#{formula}.rb")
+  if `git status -s`.chomp.empty?
+    system("git", "checkout", "-")
+    system("git", "branch", "-D", formula) unless branch
+  else
+    safe_system("git", "add", "Formula/#{formula}.rb")
+    if branch
+      safe_system("git", "commit", "-S", "--amend")
+      safe_system("git", "push", "-f", user, formula)
+    else
+      safe_system("git", "commit", "--edit", "-S", "-m", "#{formula}: fix")
+      safe_system("git", "push", "-u", user, formula)
+      safe_system("hub", "pull-request", "-a", user)
+    end
+  end
+end
+parser.on("--setup", "setup homebrew-core repo for development") do
+  dir = `brew --repository homebrew/core`
+  remotes = {
+    user.to_s => "git@github.com:#{user}/linuxbrew-core.git",
+    "homebrew" => "git@github.com:Homebrew/homebrew-core.git",
+    "homebrew-#{user}" => "git@github.com:#{user}/homebrew-core.git"
+  }
+  taps = %w[
+    homebrew/linux-dev
+    homebrew/livecheck
+    dawidd6/autoremove
+  ]
+
+  taps.each do |tap|
+    safe_system("brew", "tap", tap)
+  end
+
+  Dir.chdir(dir.chomp) do
+    if File.exist?(".git/shallow")
+      puts "==> git fetch --unshallow"
+      safe_system("git", "fetch", "--unshallow")
+    end
+
+    # Add remotes or set-urls
+    remotes.each do |name, url|
+      name_exist = false
+      url_exist = false
+
+      `git remote`.each_line do |line|
+        name_exist = true if line.chomp == name
+      end
+
+      url_exist = true if name_exist && `git remote get-url #{name}`.chomp == url
+
+      next if name_exist && url_exist
+
+      operation = "set-url" if name_exist && !url_exist
+      operation = "add" unless name_exist
+
+      puts "==> git remote #{operation} #{name} #{url}"
+      safe_system("git", "remote", operation, name, url)
+    end
+  end
+end
+parser.on("--sync", "fetch all remotes, prune branches and pull origin/master") do
+  safe_system("git", "checkout", "master")
+  safe_system("git", "fetch", "--all", "--prune")
+  safe_system("git", "checkout", "homebrew-master")
+  safe_system("git", "merge", "homebrew/master")
+  safe_system("git", "checkout", "master")
+  safe_system("git", "merge", "origin/master")
+  safe_system("git", "prune-gone-branches")
+end
+parser.on("--compare", "compare fetched upstream homebrew/master with origin/master") do
+  safe_system("git", "log", "--oneline", "master..homebrew/master")
+end
+parser.on("--merge [SHA]", "merge upstream homebrew-core to linuxbrew-core") do |sha|
+  safe_system("git", "checkout", "master")
+  if sha.nil?
+    safe_system("brew", "merge-homebrew", "--core")
+  else
+    safe_system("brew", "merge-homebrew", "--core", sha)
+  end
+end
+parser.on("--bottle [FORMULAE]", "request bottles (comma separated)") do |formulae|
+  formulae = formulae&.split(",")
+  if formulae.nil?
+    formulae = []
+    `brew find-formulae-to-bottle`.each_line do |line|
+      formulae << line.chomp
+    end
+  end
+  exit if formulae.empty?
+  puts formulae
+  print "==> Proceed?"
+  readline
+  formulae.each do |formula|
+    safe_system("brew", "request-bottle", formula)
+  end
+end
+parser.on("--container", "launch bash shell in Docker container with brew in it") do
+  core_dir = `brew --repository homebrew/core`.chomp
+  brew_dir = `brew --repository`.chomp + "/Library/Homebrew"
+  cache_dir = `brew --cache`.chomp
+  image = "homebrew/brew"
+  cmd = %W[
+    docker
+    run
+    -it
+    --rm
+    --user=linuxbrew
+    --name=linuxbrew
+    --volume=#{core_dir}:#{core_dir}:ro
+    --volume=#{brew_dir}:#{brew_dir}:ro
+    --volume=#{cache_dir}:/home/linuxbrew/.cache/Homebrew
+    --env=HOMEBREW_DEVELOPER=1
+    --env=HOMEBREW_NO_AUTO_UPDATE=1
+    --env=HOMEBREW_NO_INSTALL_CLEANUP=1
+    #{image}
+  ]
+  safe_system(*cmd)
+end
+parser.parse!

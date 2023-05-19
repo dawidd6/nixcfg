@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -euo pipefail
+
+repo="$(basename $(git config --get remote.origin.url | sed 's/\.git//'))"
+upstream="$(curl -s "https://api.github.com/repos/${USER}/${repo}" | jq -r '.parent.clone_url')"
+
+if git remote | grep -q upstream; then
+    echo "already added"
+    exit
+fi
+
+if test "$upstream" = "null"; then
+    echo "no upstream found"
+    exit 1
+fi
+
+echo $upstream
+git remote add upstream $upstream

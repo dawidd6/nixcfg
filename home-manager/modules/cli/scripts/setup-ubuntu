@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if ! type deb-get; then
+    wget -O /tmp/deb-get.deb https://github.com/wimpysworld/deb-get/releases/download/0.3.8/deb-get_0.3.8-1_all.deb
+    sudo apt install /tmp/deb-get.deb
+fi
+
+deb-get update
+deb-get install \
+    code \
+    google-chrome-stable \
+    spotify-client
+
+sudo apt purge snapd
+sudo apt update
+sudo apt install \
+    filezilla \
+    gimp \
+    gnome-clocks \
+    gnome-tweaks \
+    gnome-weather \
+    gnome-shell-extension-manager \
+    gpick \
+    inkscape \
+    keepassxc \
+    network-manager-openconnect-gnome \
+    network-manager-vpnc-gnome \
+    pavucontrol \
+    uidmap \
+    virt-manager \
+    vorta

@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require 'json'
+
+ENV["HOMEBREW_CACHE"] = Dir.pwd
+
+tap = ARGV.last
+
+tap_info = JSON.parse `brew tap-info --json #{tap}`
+tap_formulae = tap_info.last['formula_names']
+
+tap_formulae.each do |formula|
+  formula_info = JSON.parse `brew info --json #{formula}`
+  formula_name = formula_info.last['name']
+  formula_has_bottle = formula_info.last['versions']['bottle']
+  next unless formula_has_bottle
+
+  system "brew", "fetch", formula
+
+  formula_bottle_file = Dir["downloads/*#{formula_name}*bottle.tar.gz"].last
+  formula_bottle_contents = `tar -taf #{formula_bottle_file}`
+  formula_bottle_contents_file = "#{formula_bottle_file}.list"
+  File.write(formula_bottle_contents_file, formula_bottle_contents)
+end

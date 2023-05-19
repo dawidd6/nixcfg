@@ -1,0 +1,139 @@
+#!/bin/bash
+
+GREY="\033[1;30m"
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
+BLUE="\033[0;34m"
+PURPLE="\033[0;35m"
+CYAN="\033[0;36m"
+BOLD="\033[1m"
+NC="\033[0m"
+
+width=43
+filesystems=("/dev/sda1" "/dev/sda2")
+services=("dockerrr" "cron" "ssh" "cups" "NetworkManager")
+thermal_zone=3
+
+#vnstat=($(vnstat --exportdb | grep -E 'totaltx;|totalrx;'))
+#ifstat=($(ifstat 1 1 | tail -n1 | xargs | tr ' ' '\n'))
+#total_rx="$(echo ${vnstat[0]} | cut -d';' -f2)"
+#total_tx="$(echo ${vnstat[1]} | cut -d';' -f2)"
+#total_rx="$(awk "BEGIN { printf \"%.2f\n\", $total_rx/1024 }")"
+#total_tx="$(awk "BEGIN { printf \"%.2f\n\", $total_tx/1024 }")"
+
+echo_spaces()
+{
+    local number=$((${#1}+${#2}))
+
+    for ((i=0; i<$(($width-$number)); i++)); do
+        echo -n " "
+    done
+}
+
+echo_bar()
+{
+    local bar_width=$(($width-4))
+    local segments=$(($1*$bar_width/100))
+
+    echo -n "  ["
+
+    for ((i=0; i<$segments; i++)); do
+        echo -ne "${GREEN}=${NC}"
+    done
+
+    for ((i=$segments; i<$bar_width; i++)); do
+        echo -ne "${GREY}=${NC}"
+    done
+
+    echo "]"
+}
+
+show_services()
+{
+    local statuses=($(systemctl is-active "${services[@]}"))
+
+    echo "Services:"
+
+    for ((i=0; i<${#services[@]}; i++)); do
+        if [ "${statuses[$i]}" = "active" ]; then
+            state="${GREEN}running"
+        elif [ "${statuses[$i]}" = "inactive" ]; then
+            state="${RED}dead"
+        fi
+        local spaces="$(echo_spaces "${services[$i]}" "${state}")"
+        echo -e "  ${services[$i]}:${spaces}${state}${NC}"
+    done
+}
+
+show_disks()
+{
+    for fs in ${filesystems[*]}; do
+        percentage="$(df -h $fs | tail -n1 | awk '{print $5}')"
+        percentage="${percentage//%}"
+        segments+=($percentage)
+    done
+
+    echo -e "Filesystems\tSize\tUsed\tFree\tUse"
+
+    for ((num=0; num<${#filesystems[*]}; num++)); do
+        df ${filesystems[$num]} -h | awk 'NR==2 {print "  " $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5}'
+        echo_bar ${segments[$num]}
+    done
+}
+
+show_load()
+{
+    local load=$(awk -v nproc=$(nproc) '{printf("%d", $1*100/nproc)}' /proc/loadavg)
+    local spaces="$(echo_spaces "Load:" "${load}%")"
+
+    echo "Load:${spaces}${load}%"
+    echo_bar $load
+}
+
+show_ram()
+{
+    local raw=($(free -m | awk 'NR==2 {print $2, $7}'))
+    local data=$(((${raw[0]}-${raw[1]})*100/${raw[0]}))
+    local spaces="$(echo_spaces "Memory:" "${data}%")"
+
+    echo "Memory:${spaces}${data}%"
+    echo_bar $data
+}
+
+show_temp()
+{
+    local temp="$(($(cat /sys/class/thermal/thermal_zone$thermal_zone/temp)/1000))"
+    local temp_warn=60
+
+    if [ $temp -ge $temp_warn ]; then
+        temp="${RED}${temp}${NC}"
+    else
+        temp="${GREEN}${temp}${NC}"
+    fi
+
+    echo -e "Temperature: $temp°C"
+}
+
+show_figlet()
+{
+    echo -e "${PURPLE}${BOLD}$(figlet $HOSTNAME)${NC}"
+}
+
+show_uptime()
+{
+    uptime -p
+}
+
+show_figlet
+show_uptime
+echo
+show_temp
+echo
+show_services
+echo
+show_disks
+echo
+show_load
+echo
+show_ram

@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if test $# -lt 2; then
+    echo "Usage: $0 COMMIT [COMMIT ...] -- BRANCH [BRANCH ...]"
+    exit 2
+fi
+
+delimited=false
+for arg in "$@"; do
+    if test "$arg" == '--'; then
+        delimited=true
+        continue
+    fi
+    if $delimited; then
+        branches="${branches:-} $arg"
+    else
+        commits="${commits:-} $arg"
+    fi
+done
+
+branches="${branches## }"
+branches="${branches%% }"
+commits="${commits## }"
+commits="${commits%% }"
+
+for target_branch in $branches; do
+    source_branch="backport-$(echo "$commits" | tr ' ' '-')-$target_branch"
+    echo "==> Backporting $commits to $target_branch (press enter to continue)"
+    read
+    git checkout $target_branch
+    git pull origin $target_branch
+    git checkout -b $source_branch
+    if ! git cherry-pick $commits; then
+        echo "==> Cherry-pick failed, starting new shell to resolve conflicts (exit with CTRL-D once resolved)"
+        $SHELL
+    fi
+    git push origin -u $source_branch
+    glab mr create --web --fill --target-branch $target_branch
+done

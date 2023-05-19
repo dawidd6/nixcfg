@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# filename.mp4
+video="$1"
+# hh:mm:ss
+start="$2"
+
+ffmpeg -i "$video" -ss "$start" -acodec copy -vcodec copy "output-$1"

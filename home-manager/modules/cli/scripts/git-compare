@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -eo pipefail
+
+if test -z "$1"; then
+    echo "$0 --old old-ref --new new-ref"
+    exit
+fi
+
+while test -n "$1"; do
+    case "$1" in
+        --old)
+            old="$2"
+            shift 2
+            ;;
+        --new)
+            new="$2"
+            shift 2
+            ;;
+        *)
+            echo "wrong: $2"
+            exit 1
+        ;;
+    esac
+done
+
+git diff "$old" "$new"

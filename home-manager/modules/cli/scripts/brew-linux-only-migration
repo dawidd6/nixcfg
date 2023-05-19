@@ -1,0 +1,21 @@
+#!/usr/bin/env -S brew ruby
+# vi: ft=ruby
+
+dir = `#{HOMEBREW_BREW_FILE} --repo homebrew/core`.chomp
+
+Dir.chdir(dir) do
+  all_linux_only_formulae = `grep -lR 'depends_on :linux' Formula`.split("\n")
+  migrated_formulae = []
+  all_linux_only_formulae.each do |line|
+    line.chomp!
+    if system "git cat-file -e 'homebrew/master:#{line}' 2>/dev/null"
+      migrated_formulae << line
+    end
+  end
+
+  ohai "Migrated formulae"
+  puts migrated_formulae
+  ohai "Not migrated formulae"
+  puts all_linux_only_formulae - migrated_formulae
+end
+

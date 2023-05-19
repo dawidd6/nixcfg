@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# scan-ports-by-host <ip_address> <port-range>
+# scan-ports-by-host 192.168.1.1 22-443
+
+ports_start="$(echo $2 | cut -d'-' -f1)"
+ports_end="$(echo $2 | cut -d'-' -f2)"
+
+for ((i=$ports_start; i<=$ports_end; i++)); do
+	width=$(($(tput cols)-7))
+	perc=$(($i*100/$ports_end))
+	seg=$(($perc*$width/100))
+	for ((j=0; j<$width; j++)); do
+		if [ $j -lt $seg ]; then
+			line="${line}="
+		else
+			line="${line} "
+		fi
+	done
+
+	echo -ne "\r[$line] ${perc}%"
+	unset line
+
+	if ! ping -w 1 -c 1 "$1" &>/dev/null; then
+		exit 1
+	elif nc -z "$1" "$i"; then
+		echo -ne "\r$i"
+		for ((j=$((${#i}-7)); j<$width; j++)); do
+			echo -ne " "
+		done
+		echo
+	fi
+done

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+[[ -z $1 ]] && echo "pass source svg" && exit
+
+for size in 8 16 20 22 24 32 36 42 48 64 96 128 192 256 ; do
+    dir="${size}x${size}"
+    file="$(basename ${1//.svg}_${size}.png)"
+    mkdir -p "$dir"
+    inkscape --export-png "$dir/$file" -w ${size} "$1"
+done

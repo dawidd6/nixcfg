@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -euo pipefail
+
+name="$1"
+file="$HOME/bin/$name"
+
+test -f "$file" && echo exists && exit 1
+
+cat <<-EOF > "$file"
+#!/bin/bash
+
+set -euo pipefail
+EOF
+
+chmod +x "$file"
+
+$EDITOR "$file"

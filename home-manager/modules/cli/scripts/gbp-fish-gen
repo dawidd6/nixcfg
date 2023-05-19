@@ -1,0 +1,26 @@
+#!/usr/bin/env fish
+
+set -l cmds (gbp --list-cmds | grep '-' | grep -v '/' | string trim | string split ' - ')
+
+set -l iter 1
+while test $iter -le (count $cmds)
+    set -l cmd $cmds[$iter]
+    set -l desc $cmds[(math $iter + 1)]
+
+    echo "# $cmd"
+    echo "complete -c gbp -f -n \"__fish_use_subcommand\" -a \"$cmd\" -d \"$desc\""
+
+    set -l options (gbp "$cmd" -h | string trim | egrep "^\-\-" | cut -d " " -f1)
+
+    for option in $options
+        set -l option (echo "$option" | cut -d'-' -f3- | cut -d '=' -f1)
+        echo "complete -c gbp -n \"__fish_seen_subcommand_from $cmd\" -l \"$option\""
+    end
+
+    echo ""
+
+    set iter (math $iter + 2)
+end
+
+echo "# DON'T COMPLETE FILES"
+echo "complete -c gbp -f"

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+
+QUERY="
+SELECT id,title FROM bugs WHERE submitter_email LIKE '$DEBEMAIL';
+"
+
+PGPASSWORD=udd-mirror psql \
+    --host=udd-mirror.debian.net \
+    --user=udd-mirror \
+    -qAtX \
+    -c "$QUERY" \
+    udd
+

@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+remote = ARGV[0] || "origin"
+remote_branches = `git ls-remote --heads -q #{remote} | cut -d'/' -f3`
+local_branches = `git branch --format="%(refname:lstrip=2)"`
+local_branches_removable = []
+
+puts <<~EOS
+==> Remote branches:
+#{remote_branches}
+==> Local branches:
+#{local_branches}
+EOS
+
+local_branches.each_line do |lbranch|
+  exists = false
+
+  remote_branches.each_line do |rbranch|
+    exists = true if lbranch == rbranch
+  end
+
+  local_branches_removable << lbranch.chomp unless exists
+end
+
+if local_branches_removable.length > 0
+  puts <<~EOS
+  ==> Removable branches:
+  #{local_branches_removable.join("\n")}
+  EOS
+
+  print "==> Remove? [y/N] "
+  input = STDIN.readline
+  if input.chomp == "y"
+    local_branches_removable.each do |branch|
+      system("git", "update-ref", "-d", "refs/remotes/#{remote}/#{branch}")
+      system("git", "branch", "-D", branch)
+    end
+  end
+end

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+package="$(dpkg-parsechangelog -S Source)"
+version="$(dpkg-parsechangelog -S Version)"
+itp="$(dpkg-parsechangelog -S Closes)"
+
+cat > "../rfs-${package}.txt" <<EOF
+From: "$DEBFULLNAME" <$DEBEMAIL>
+To: debian-go@lists.debian.org
+Subject: RFS: ${package}/${version}
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Cc: ${itp}@bugs.debian.org
+
+Dear Go team,
+
+I am looking for a sponsor for the package "${package}".
+This package is a prerequisite for upcoming package "lazygit" (#908894).
+
+I pushed to our team's Salsa:
+
+  https://salsa.debian.org/go-team/packages/${package}
+
+Could you please reviewing/sponsoring this?
+Any kind of reviews and suggestions are appreciated.
+EOF

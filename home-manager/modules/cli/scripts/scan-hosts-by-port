@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# scan-hosts-by-port <port> <network_interface>
+# scan-hosts-by-port 22 eth0
+
+net="$(ip route list | grep ${2:-''} | egrep -o '[0-9]+\.[0-9]+\.[0-9]+' | head -n1)"
+
+echo "subnet: $net.0/24"
+echo "port: $1"
+echo "interface: $2"
+
+for ((i=0; i<256; i++)); do
+	width=$(($(tput cols)-7))
+	perc=$(($i*100/255))
+	seg=$(($perc*$width/100))
+	for ((j=0; j<$width; j++)); do
+		[[ $j -lt $seg ]] && line="${line}=" || line="${line} "
+	done
+
+	echo -ne "\r[$line] ${perc}%"
+	unset line
+
+	if ! timeout 0.1 ping -c 1 "${net}.${i}" &>/dev/null; then
+		continue
+	elif nc -w 1 -z "${net}.${i}" "$1"; then
+		echo -ne "\r${net}.${i} $1"
+		for ((j=$((${#net}+${#i}+${#1}+2-7)); j<$width; j++)); do
+			echo -ne " "
+		done
+		echo
+	fi
+done

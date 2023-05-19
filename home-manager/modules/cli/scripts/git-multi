@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require 'English'
+
+failures = {}
+
+Dir['*/'].sort.each do |dir|
+  Dir.chdir(dir) do
+    puts "\n\e[96m\e[1m==> \e[39m#{dir}\e[0m"
+    out = `git #{ARGV.join(' ')} 2>&1`.chomp
+    puts out
+    failures[dir] = out unless $CHILD_STATUS.success?
+  end
+end
+
+failures.keys.each do |dir|
+    puts "\n\e[31m\e[1m==> \e[39m#{dir}\e[0m"
+    puts failures[dir]
+end
+
+exit 1 unless failures.empty?

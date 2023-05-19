@@ -1,0 +1,5 @@
+#!/bin/bash
+
+url="$1"
+
+wget "$url" -O - | sha256sum | cut -d' ' -f1
