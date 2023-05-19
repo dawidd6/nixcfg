@@ -33,7 +33,6 @@
         inherit modules pkgs;
         extraSpecialArgs = {inherit inputs;};
       };
-    filesInDir = dir: map (x: (dir + "/${x}")) (builtins.attrNames (nixpkgs.lib.filterAttrs (_n: v: v == "regular") (builtins.readDir dir)));
   in rec {
     devShells.${system} = import ./shell.nix {inherit pkgs;};
     formatter.${system} = formatter-pack.lib.mkFormatter {
@@ -53,24 +52,64 @@
       "zotac" = mkNixos [
         ./nixos/hardware/zotac.nix
         ./nixos/hosts/zotac.nix
+        ./nixos/modules/boot.nix
+        ./nixos/modules/locale.nix
+        ./nixos/modules/network.nix
+        ./nixos/modules/nix.nix
+        ./nixos/modules/user.nix
       ];
       "t440s" = mkNixos [
         hardware.nixosModules.lenovo-thinkpad-t440s
         hardware.nixosModules.common-pc-ssd
         ./nixos/hardware/t440s.nix
         ./nixos/hosts/t440s.nix
+        ./nixos/modules/boot.nix
+        ./nixos/modules/desktop.nix
+        ./nixos/modules/laptop.nix
+        ./nixos/modules/locale.nix
+        ./nixos/modules/network.nix
+        ./nixos/modules/nix.nix
+        ./nixos/modules/user.nix
       ];
     };
     homeConfigurations = {
-      "dawidd6" = mkHome (
-        [./home-manager/users/dawidd6.nix]
-        ++ (filesInDir ./home-manager/modules/cli)
-        ++ (filesInDir ./home-manager/modules/gui)
-      );
-      "dawid" = mkHome (
-        [./home-manager/users/dawid.nix]
-        ++ (filesInDir ./home-manager/modules/cli)
-      );
+      "dawidd6" = mkHome [
+        ./home-manager/users/dawidd6.nix
+        ./home-manager/modules/cli/bat.nix
+        ./home-manager/modules/cli/fish.nix
+        ./home-manager/modules/cli/fzf.nix
+        ./home-manager/modules/cli/gh.nix
+        ./home-manager/modules/cli/git.nix
+        ./home-manager/modules/cli/less.nix
+        ./home-manager/modules/cli/neovim.nix
+        ./home-manager/modules/cli/nix.nix
+        ./home-manager/modules/cli/podman.nix
+        ./home-manager/modules/cli/scripts.nix
+        ./home-manager/modules/cli/starship.nix
+        ./home-manager/modules/cli/tools.nix
+        ./home-manager/modules/cli/zoxide.nix
+        ./home-manager/modules/gui/apps.nix
+        ./home-manager/modules/gui/extensions.nix
+        ./home-manager/modules/gui/font.nix
+        ./home-manager/modules/gui/keybindings.nix
+        ./home-manager/modules/gui/tweaks.nix
+      ];
+      "dawid" = mkHome [
+        ./home-manager/users/dawid.nix
+        ./home-manager/modules/cli/bat.nix
+        ./home-manager/modules/cli/fish.nix
+        ./home-manager/modules/cli/fzf.nix
+        ./home-manager/modules/cli/gh.nix
+        ./home-manager/modules/cli/git.nix
+        ./home-manager/modules/cli/less.nix
+        ./home-manager/modules/cli/neovim.nix
+        ./home-manager/modules/cli/nix.nix
+        ./home-manager/modules/cli/podman.nix
+        ./home-manager/modules/cli/scripts.nix
+        ./home-manager/modules/cli/starship.nix
+        ./home-manager/modules/cli/tools.nix
+        ./home-manager/modules/cli/zoxide.nix
+      ];
     };
   };
 }
