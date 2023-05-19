@@ -62,10 +62,6 @@
     '';
   };
 
-  home.sessionPath = [
-    "${config.home.homeDirectory}/bin"
-  ];
-
   home.sessionVariables = {
     ELECTRON_TRASH = "gvfs-trash";
   };
