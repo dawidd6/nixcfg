@@ -2,13 +2,12 @@
   description = "NixOS configurations for dawidd6's machines";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    hardware.url = "github:nixos/nixos-hardware";
     home-manager = {
-      url = "github:nix-community/home-manager/release-22.11";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    hardware.url = "github:nixos/nixos-hardware";
     formatter-pack = {
       url = "github:Gerschtli/nix-formatter-pack";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,8 +16,8 @@
 
   outputs = {
     nixpkgs,
-    home-manager,
     hardware,
+    home-manager,
     formatter-pack,
     ...
   } @ inputs: let
@@ -34,6 +33,7 @@
         inherit modules pkgs;
         extraSpecialArgs = {inherit inputs;};
       };
+    filesInDir = dir: map (x: (dir + "/${x}")) (builtins.attrNames (builtins.readDir dir));
   in rec {
     devShells.${system} = import ./shell.nix {inherit pkgs;};
     formatter.${system} = formatter-pack.lib.mkFormatter {
@@ -62,15 +62,15 @@
       ];
     };
     homeConfigurations = {
-      "dawidd6" = mkHome [
-        ./home-manager/users/dawidd6.nix
-        ./home-manager/modules/cli.nix
-        ./home-manager/modules/gui.nix
-      ];
-      "dawid" = mkHome [
-        ./home-manager/users/dawid.nix
-        ./home-manager/modules/cli.nix
-      ];
+      "dawidd6" = mkHome (
+        [./home-manager/users/dawidd6.nix]
+        ++ (filesInDir ./home-manager/modules/cli)
+        ++ (filesInDir ./home-manager/modules/gui)
+      );
+      "dawid" = mkHome (
+        [./home-manager/users/dawid.nix]
+        ++ (filesInDir ./home-manager/modules/cli)
+      );
     };
   };
 }

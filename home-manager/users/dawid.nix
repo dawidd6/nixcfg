@@ -1,4 +1,6 @@
 {
+  programs.home-manager.enable = true;
+
   home = {
     username = "dawid";
     homeDirectory = "/home/dawid";
