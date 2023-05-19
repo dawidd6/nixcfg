@@ -17,6 +17,7 @@
     lm_sensors
     ncdu
     nmap
+    ruby
     sshpass
     strace
     tealdeer
