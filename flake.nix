@@ -33,7 +33,7 @@
         inherit modules pkgs;
         extraSpecialArgs = {inherit inputs;};
       };
-    filesInDir = dir: map (x: (dir + "/${x}")) (builtins.attrNames (nixpkgs.lib.filterAttrs (n: v: v == "regular") (builtins.readDir dir)));
+    filesInDir = dir: map (x: (dir + "/${x}")) (builtins.attrNames (nixpkgs.lib.filterAttrs (_n: v: v == "regular") (builtins.readDir dir)));
   in rec {
     devShells.${system} = import ./shell.nix {inherit pkgs;};
     formatter.${system} = formatter-pack.lib.mkFormatter {

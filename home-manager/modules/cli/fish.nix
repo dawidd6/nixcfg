@@ -1,4 +1,4 @@
-{config, ...}: {
+_: {
   programs.fish = {
     enable = true;
     shellAliases = {
