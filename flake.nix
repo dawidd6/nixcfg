@@ -8,8 +8,8 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    formatter-pack = {
-      url = "github:Gerschtli/nix-formatter-pack";
+    treefmt = {
+      url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -18,7 +18,7 @@
     nixpkgs,
     hardware,
     home-manager,
-    formatter-pack,
+    treefmt,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -35,14 +35,15 @@
       };
   in rec {
     devShells.${system} = import ./shell.nix {inherit pkgs;};
-    formatter.${system} = formatter-pack.lib.mkFormatter {
-      inherit pkgs;
-      config.tools = {
-        alejandra.enable = true;
-        deadnix.enable = true;
-        statix.enable = true;
+    formatter.${system} =
+      treefmt.lib.mkWrapper pkgs
+      {
+        projectRootFile = "flake.nix";
+        programs.alejandra.enable = true;
+        programs.deadnix.enable = true;
+        # TODO: uncomment when implemented
+        #programs.statix.enable = true;
       };
-    };
     checks.${system} = let
       os = nixpkgs.lib.mapAttrs (_: c: c.config.system.build.toplevel) nixosConfigurations;
       hm = nixpkgs.lib.mapAttrs (_: c: c.activationPackage) homeConfigurations;
