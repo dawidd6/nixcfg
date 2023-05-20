@@ -28,8 +28,6 @@
         projectRootFile = "flake.nix";
         programs.alejandra.enable = true;
         programs.deadnix.enable = true;
-        # TODO: uncomment when implemented
-        #programs.statix.enable = true;
       };
     checks.x86_64-linux = let
       os = nixpkgs.lib.mapAttrs (_: c: c.config.system.build.toplevel) nixosConfigurations;
