@@ -37,6 +37,7 @@ in {
       lm_sensors
       my-scripts
       ncdu
+      nil
       nmap
       podman
       ruby
