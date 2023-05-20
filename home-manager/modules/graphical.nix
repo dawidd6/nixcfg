@@ -68,5 +68,8 @@ in {
       command = "kgx";
       name = "Terminal";
     };
+    "/org/gnome/shell/extensions/pano" = {
+      send-notification-on-copy = false;
+    };
   };
 }
