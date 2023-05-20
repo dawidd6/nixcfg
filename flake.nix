@@ -31,84 +31,58 @@
         # TODO: uncomment when implemented
         #programs.statix.enable = true;
       };
-    checks.x86_64-linux = {
+    checks.x86_64-linux = let
       os = nixpkgs.lib.mapAttrs (_: c: c.config.system.build.toplevel) nixosConfigurations;
       hm = nixpkgs.lib.mapAttrs (_: c: c.activationPackage) homeConfigurations;
-    };
+    in
+      os // hm;
     nixosConfigurations = {
       "zotac" = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs;};
+        specialArgs = {
+          inherit inputs;
+          hostname = "zotac";
+        };
         modules = [
           ./nixos/hardware/zotac.nix
           ./nixos/hosts/zotac.nix
-          ./nixos/modules/boot.nix
-          ./nixos/modules/locale.nix
-          ./nixos/modules/network.nix
-          ./nixos/modules/nix.nix
-          ./nixos/modules/user.nix
+          ./nixos/modules/basic.nix
         ];
       };
       "t440s" = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs;};
+        specialArgs = {
+          inherit inputs;
+          hostname = "t440s";
+        };
         modules = [
           hardware.nixosModules.lenovo-thinkpad-t440s
           hardware.nixosModules.common-pc-ssd
           ./nixos/hardware/t440s.nix
           ./nixos/hosts/t440s.nix
-          ./nixos/modules/boot.nix
-          ./nixos/modules/desktop.nix
-          ./nixos/modules/laptop.nix
-          ./nixos/modules/locale.nix
-          ./nixos/modules/network.nix
-          ./nixos/modules/nix.nix
-          ./nixos/modules/user.nix
+          ./nixos/modules/basic.nix
+          ./nixos/modules/graphical.nix
         ];
       };
     };
     homeConfigurations = {
       "dawidd6" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {inherit inputs;};
+        extraSpecialArgs = {
+          inherit inputs;
+          username = "dawidd6";
+        };
         modules = [
-          ./home-manager/users/dawidd6.nix
-          ./home-manager/modules/cli/bat.nix
-          ./home-manager/modules/cli/fish.nix
-          ./home-manager/modules/cli/fzf.nix
-          ./home-manager/modules/cli/gh.nix
-          ./home-manager/modules/cli/git.nix
-          ./home-manager/modules/cli/less.nix
-          ./home-manager/modules/cli/neovim.nix
-          ./home-manager/modules/cli/nix.nix
-          ./home-manager/modules/cli/podman.nix
-          ./home-manager/modules/cli/scripts.nix
-          ./home-manager/modules/cli/starship.nix
-          ./home-manager/modules/cli/tools.nix
-          ./home-manager/modules/cli/zoxide.nix
-          ./home-manager/modules/gui/apps.nix
-          ./home-manager/modules/gui/extensions.nix
-          ./home-manager/modules/gui/font.nix
-          ./home-manager/modules/gui/keybindings.nix
-          ./home-manager/modules/gui/tweaks.nix
+          ./home-manager/modules/basic.nix
+          ./home-manager/modules/graphical.nix
         ];
       };
       "dawid" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {inherit inputs;};
+        extraSpecialArgs = {
+          inherit inputs;
+          username = "dawid";
+        };
         modules = [
-          ./home-manager/users/dawid.nix
-          ./home-manager/modules/cli/bat.nix
-          ./home-manager/modules/cli/fish.nix
-          ./home-manager/modules/cli/fzf.nix
-          ./home-manager/modules/cli/gh.nix
-          ./home-manager/modules/cli/git.nix
-          ./home-manager/modules/cli/less.nix
-          ./home-manager/modules/cli/neovim.nix
-          ./home-manager/modules/cli/nix.nix
-          ./home-manager/modules/cli/podman.nix
-          ./home-manager/modules/cli/scripts.nix
-          ./home-manager/modules/cli/starship.nix
-          ./home-manager/modules/cli/tools.nix
-          ./home-manager/modules/cli/zoxide.nix
+          ./home-manager/modules/basic.nix
         ];
       };
     };

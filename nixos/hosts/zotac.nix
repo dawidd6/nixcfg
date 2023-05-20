@@ -14,20 +14,6 @@
     tmux
   ];
 
-  # TODO: use home-manager for this?
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-  };
-
-  services.openssh.enable = true;
-  services.udisks2.enable = true;
-
-  virtualisation.podman.enable = true;
-
-  # TODO: move to separate module
   system.autoUpgrade = {
     enable = true;
     allowReboot = true;
@@ -35,8 +21,4 @@
     flake = "github:dawidd6/nix";
     flags = ["--verbose"];
   };
-
-  networking.hostName = "zotac";
-
-  system.stateVersion = "22.11";
 }
