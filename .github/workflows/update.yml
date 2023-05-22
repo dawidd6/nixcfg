@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  update-flake:
+  update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
