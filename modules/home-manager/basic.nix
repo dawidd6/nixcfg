@@ -302,6 +302,9 @@ in {
           disabled = false;
           format = "[$status]($style) ";
         };
+        nix_shell = {
+          heuristic = true;
+        };
       };
     };
     zoxide = {
