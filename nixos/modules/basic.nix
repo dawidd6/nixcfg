@@ -52,11 +52,6 @@
 
   programs.fish.enable = true;
 
-  services = {
-    openssh.enable = true;
-    udisks2.enable = true;
-  };
-
   virtualisation.libvirtd.enable = true;
 
   system.stateVersion = "22.11";

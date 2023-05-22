@@ -14,6 +14,11 @@
     tmux
   ];
 
+  services = {
+    openssh.enable = true;
+    udisks2.enable = true;
+  };
+
   system.autoUpgrade = {
     enable = true;
     allowReboot = true;
