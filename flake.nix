@@ -41,9 +41,9 @@
           hostname = "zotac";
         };
         modules = [
-          ./nixos/hardware/zotac.nix
-          ./nixos/hosts/zotac.nix
-          ./nixos/modules/basic.nix
+          ./hardware/zotac.nix
+          ./hosts/zotac.nix
+          ./modules/nixos/basic.nix
         ];
       };
       "t440s" = nixpkgs.lib.nixosSystem {
@@ -54,10 +54,10 @@
         modules = [
           hardware.nixosModules.lenovo-thinkpad-t440s
           hardware.nixosModules.common-pc-ssd
-          ./nixos/hardware/t440s.nix
-          ./nixos/hosts/t440s.nix
-          ./nixos/modules/basic.nix
-          ./nixos/modules/graphical.nix
+          ./hardware/t440s.nix
+          ./hosts/t440s.nix
+          ./modules/nixos/basic.nix
+          ./modules/nixos/graphical.nix
         ];
       };
     };
@@ -69,8 +69,8 @@
           username = "dawidd6";
         };
         modules = [
-          ./home-manager/modules/basic.nix
-          ./home-manager/modules/graphical.nix
+          ./modules/home-manager/basic.nix
+          ./modules/home-manager/graphical.nix
         ];
       };
       "dawid" = home-manager.lib.homeManagerConfiguration {
@@ -80,7 +80,7 @@
           username = "dawid";
         };
         modules = [
-          ./home-manager/modules/basic.nix
+          ./modules/home-manager/basic.nix
         ];
       };
     };
