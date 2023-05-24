@@ -1,4 +1,5 @@
 {pkgs, ...}: let
+  ubuntu-font-family = pkgs.callPackage ../../packages/ubuntu-font-family.nix {};
   extensions = with pkgs.gnomeExtensions; [
     appindicator
     gtk-title-bar
@@ -19,11 +20,11 @@ in {
       keepassxc
       pavucontrol
       spotify
-      ubuntu_font_family
       virt-manager
       vorta
       vscode
     ]
+    ++ [ubuntu-font-family]
     ++ extensions;
 
   dconf.settings = {
