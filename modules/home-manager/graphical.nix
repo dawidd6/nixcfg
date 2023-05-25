@@ -53,6 +53,10 @@ in {
     "org/gnome/desktop/calendar" = {
       show-weekdate = true;
     };
+    "org/gnome/settings-daemon/plugins/power" = {
+      sleep-inactive-battery-type = "nothing";
+      sleep-inactive-ac-type = "nothing";
+    };
     "org/gnome/desktop/wm/keybindings" = {
       switch-applications = [];
       switch-applications-backward = [];
