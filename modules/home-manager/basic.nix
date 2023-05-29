@@ -19,11 +19,13 @@ in {
       ELECTRON_TRASH = "gvfs-trash";
     };
     packages = with pkgs; [
+      alejandra
       ansible
       ansible-lint
       btop
       cpio
       curl
+      deadnix
       diffoscopeMinimal
       distrobox
       dos2unix
@@ -38,7 +40,10 @@ in {
       my-scripts
       ncdu
       nil
+      nix-init
+      nix-update
       nmap
+      nurl
       podman
       ruby
       sshpass
