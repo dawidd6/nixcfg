@@ -8,7 +8,6 @@
       name = "my-packages";
       paths = with pkgs; [
         alejandra
-        gitMinimal
         nil
       ];
     };

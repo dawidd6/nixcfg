@@ -1,9 +1,8 @@
-FROM docker.io/library/ubuntu:jammy
+FROM docker.io/nixpkgs/devcontainer
 
-RUN apt update && apt install -y curl
+ENV PATH="/root/.nix-profile/bin:${PATH}"
 
-RUN curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install linux --extra-conf "sandbox = false" --init none --no-confirm
+COPY nix.conf /etc/nix/
+COPY flake.nix flake.lock /flake/
 
-COPY flake.nix flake.lock /flake
-
-RUN . /etc/profile && nix profile install /flake#
+RUN nix profile install /flake
