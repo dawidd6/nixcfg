@@ -1,0 +1,16 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "nix",
+    "build":{
+        "dockerfile": "Dockerfile"
+    },
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"GitHub.vscode-github-actions",
+				"jnoortheen.nix-ide"
+			]
+		}
+	}
+}
