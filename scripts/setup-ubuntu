@@ -16,6 +16,7 @@ deb-get install \
 sudo apt purge snapd
 sudo apt update
 sudo apt install \
+    copyq \
     filezilla \
     gimp \
     gnome-clocks \
