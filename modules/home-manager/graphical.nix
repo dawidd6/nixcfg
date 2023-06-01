@@ -4,13 +4,13 @@
     appindicator
     gtk-title-bar
     hibernate-status-button
-    pano
   ];
 in {
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs;
     [
+      copyq
       filezilla
       gimp
       gnome.gnome-tweaks
@@ -72,9 +72,6 @@ in {
       binding = "<Control><Alt>t";
       command = "kgx";
       name = "Terminal";
-    };
-    "org/gnome/shell/extensions/pano" = {
-      send-notification-on-copy = false;
     };
   };
 }
