@@ -73,5 +73,12 @@ in {
       command = "kgx";
       name = "Terminal";
     };
+    "org/virt-manager/virt-manager" = {
+      system-tray = true;
+    };
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = ["qemu:///system"];
+      uris = ["qemu:///system"];
+    };
   };
 }
