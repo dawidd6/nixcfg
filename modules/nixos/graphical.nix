@@ -18,6 +18,7 @@ _: {
     };
     thermald.enable = true;
     upower.enable = true;
+    fwupd.enable = true;
   };
 
   sound.enable = true;
