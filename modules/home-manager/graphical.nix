@@ -4,13 +4,13 @@
     appindicator
     gtk-title-bar
     hibernate-status-button
+    pano
   ];
 in {
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs;
     [
-      copyq
       filezilla
       gimp
       gnome.gnome-tweaks
@@ -79,6 +79,9 @@ in {
     "org/virt-manager/virt-manager/connections" = {
       autoconnect = ["qemu:///system"];
       uris = ["qemu:///system"];
+    };
+    "org/gnome/shell/extensions/pano" = {
+      send-notification-on-copy = false;
     };
   };
 }
