@@ -1,4 +1,6 @@
 {pkgs, ...}: {
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
   fileSystems."/home/dawidd6/Backups" = {
     device = "/dev/disk/by-label/Backups";
     fsType = "ext4";

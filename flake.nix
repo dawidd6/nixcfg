@@ -60,6 +60,19 @@
           ./modules/nixos/graphical.nix
         ];
       };
+      "x1c6" = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs;
+          hostname = "x1c6";
+        };
+        modules = [
+          hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
+          ./hardware/x1c6.nix
+          ./hosts/x1c6.nix
+          ./modules/nixos/basic.nix
+          ./modules/nixos/graphical.nix
+        ];
+      };
     };
     homeConfigurations = {
       "dawidd6" = home-manager.lib.homeManagerConfiguration {

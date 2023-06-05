@@ -10,7 +10,6 @@
     tmp.cleanOnBoot = true;
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-    loader.efi.efiSysMountPoint = "/boot/efi";
     initrd.systemd.enable = true;
     kernelParams = ["quiet"];
   };

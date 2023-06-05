@@ -1,4 +1,6 @@
 _: {
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
   boot.initrd = {
     secrets = {
       "/crypto_keyfile.bin" = null;
