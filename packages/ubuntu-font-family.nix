@@ -1,3 +1,5 @@
+# Pinning this font to v0.83,
+# because newer version of it is garbage IMO
 {
   stdenvNoCC,
   fetchzip,

@@ -6,40 +6,39 @@
   hostname,
   ...
 }: {
-  boot = {
-    tmp.cleanOnBoot = true;
-    loader.systemd-boot.enable = true;
-    loader.efi.canTouchEfiVariables = true;
-    initrd.systemd.enable = true;
-    kernelParams = ["quiet"];
-  };
+  # Basic boot
+  boot.tmp.cleanOnBoot = true;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.initrd.systemd.enable = true;
+  boot.kernelParams = ["quiet"];
 
+  # Default timezone
   time.timeZone = "Europe/Warsaw";
 
+  # Default locale
   i18n.defaultLocale = "en_GB.UTF-8";
 
+  # Keyboard map
   console.keyMap = "pl2";
 
+  # Networking configuration
   networking.hostName = hostname;
-  networking.networkmanager = {
-    enable = true;
-    wifi.powersave = false;
-  };
+  networking.networkmanager.enable = true;
+  networking.networkmanager.wifi.powersave = false;
 
-  nix = {
-    registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
-    settings = {
-      experimental-features = "nix-command flakes";
-      auto-optimise-store = true;
-    };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 14d";
-    };
-  };
+  # Nix flakes configuration
+  nix.registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
+  nix.nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+  nix.settings.experimental-features = "nix-command flakes";
 
+  # Nix store optimisation
+  nix.settings.auto-optimise-store = true;
+  nix.gc.automatic = true;
+  nix.gc.dates = "weekly";
+  nix.gc.options = "--delete-older-than 14d";
+
+  # Main user
   users.users.dawidd6 = {
     isNormalUser = true;
     description = "dawidd6";
@@ -49,9 +48,13 @@
     shell = pkgs.fish;
   };
 
+  # Main shell
   programs.fish.enable = true;
 
+  # Virtualisation stuff
   virtualisation.libvirtd.enable = true;
 
+  # System state version
+  # NOT TO BE TOUCHED
   system.stateVersion = "22.11";
 }
