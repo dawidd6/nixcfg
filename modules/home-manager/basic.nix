@@ -141,13 +141,6 @@ in {
       d = "podman";
       p = "podman";
       hm = "home-manager";
-      hms = "home-manager switch --flake ~/nix#$USER";
-      hmb = "home-manager build --flake ~/nix#$USER";
-      hmd = "home-manager build --flake ~/nix#$USER && nix store diff-closures /nix/var/nix/profiles/per-user/$USER/home-manager ~/nix/result";
-      nr = "sudo nixos-rebuild";
-      nrs = "sudo nixos-rebuild switch --flake ~/nix#$hostname";
-      nrb = "sudo nixos-rebuild build --flake ~/nix#$hostname";
-      nrd = "sudo nixos-rebuild build --flake ~/nix#$hostname && nix store diff-closures /run/current-system ~/nix/result";
     };
     interactiveShellInit = ''
       set fish_color_command green
