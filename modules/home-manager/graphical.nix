@@ -1,4 +1,4 @@
-{pkgs, ...}: let
+{pkgs, lib, ...}: let
   # Desktop font
   ubuntu-font-family = pkgs.callPackage ../../packages/ubuntu-font-family.nix {};
   # GNOME extensions
@@ -67,6 +67,11 @@ in {
     "org/gnome/settings-daemon/plugins/power" = {
       sleep-inactive-battery-type = "nothing";
       sleep-inactive-ac-type = "nothing";
+      idle-dim = false;
+    };
+    # Session settings
+    "org/gnome/desktop/session" = {
+      idle-delay = lib.hm.gvariant.mkUint32 0;
     };
     # Keybindings remapping
     "org/gnome/desktop/wm/keybindings" = {
