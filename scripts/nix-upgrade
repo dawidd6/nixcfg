@@ -33,7 +33,7 @@ fi
 header 'home-manager'
 if ask 'Diff home-manager'; then
     home-manager build --flake ".#$USER"
-    nix store diff-closures "/nix/var/nix/profiles/per-user/$USER/home-manager" ./result
+    nix store diff-closures ~/.local/state/nix/profiles/home-manager ./result
     rm -f result
 fi
 if ask 'Switch home-manager'; then
