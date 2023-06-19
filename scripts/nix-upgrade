@@ -36,7 +36,7 @@ fi
 header 'home-manager'
 if ask 'Show home-manager changes'; then
     home-manager build --flake ".#$USER"
-    nix store diff-closures ~/.local/state/nix/profiles/home-manager ./result
+    nix store diff-closures ~/.local/state/home-manager/gcroots/current-home ./result
     rm -f result
 fi
 if ask 'Switch home-manager generation'; then
