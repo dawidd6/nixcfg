@@ -1,4 +1,8 @@
-{pkgs, lib, ...}: let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   # Desktop font
   ubuntu-font-family = pkgs.callPackage ../../packages/ubuntu-font-family.nix {};
   # GNOME extensions
