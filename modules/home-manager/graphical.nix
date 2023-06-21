@@ -49,7 +49,7 @@ in {
       color-scheme = "prefer-dark";
       cursor-theme = "Yaru";
       icon-theme = "Yaru";
-      gtk-theme = "Yaru";
+      gtk-theme = "Yaru-dark";
       clock-show-weekday = true;
       clock-show-seconds = true;
       show-battery-percentage = true;
@@ -117,7 +117,7 @@ in {
     };
     # User themes extension settings
     "org/gnome/shell/extensions/user-theme" = {
-      name = "Yaru";
+      name = "Yaru-dark";
     };
   };
 }
