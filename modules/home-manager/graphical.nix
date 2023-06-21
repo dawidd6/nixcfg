@@ -11,6 +11,7 @@
     gtk-title-bar
     hibernate-status-button
     pano
+    user-themes
   ];
 in {
   # Enable fonts configuration
@@ -32,6 +33,7 @@ in {
       vorta
       vscode
     ]
+    ++ [yaru-theme]
     ++ [ubuntu-font-family]
     ++ extensions;
 
@@ -45,7 +47,9 @@ in {
     # Desktop interface
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
-      gtk-theme = "Adwaita-dark";
+      cursor-theme = "Yaru";
+      icon-theme = "Yaru";
+      gtk-theme = "Yaru";
       clock-show-weekday = true;
       clock-show-seconds = true;
       show-battery-percentage = true;
@@ -62,6 +66,10 @@ in {
     "org/gnome/desktop/peripherals/touchpad" = {
       tap-to-click = true;
       two-finger-scrolling-enabled = true;
+    };
+    # Sound stuff
+    "org/gnome/desktop/sound" = {
+      theme-name = "Yaru";
     };
     # Calendar options
     "org/gnome/desktop/calendar" = {
@@ -106,6 +114,10 @@ in {
     # Pano extension settings
     "org/gnome/shell/extensions/pano" = {
       send-notification-on-copy = false;
+    };
+    # User themes extension settings
+    "org/gnome/shell/extensions/user-theme" = {
+      name = "Yaru";
     };
   };
 }
