@@ -13,29 +13,32 @@
     pano
     user-themes
   ];
+  favorite-apps = with pkgs; [
+    filezilla
+    gimp
+    gnome.gnome-tweaks
+    google-chrome
+    gpick
+    inkscape
+    keepassxc
+    pavucontrol
+    spotify
+    virt-manager
+    vorta
+    vscode
+  ];
 in {
   # Enable fonts configuration
   fonts.fontconfig.enable = true;
 
   # Graphical apps, fonts and extensions
-  home.packages = with pkgs;
+  home.packages =
     [
-      filezilla
-      gimp
-      gnome.gnome-tweaks
-      google-chrome
-      gpick
-      inkscape
-      keepassxc
-      pavucontrol
-      spotify
-      virt-manager
-      vorta
-      vscode
+      pkgs.yaru-theme
+      ubuntu-font-family
     ]
-    ++ [yaru-theme]
-    ++ [ubuntu-font-family]
-    ++ extensions;
+    ++ extensions
+    ++ favorite-apps;
 
   # GNOME preferences
   dconf.settings = {
@@ -43,6 +46,13 @@ in {
     "org/gnome/shell" = {
       enabled-extensions = map (extension: extension.extensionUuid) extensions;
       disabled-extensions = [];
+      favorite-apps = builtins.map (p:
+        builtins.head (
+          builtins.attrNames (
+            builtins.readDir (p.outPath + "/share/applications")
+          )
+        ))
+      favorite-apps;
     };
     # Desktop interface
     "org/gnome/desktop/interface" = {
