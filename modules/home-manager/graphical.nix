@@ -46,13 +46,7 @@ in {
     "org/gnome/shell" = {
       enabled-extensions = map (extension: extension.extensionUuid) extensions;
       disabled-extensions = [];
-      favorite-apps = builtins.map (p:
-        builtins.head (
-          builtins.attrNames (
-            builtins.readDir (p.outPath + "/share/applications")
-          )
-        ))
-      favorite-apps;
+      favorite-apps = builtins.concatLists (builtins.map (p: builtins.attrNames (builtins.readDir (p.outPath + "/share/applications"))) favorite-apps);
     };
     # Desktop interface
     "org/gnome/desktop/interface" = {
