@@ -19,6 +19,9 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v2
 
+      - name: Cache store
+        uses: DeterminateSystems/magic-nix-cache-action@v1
+
       - name: Update flake
         uses: DeterminateSystems/update-flake-lock@v19
         with:
