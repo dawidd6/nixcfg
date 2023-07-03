@@ -33,6 +33,7 @@ in {
     diffoscopeMinimal
     distrobox
     dos2unix
+    file
     gh
     ghorg
     glab
@@ -47,8 +48,10 @@ in {
     nix-init
     nix-update
     nmap
+    nodejs
     nurl
     podman
+    python3
     ruby
     sshpass
     strace
