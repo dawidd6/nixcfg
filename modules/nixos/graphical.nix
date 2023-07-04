@@ -13,6 +13,9 @@ _: {
 
   # Printing services
   services.printing.enable = true;
+  services.avahi.enable = true;
+  services.avahi.nssmdns = true;
+  services.avahi.openFirewall = true;
 
   # Desktop environment
   services.xserver.enable = true;
