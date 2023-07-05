@@ -27,6 +27,7 @@ in {
     ansible
     ansible-lint
     btop
+    cloc
     cpio
     curl
     deadnix
