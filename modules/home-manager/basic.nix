@@ -51,6 +51,7 @@ in {
     nmap
     nodejs
     nurl
+    openstackclient
     podman
     python3
     ruby
