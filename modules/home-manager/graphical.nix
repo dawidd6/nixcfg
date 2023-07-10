@@ -84,6 +84,7 @@ in {
       sleep-inactive-battery-type = "nothing";
       sleep-inactive-ac-type = "nothing";
       idle-dim = false;
+      idle-brightness = 100;
     };
     # Session settings
     "org/gnome/desktop/session" = {
