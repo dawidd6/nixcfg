@@ -60,15 +60,15 @@
           ./modules/nixos/graphical.nix
         ];
       };
-      "x1c6" = nixpkgs.lib.nixosSystem {
+      "t14" = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs;
-          hostname = "x1c6";
+          hostname = "t14";
         };
         modules = [
-          hardware.nixosModules.lenovo-thinkpad-x1-6th-gen
-          ./hardware/x1c6.nix
-          ./hosts/x1c6.nix
+          hardware.nixosModules.lenovo-thinkpad-t14-amd-gen1
+          ./hardware/t14.nix
+          ./hosts/t14.nix
           ./modules/nixos/basic.nix
           ./modules/nixos/graphical.nix
         ];
