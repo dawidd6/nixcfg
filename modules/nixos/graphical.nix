@@ -2,6 +2,9 @@ _: {
   # Flicker-free boot
   boot.plymouth.enable = true;
 
+  # Bluetooth configuration
+  hardware.bluetooth.powerOnBoot = false;
+
   # Sound configuration
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
