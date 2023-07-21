@@ -1,15 +1,16 @@
 {pkgs, ...}: {
-  # Machine-specific boot configuration
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
-  # External disk automount
+  networking.networkmanager.wifi.powersave = false;
+
   fileSystems."/home/dawidd6/Backups" = {
     device = "/dev/disk/by-label/Backups";
     fsType = "ext4";
     options = ["nofail"];
   };
 
-  # Special packages for this host
   environment.systemPackages = with pkgs; [
     borgbackup
     file
@@ -19,11 +20,9 @@
     tmux
   ];
 
-  # Special services for this host
   services.openssh.enable = true;
   services.udisks2.enable = true;
 
-  # Auto-upgrade for this host
   system.autoUpgrade = {
     enable = true;
     allowReboot = true;
@@ -31,4 +30,6 @@
     flake = "github:dawidd6/nix";
     flags = ["--verbose"];
   };
+
+  system.stateVersion = "22.11";
 }

@@ -15,86 +15,127 @@
   };
 
   outputs = {
+    self,
     nixpkgs,
     hardware,
     home-manager,
     treefmt,
     ...
-  } @ inputs: rec {
-    devShells.x86_64-linux = import ./shell.nix {pkgs = nixpkgs.legacyPackages.x86_64-linux;};
-    formatter.x86_64-linux =
-      treefmt.lib.mkWrapper nixpkgs.legacyPackages.x86_64-linux
-      {
-        projectRootFile = "flake.nix";
-        programs.alejandra.enable = true;
-        programs.deadnix.enable = true;
-      };
-    checks.x86_64-linux = let
-      os = nixpkgs.lib.mapAttrs (_: c: c.config.system.build.toplevel) nixosConfigurations;
-      hm = nixpkgs.lib.mapAttrs (_: c: c.activationPackage) homeConfigurations;
-    in
-      os // hm;
+  } @ inputs: let
+    inherit (self) outputs;
+    inherit (nixpkgs.lib.filesystem) listFilesRecursive;
+    inherit (nixpkgs.lib) mapAttrs genAttrs;
+    username = "dawidd6";
+    eachSystem = genAttrs [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+    eachSystemPkgs = f: eachSystem (system: f (import nixpkgs {inherit system;}));
+  in rec {
+    devShells = eachSystemPkgs (pkgs: import ./shell.nix {inherit pkgs;});
+    formatter = eachSystemPkgs (pkgs: treefmt.lib.mkWrapper pkgs ./treefmt.nix);
+    packages = eachSystemPkgs (pkgs: import ./pkgs {inherit pkgs;});
+    overlays = import ./overlays {};
+    checks = eachSystem (
+      system:
+        (mapAttrs (_: c: c.config.system.build.toplevel) nixosConfigurations)
+        // {dawid = homeConfigurations.dawid.activationPackage;}
+    );
+    nixosModules = {
+      default = _: {imports = [home-manager.nixosModules.default];};
+      basic = _: {imports = listFilesRecursive ./modules/nixos/basic;};
+      graphical = _: {imports = listFilesRecursive ./modules/nixos/graphical;};
+    };
+    homeModules = {
+      basic = _: {imports = listFilesRecursive ./modules/home-manager/basic;};
+      graphical = _: {imports = listFilesRecursive ./modules/home-manager/graphical;};
+    };
     nixosConfigurations = {
-      "zotac" = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs;
-          hostname = "zotac";
-        };
+      "t14" = nixpkgs.lib.nixosSystem rec {
         modules = [
-          ./hardware/zotac.nix
-          ./hosts/zotac.nix
-          ./modules/nixos/basic.nix
+          ./hosts/t14/configuration.nix
+          hardware.nixosModules.lenovo-thinkpad-t14-amd-gen1
+          nixosModules.default
+          nixosModules.basic
+          nixosModules.graphical
+          {
+            home-manager = {
+              users.${username} = import ./hosts/t14/home.nix;
+              extraSpecialArgs = specialArgs;
+              sharedModules = [
+                homeModules.basic
+                homeModules.graphical
+              ];
+            };
+          }
         ];
-      };
-      "t440s" = nixpkgs.lib.nixosSystem {
         specialArgs = {
-          inherit inputs;
-          hostname = "t440s";
-        };
-        modules = [
-          hardware.nixosModules.lenovo-thinkpad-t440s
-          hardware.nixosModules.common-pc-ssd
-          ./hardware/t440s.nix
-          ./hosts/t440s.nix
-          ./modules/nixos/basic.nix
-          ./modules/nixos/graphical.nix
-        ];
-      };
-      "t14" = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs;
+          inherit inputs outputs username;
           hostname = "t14";
         };
+      };
+      "t440s" = nixpkgs.lib.nixosSystem rec {
         modules = [
-          hardware.nixosModules.lenovo-thinkpad-t14-amd-gen1
-          ./hardware/t14.nix
-          ./hosts/t14.nix
-          ./modules/nixos/basic.nix
-          ./modules/nixos/graphical.nix
+          ./hosts/t440s/configuration.nix
+          hardware.nixosModules.lenovo-thinkpad-t440s
+          hardware.nixosModules.common-pc-ssd
+          nixosModules.default
+          nixosModules.basic
+          nixosModules.graphical
+          {
+            home-manager = {
+              users.${username} = import ./hosts/t440s/home.nix;
+              extraSpecialArgs = specialArgs;
+              sharedModules = [
+                homeModules.basic
+                homeModules.graphical
+              ];
+            };
+          }
         ];
+        specialArgs = {
+          inherit inputs outputs username;
+          hostname = "t440s";
+        };
+      };
+      "zotac" = nixpkgs.lib.nixosSystem rec {
+        modules = [
+          ./hosts/zotac/configuration.nix
+          nixosModules.default
+          nixosModules.basic
+          {
+            home-manager = {
+              users.${username} = import ./hosts/zotac/home.nix;
+              extraSpecialArgs = specialArgs;
+              sharedModules = [
+                homeModules.basic
+              ];
+            };
+          }
+        ];
+        specialArgs = {
+          inherit inputs outputs username;
+          hostname = "zotac";
+        };
       };
     };
     homeConfigurations = {
-      "dawidd6" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {
-          inherit inputs;
-          username = "dawidd6";
-        };
+      dawid = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {system = "x86_64-linux";};
         modules = [
-          ./modules/home-manager/basic.nix
-          ./modules/home-manager/graphical.nix
+          {
+            nixpkgs.overlays = [
+              outputs.overlays.additions
+              outputs.overlays.modifications
+            ];
+            home.stateVersion = "22.11";
+          }
+          homeModules.basic
         ];
-      };
-      "dawid" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = {
-          inherit inputs;
+          inherit inputs outputs;
           username = "dawid";
         };
-        modules = [
-          ./modules/home-manager/basic.nix
-        ];
       };
     };
   };
