@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, lib, ...}: {
   # Machine-specific boot configuration
   boot.initrd.secrets = {
     "/crypto_keyfile.bin" = null;
@@ -14,4 +14,6 @@
   services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
   security.pam.services.login.fprintAuth = false;
   security.pam.services.gdm-fingerprint.fprintAuth = true;
+
+  networking.networkmanager.wifi.powersave = lib.mkForce true;
 }

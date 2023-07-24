@@ -28,6 +28,7 @@ _: {
   services.xserver.xkbVariant = "";
 
   # Power management
+  powerManagement.enable = true;
   powerManagement.powertop.enable = true;
   services.thermald.enable = true;
   services.upower.enable = true;
