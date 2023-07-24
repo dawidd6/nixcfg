@@ -106,6 +106,7 @@ in {
       dotfiles = "git --git-dir=$HOME/.dotfiles --work-tree=$HOME";
       ssh = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no";
       hub = "gh";
+      nix-shell = "nix-shell --command fish";
     };
     shellAbbrs = {
       e = "exit";
