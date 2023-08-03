@@ -27,6 +27,7 @@
     nmap
     nodejs
     nurl
+    nvd
     openstackclient
     python3
     ruby
