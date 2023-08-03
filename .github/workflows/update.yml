@@ -19,7 +19,12 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v2
 
-      - name: Update flake
-        uses: DeterminateSystems/update-flake-lock@v19
-        with:
-          token: ${{ secrets.TOKEN }}
+      - run: nix flake show --json | jq > flake.json
+
+      - run: nix build .#checks.dawid -o /tmp/dawid-current
+
+      - run: nix flake update
+
+      - run: nix build .#checks.dawid -o /tmp/dawid-proposed
+
+      - run: nix store diff-closures /tmp/dawid-current /tmp/dawid-proposed
