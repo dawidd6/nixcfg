@@ -1,0 +1,37 @@
+name: Build flake
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  discovery:
+    runs-on: ubuntu-latest
+    outputs:
+      hits: ${{ steps.discovery.outputs.hits }}
+    steps:
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v2
+
+      - name: Discover derivations
+        id: discovery
+        uses: DevPalace/phoenix-ci/discovery@v1.1
+        with:
+          attrPaths: packages.x86_64-linux
+
+  worker:
+    name: ${{ matrix.target.attrPath }}
+    needs: discovery
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ${{ fromJSON(needs.discovery.outputs.hits) }}
+    steps:
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v2
+
+      - name: Build derivation
+        uses: DevPalace/phoenix-ci/worker@v1.1
+        with:
+          target: ${{ toJSON(matrix.target) }}
