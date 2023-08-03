@@ -17,7 +17,8 @@ jobs:
         id: discovery
         uses: DevPalace/phoenix-ci/discovery@v1.1
         with:
-          attrPaths: packages.x86_64-linux
+          attrPaths: >
+            packages.x86_64-linux, nixosConfigurations, homeConfigurations
 
   worker:
     name: ${{ matrix.target.attrPath }}
