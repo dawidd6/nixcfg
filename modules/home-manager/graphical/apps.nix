@@ -1,5 +1,5 @@
-{pkgs, ...}: let
-  apps = with pkgs; [
+{pkgs, ...}: {
+  home.packages = with pkgs; [
     filezilla
     gimp
     gnome.gnome-tweaks
@@ -13,12 +13,10 @@
     vorta
     vscode
   ];
-in {
-  home.packages = apps;
 
   dconf.settings = {
     "org/gnome/shell" = {
-      favorite-apps = builtins.concatLists (builtins.map (p: builtins.attrNames (builtins.readDir (p.outPath + "/share/applications"))) apps);
+      favorite-apps = [];
     };
     "org/virt-manager/virt-manager" = {
       system-tray = true;
