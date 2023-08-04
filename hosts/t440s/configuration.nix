@@ -1,6 +1,18 @@
-{...}: {
+{
+  inputs,
+  outputs,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
+
+    inputs.home-manager.nixosModules.default
+
+    inputs.hardware.nixosModules.lenovo-thinkpad-t440s
+    inputs.hardware.nixosModules.common-pc-ssd
+
+    outputs.nixosModules.basic
+    outputs.nixosModules.graphical
   ];
 
   networking.networkmanager.wifi.powersave = false;

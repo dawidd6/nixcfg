@@ -1,6 +1,9 @@
 {
+  inputs,
+  outputs,
   pkgs,
   username,
+  hostname,
   ...
 }: {
   programs.fish.enable = true;
@@ -18,5 +21,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    users."${username}" = import "${inputs.self}/hosts/${hostname}/home.nix";
+    extraSpecialArgs = {inherit inputs outputs hostname username;};
   };
 }
