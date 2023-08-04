@@ -36,10 +36,12 @@
     formatter = eachSystemPkgs (pkgs: treefmt.lib.mkWrapper pkgs ./treefmt.nix);
     packages = eachSystemPkgs (pkgs: import ./pkgs {inherit pkgs;});
     overlays = import ./overlays {};
-    checks = eachSystem (
-      system:
+    checks = eachSystemPkgs (
+      pkgs:
         (mapAttrs (_: c: c.config.system.build.toplevel) nixosConfigurations)
         // {dawid = homeConfigurations.dawid.activationPackage;}
+        // (overlays.modifications pkgs pkgs)
+        // (overlays.additions pkgs pkgs)
     );
     nixosModules = {
       default = _: {imports = [home-manager.nixosModules.default];};
