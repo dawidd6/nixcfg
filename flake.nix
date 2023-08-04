@@ -1,6 +1,4 @@
 {
-  description = "NixOS configurations for dawidd6's machines";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     hardware.url = "github:nixos/nixos-hardware";
@@ -16,23 +14,15 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-parts,
-    systems,
-    home-manager,
-    treefmt,
-    ...
-  } @ inputs: let
+  outputs = {self, ...} @ inputs: let
     inherit (self) outputs;
-    inherit (nixpkgs.lib.filesystem) listFilesRecursive;
-    inherit (nixpkgs.lib.attrsets) mapAttrs filterAttrs genAttrs;
+    inherit (inputs.nixpkgs.lib.filesystem) listFilesRecursive;
+    inherit (inputs.nixpkgs.lib.attrsets) mapAttrs filterAttrs genAttrs;
     inherit (builtins) readDir attrNames;
     username = "dawidd6";
   in
-    flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = import systems;
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = import inputs.systems;
       flake = {
         overlays = import ./overlays {};
         nixosModules = {
@@ -45,7 +35,7 @@
         };
         nixosConfigurations = let
           mkNixos = hostname:
-            nixpkgs.lib.nixosSystem {
+            inputs.nixpkgs.lib.nixosSystem {
               specialArgs = {inherit inputs outputs username hostname;};
               modules = [(./hosts + "/${hostname}/configuration.nix")];
             };
@@ -53,8 +43,8 @@
         in
           genAttrs hosts (hostname: mkNixos hostname);
         homeConfigurations = {
-          dawid = home-manager.lib.homeManagerConfiguration {
-            pkgs = import nixpkgs {system = "x86_64-linux";};
+          dawid = inputs.home-manager.lib.homeManagerConfiguration {
+            pkgs = import inputs.nixpkgs {system = "x86_64-linux";};
             modules = [
               {
                 nixpkgs.overlays = [
@@ -75,7 +65,7 @@
       perSystem = {pkgs, ...}: {
         devShells = import ./shell.nix {inherit pkgs;};
         packages = import ./pkgs {inherit pkgs;};
-        formatter = treefmt.lib.mkWrapper pkgs ./treefmt.nix;
+        formatter = inputs.treefmt.lib.mkWrapper pkgs ./treefmt.nix;
         checks =
           {}
           // (mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations)
