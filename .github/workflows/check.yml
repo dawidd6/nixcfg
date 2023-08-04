@@ -3,6 +3,9 @@ name: Check flake
 on:
   workflow_dispatch:
   push:
+    branches:
+      - master
+  pull_request:
 
 concurrency:
   group: test-${{ github.ref }}
