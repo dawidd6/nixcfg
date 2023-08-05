@@ -68,8 +68,8 @@
         formatter = inputs.treefmt.lib.mkWrapper pkgs ./treefmt.nix;
         checks =
           {}
-          // (mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations)
-          // {dawid = outputs.homeConfigurations.dawid.activationPackage;}
+          #// (mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations)
+          #// {dawid = outputs.homeConfigurations.dawid.activationPackage;}
           // (outputs.overlays.modifications pkgs pkgs)
           // (outputs.overlays.additions pkgs pkgs);
       };
