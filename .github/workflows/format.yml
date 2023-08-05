@@ -3,13 +3,16 @@ name: Format flake
 on:
   workflow_dispatch:
   push:
+    branches:
+      - master
+  pull_request:
 
 concurrency:
-  group: fmt-${{ github.ref }}
+  group: format-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  fmt:
+  format:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
