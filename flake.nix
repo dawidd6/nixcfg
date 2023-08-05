@@ -22,7 +22,7 @@
   outputs = {self, ...} @ inputs: let
     inherit (self) outputs;
     inherit (inputs.nixpkgs.lib.filesystem) listFilesRecursive;
-    inherit (inputs.nixpkgs.lib.attrsets) mapAttrs filterAttrs genAttrs;
+    inherit (inputs.nixpkgs.lib.attrsets) filterAttrs genAttrs;
     inherit (builtins) readDir attrNames;
     username = "dawidd6";
   in
