@@ -22,7 +22,7 @@
   outputs = {self, ...} @ inputs: let
     inherit (self) outputs;
     inherit (inputs.nixpkgs.lib.filesystem) listFilesRecursive;
-    inherit (inputs.nixpkgs.lib.attrsets) filterAttrs genAttrs;
+    inherit (inputs.nixpkgs.lib.attrsets) filterAttrs genAttrs mapAttrs;
     inherit (builtins) readDir attrNames;
     username = "dawidd6";
   in
@@ -73,8 +73,8 @@
         formatter = inputs.treefmt.lib.mkWrapper pkgs ./treefmt.nix;
         checks =
           {}
-          #// (mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations)
-          #// {dawid = outputs.homeConfigurations.dawid.activationPackage;}
+          // (mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations)
+          // {dawid = outputs.homeConfigurations.dawid.activationPackage;}
           // (outputs.overlays.modifications pkgs pkgs)
           // (outputs.overlays.additions pkgs pkgs);
       };
