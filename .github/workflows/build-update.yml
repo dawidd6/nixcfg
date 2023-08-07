@@ -33,5 +33,9 @@ jobs:
           for check in ${checks}; do
             nix build github:${{github.repository}}#checks.${system}.${check} -o before
             nix build .#checks.${system}.${check} -o after
-            nix run nixpkgs#nvd -- diff before after | gh pr comment ${{github.event.number}} -F -
+            echo "## ${check}" > body
+            echo '```' >> body
+            nix run nixpkgs#nvd -- diff before after >> body
+            echo '```' >> body
+            gh pr comment ${{github.event.number}} -F body
           done
