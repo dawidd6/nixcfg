@@ -72,11 +72,8 @@
         packages = import ./pkgs {inherit pkgs;};
         formatter = inputs.treefmt.lib.mkWrapper pkgs ./treefmt.nix;
         checks =
-          {}
-          // (mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations)
-          // {dawid = outputs.homeConfigurations.dawid.activationPackage;}
-          // (outputs.overlays.modifications pkgs pkgs)
-          // (outputs.overlays.additions pkgs pkgs);
+          (mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations)
+          // (mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations);
       };
     };
 }
