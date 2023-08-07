@@ -1,14 +1,21 @@
-name: Check flake on PR
+name: Build flake
 
 on:
+  push:
+    branches:
+      - master
   pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - flake.lock
 
 concurrency:
-  group: check-${{ github.ref }}
+  group: build-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  check:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,5 +27,11 @@ jobs:
           extra-conf: |
             accept-flake-config = true
 
-      - name: Check flake
+      - name: Setup cachix
+        uses: cachix/cachix-action@v12
+        with:
+          name: ${{ github.repository_owner }}
+          authToken: ${{ secrets.CACHIX_TOKEN }}
+
+      - name: Build flake
         run: nix flake check

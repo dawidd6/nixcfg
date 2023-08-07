@@ -1,0 +1,37 @@
+name: Build updated flake
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - flake.lock
+
+concurrency:
+  group: build-updated-flake-${{ github.ref }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v2
+        with:
+          extra-conf: |
+            accept-flake-config = true
+
+      - name: Build flake
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          system="$(uname -i)-$(uname -s | tr [:upper:] [:lower:])"
+          checks="$(nix eval .#checks.${system} --raw --apply 'checks: builtins.toString (builtins.attrNames checks)')"
+          for check in ${checks}; do
+            nix build github:${{github.repository}}#checks.${system}.${check} -o before
+            nix build .#checks.${system}.${check} -o after
+            nix run nixpkgs#nvd -- diff before after | gh pr comment ${{github.event.number}} -F -
+          done
