@@ -14,6 +14,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Create directory
+        run: sudo mkdir /nix
+
+      - name: Maximize space
+        uses: easimon/maximize-build-space@v7
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          build-mount-path: /nix
+          overprovision-lvm: true
+          remove-dotnet: true
+          remove-android: true
+          remove-haskell: true
+          remove-codeql: true
+          remove-docker-images: true
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
