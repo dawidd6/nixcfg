@@ -6,8 +6,7 @@ on:
     - cron: '0 0 * * 0' # runs weekly on Sunday at 00:00
 
 concurrency:
-  group: update-${{ github.ref }}
-  cancel-in-progress: false
+  group: update-flake-${{ github.ref }}
 
 jobs:
   update:

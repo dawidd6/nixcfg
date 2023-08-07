@@ -7,7 +7,7 @@ on:
   pull_request:
 
 concurrency:
-  group: format-${{ github.ref }}
+  group: format-flake-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

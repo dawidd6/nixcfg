@@ -11,7 +11,7 @@ on:
       - flake.lock
 
 concurrency:
-  group: build-${{ github.ref }}
+  group: build-flake-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
