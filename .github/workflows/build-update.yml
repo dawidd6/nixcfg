@@ -15,9 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create directory
-        run: |
-          sudo mkdir /nix
-          ls -lh /
+        run: sudo mkdir /nix
 
       - name: Maximize space
         uses: easimon/maximize-build-space@v7
@@ -31,6 +29,9 @@ jobs:
           remove-haskell: true
           remove-codeql: true
           remove-docker-images: true
+
+      - name: Fix ownership
+        run: sudo chown root:root /nix
 
       - name: Checkout repository
         uses: actions/checkout@v3
