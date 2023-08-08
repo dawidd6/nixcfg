@@ -9,6 +9,7 @@
     outputs.nixosModules.basic
   ];
 
+  networking.hostName = "zotac";
   networking.networkmanager.wifi.powersave = false;
 
   fileSystems."/home/dawidd6/Backups" = {

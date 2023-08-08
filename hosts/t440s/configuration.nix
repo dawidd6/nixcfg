@@ -13,6 +13,7 @@
     outputs.nixosModules.graphical
   ];
 
+  networking.hostName = "t440s";
   networking.networkmanager.wifi.powersave = false;
 
   boot.initrd.secrets = {
