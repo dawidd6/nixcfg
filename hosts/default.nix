@@ -1,4 +1,8 @@
-{inputs, outputs, ...} :{
+{
+  inputs,
+  outputs,
+  ...
+}: {
   "t14" = inputs.nixpkgs.lib.nixosSystem {
     specialArgs = {inherit inputs outputs;};
     modules = [./t14/configuration.nix];

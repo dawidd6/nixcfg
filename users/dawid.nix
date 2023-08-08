@@ -1,7 +1,4 @@
-{
-  outputs,
-  ...
-}: {
+{outputs, ...}: {
   imports = [
     outputs.homeModules.basic
   ];
