@@ -1,13 +1,10 @@
 {
-  inputs,
   outputs,
   pkgs,
   ...
 }: {
   imports = [
     ./hardware-configuration.nix
-
-    inputs.home-manager.nixosModules.default
 
     outputs.nixosModules.basic
   ];

@@ -7,8 +7,6 @@
   imports = [
     ./hardware-configuration.nix
 
-    inputs.home-manager.nixosModules.default
-
     inputs.hardware.nixosModules.lenovo-thinkpad-t14-amd-gen1
 
     outputs.nixosModules.basic

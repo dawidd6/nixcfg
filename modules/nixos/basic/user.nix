@@ -6,6 +6,8 @@
   hostname,
   ...
 }: {
+  imports = [inputs.home-manager.nixosModules.default];
+
   programs.fish.enable = true;
 
   users.defaultUserShell = pkgs.fish;
