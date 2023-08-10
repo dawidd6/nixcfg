@@ -44,12 +44,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           for name in $(nix eval .#hostNames --raw); do
-          nix build github:${{ github.repository }}#hostTops.${name} .#hostTops.${name}
-          nix run nixpkgs#nvd -- diff ./result ./result-1 | tee ./diff
-          gh pr comment ${{ github.event.number }} -F - <<-DDEOF
-          ## ${name}
-          ```
-          $(cat ./diff)
-          ```
-          DDEOF
+            nix build github:${{ github.repository }}#hostTops.${name} .#hostTops.${name}
+            echo "## ${name}" | tee body.txt
+            echo '```' | tee -a body.txt
+            nix run nixpkgs#nvd -- diff ./result ./result-1 | tee -a ./body.txt
+            echo '```' | tee -a body.txt
+            gh pr comment ${{ github.event.number }} -F ./body.txt
           done
