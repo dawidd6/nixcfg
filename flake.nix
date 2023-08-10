@@ -33,14 +33,14 @@
         homeModules = import ./modules/home-manager;
         nixosConfigurations = import ./hosts {inherit inputs outputs;};
         homeConfigurations = import ./users {inherit inputs outputs;};
+        hostNames = builtins.toString (builtins.attrNames outputs.hostTops);
+        hostTops = inputs.nixpkgs.lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
       };
       perSystem = {pkgs, ...}: {
         devShells = import ./shell.nix {inherit pkgs;};
         packages = import ./pkgs {inherit pkgs;};
         formatter = inputs.treefmt.lib.mkWrapper pkgs ./treefmt.nix;
-        checks = with inputs.nixpkgs.lib;
-          (mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations)
-          // (mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations);
+        checks = outputs.hostTops // (inputs.nixpkgs.lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations);
       };
     };
 }
