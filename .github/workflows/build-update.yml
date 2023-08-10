@@ -14,24 +14,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Create directory
-        run: sudo mkdir /nix
-
+      # TODO: https://github.com/easimon/maximize-build-space/pull/27
       - name: Maximize space
-        uses: easimon/maximize-build-space@v7
+        #uses: easimon/maximize-build-space@v7
+        uses: dawidd6/maximize-build-space@test
         with:
           root-reserve-mb: 512
           swap-size-mb: 1024
           build-mount-path: /nix
+          build-mount-path-ownership: runner:runner
           overprovision-lvm: true
           remove-dotnet: true
           remove-android: true
           remove-haskell: true
           remove-codeql: true
           remove-docker-images: true
-
-      - name: Fix ownership
-        run: sudo chown root:root /nix
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -46,15 +43,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -euo pipefail
-          system="$(uname -i)-$(uname -s | tr [:upper:] [:lower:])"
-          checks="$(nix eval .#checks.${system} --raw --apply 'checks: builtins.toString (builtins.attrNames checks)')"
-          for check in ${checks}; do
-            nix build github:${{github.repository}}#checks.${system}.${check} -o before
-            nix build .#checks.${system}.${check} -o after
-            echo "## ${check}" > body
-            echo '```' >> body
-            nix run nixpkgs#nvd -- diff before after >> body
-            echo '```' >> body
-            gh pr comment ${{github.event.number}} -F body
+          for name in $(nix eval .#hostNames --raw); do
+            nix build github:${{ github.repository }}#hostTops.${name} .#hostTops.${name}
+            nix run nixpkgs#nvd -- diff ./result ./result-1 | tee ./diff
+            gh pr comment ${{ github.event.number }} -F - <<EOF
+            ## ${name}
+            ```
+            $(cat ./diff)
+            ```
+            EOF
           done
