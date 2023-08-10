@@ -46,7 +46,7 @@ jobs:
           for name in $(nix eval .#hostNames --raw); do
             nix build github:${{ github.repository }}#hostTops.${name} .#hostTops.${name}
             nix run nixpkgs#nvd -- diff ./result ./result-1 | tee ./diff
-            gh pr comment ${{ github.event.number }} -F - <<EOF
+            gh pr comment ${{ github.event.number }} -F - <<-EOF
             ## ${name}
             ```
             $(cat ./diff)
