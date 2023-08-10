@@ -22,7 +22,7 @@ jobs:
           root-reserve-mb: 512
           swap-size-mb: 1024
           build-mount-path: /nix
-          build-mount-path-ownership: runner:runner
+          build-mount-path-ownership: root:root
           overprovision-lvm: true
           remove-dotnet: true
           remove-android: true
