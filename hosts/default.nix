@@ -15,4 +15,8 @@
     specialArgs = {inherit inputs outputs;};
     modules = [./zotac/configuration.nix];
   };
+  "vm" = inputs.nixpkgs.lib.nixosSystem {
+    specialArgs = {inherit inputs outputs;};
+    modules = [./vm/configuration.nix];
+  };
 }
