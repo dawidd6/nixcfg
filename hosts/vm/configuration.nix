@@ -19,8 +19,7 @@
   virtualisation.graphics = true;
   virtualisation.qemu.options = [
     "-device virtio-vga-gl"
-    #"-display gtk,gl=on,grab-on-hover=on"
-    "-display spice-app,gl=on"
+    "-display gtk,gl=on,grab-on-hover=on"
   ];
 
   services.sshd.enable = true;
