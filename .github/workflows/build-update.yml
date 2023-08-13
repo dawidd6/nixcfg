@@ -14,10 +14,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # TODO: https://github.com/easimon/maximize-build-space/pull/27
       - name: Maximize space
-        #uses: easimon/maximize-build-space@v7
-        uses: dawidd6/maximize-build-space@test
+        uses: easimon/maximize-build-space@v8
         with:
           root-reserve-mb: 512
           swap-size-mb: 1024
