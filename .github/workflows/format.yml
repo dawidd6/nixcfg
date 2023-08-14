@@ -26,5 +26,6 @@ jobs:
       - name: Format flake
         run: nix fmt
 
-      - name: Repository status
-        uses: CatChen/check-git-status-action@v1
+      - name: Create PR
+        if: github.ref_name == 'master'
+        uses: peter-evans/create-pull-request@v5
