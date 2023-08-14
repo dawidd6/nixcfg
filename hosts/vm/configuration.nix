@@ -12,11 +12,7 @@
   ];
 
   virtualisation.forwardPorts = [
-    {
-      from = "host";
-      host.port = 22222;
-      guest.port = 22;
-    }
+    { from = "host"; host.port = 22222; guest.port = 22; }
   ];
   virtualisation.cores = 4;
   virtualisation.memorySize = 4096;
