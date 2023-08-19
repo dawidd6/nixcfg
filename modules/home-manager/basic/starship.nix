@@ -2,6 +2,7 @@
   programs.starship = {
     enable = true;
     settings = {
+      command_timeout = 2000;
       add_newline = false;
       character = {
         success_symbol = "[➜](bold green) ";
