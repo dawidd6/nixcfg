@@ -1,22 +1,11 @@
 {
   inputs,
   outputs,
+  lib,
   ...
-}: {
-  "t14" = inputs.nixpkgs.lib.nixosSystem {
+}: let
+  mkNixos = hostname: inputs.nixpkgs.lib.nixosSystem {
     specialArgs = {inherit inputs outputs;};
-    modules = [./t14/configuration.nix];
+    modules = [(./. + "/${hostname}/configuration.nix")];
   };
-  "t440s" = inputs.nixpkgs.lib.nixosSystem {
-    specialArgs = {inherit inputs outputs;};
-    modules = [./t440s/configuration.nix];
-  };
-  "zotac" = inputs.nixpkgs.lib.nixosSystem {
-    specialArgs = {inherit inputs outputs;};
-    modules = [./zotac/configuration.nix];
-  };
-  "vm" = inputs.nixpkgs.lib.nixosSystem {
-    specialArgs = {inherit inputs outputs;};
-    modules = [./vm/configuration.nix];
-  };
-}
+in lib.genAttrs (builtins.attrNames (lib.filterAttrs (n: v: v == "directory") (builtins.readDir ./.))) mkNixos

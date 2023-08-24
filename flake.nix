@@ -24,15 +24,16 @@
 
   outputs = {self, ...} @ inputs: let
     inherit (self) outputs;
+    inherit (inputs.nixpkgs) lib;
   in
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       systems = import inputs.systems;
       flake = {
         overlays = import ./overlays;
-        nixosModules = import ./modules/nixos;
-        homeModules = import ./modules/home-manager;
-        nixosConfigurations = import ./hosts {inherit inputs outputs;};
-        homeConfigurations = import ./users {inherit inputs outputs;};
+        nixosModules = import ./modules/nixos {inherit lib;};
+        homeModules = import ./modules/home-manager {inherit lib;};
+        nixosConfigurations = import ./hosts {inherit inputs outputs lib;};
+        homeConfigurations = import ./users {inherit inputs outputs lib;};
         hostNames = builtins.toString (builtins.attrNames outputs.hostTops);
         hostTops = inputs.nixpkgs.lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
       };
