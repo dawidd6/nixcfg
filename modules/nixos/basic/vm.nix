@@ -1,4 +1,9 @@
-{modulesPath, config, lib, ...}: {
+{
+  modulesPath,
+  config,
+  lib,
+  ...
+}: {
   virtualisation.vmVariant = {
     imports = [(modulesPath + "/profiles/qemu-guest.nix")];
 
