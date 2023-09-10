@@ -24,4 +24,14 @@
     outputs.overlays.additions
     outputs.overlays.modifications
   ];
+
+  systemd.user.services.nix-gc = {
+    description = config.systemd.services.nix-gc.description;
+    script = config.systemd.services.nix-gc.script;
+    startAt = config.systemd.services.nix-gc.startAt;
+  };
+
+  systemd.user.timers.nix-gc = {
+    timerConfig = config.systemd.timers.nix-gc.timerConfig;
+  };
 }
