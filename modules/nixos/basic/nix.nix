@@ -25,13 +25,15 @@
     outputs.overlays.modifications
   ];
 
-  systemd.user.services.nix-gc = {
+  systemd.user.services.nix-gc-user = {
     description = config.systemd.services.nix-gc.description;
     script = config.systemd.services.nix-gc.script;
     startAt = config.systemd.services.nix-gc.startAt;
+    after = ["nix-gc.service"];
   };
 
-  systemd.user.timers.nix-gc = {
+  systemd.user.timers.nix-gc-user = {
     timerConfig = config.systemd.timers.nix-gc.timerConfig;
+    after = ["nix-gc.timer"];
   };
 }
