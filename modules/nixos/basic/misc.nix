@@ -1,4 +1,4 @@
-{...}: {
+_: {
   programs.command-not-found.enable = false;
 
   hardware.bluetooth.powerOnBoot = false;
