@@ -1,4 +1,4 @@
-{...}: {
+_: {
   home.sessionVariables = {
     ELECTRON_TRASH = "gvfs-trash";
   };
