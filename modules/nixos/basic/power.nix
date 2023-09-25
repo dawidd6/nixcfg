@@ -4,4 +4,6 @@ _: {
 
   services.thermald.enable = true;
   services.upower.enable = true;
+
+  hardware.bluetooth.powerOnBoot = false;
 }

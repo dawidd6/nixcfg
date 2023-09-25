@@ -4,6 +4,9 @@
   lib,
   ...
 }: {
+  virtualisation.libvirtd.enable = true;
+  virtualisation.multipass.enable = true;
+
   virtualisation.vmVariant = {
     imports = [(modulesPath + "/profiles/qemu-guest.nix")];
 
