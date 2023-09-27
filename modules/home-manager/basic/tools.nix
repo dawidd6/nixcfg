@@ -32,6 +32,7 @@
     openstackclient
     python3
     ruby
+    shellcheck
     sshpass
     strace
     tealdeer
