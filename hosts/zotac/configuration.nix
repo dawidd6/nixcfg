@@ -12,21 +12,6 @@
   networking.hostName = "zotac";
   networking.networkmanager.wifi.powersave = false;
 
-  fileSystems."/home/dawidd6/Backups" = {
-    device = "/dev/disk/by-label/Backups";
-    fsType = "ext4";
-    options = ["nofail"];
-  };
-
-  environment.systemPackages = with pkgs; [
-    borgbackup
-    file
-    git
-    htop
-    lm_sensors
-    tmux
-  ];
-
   services.openssh.enable = true;
   services.udisks2.enable = true;
 
