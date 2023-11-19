@@ -7,6 +7,7 @@
     gpick
     inkscape
     keepassxc
+    libreoffice
     pavucontrol
     spotify
     virt-manager
