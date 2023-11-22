@@ -24,6 +24,7 @@
     nil
     nix-init
     nix-update
+    nixos-shell
     nixpkgs-review
     nmap
     nodejs
