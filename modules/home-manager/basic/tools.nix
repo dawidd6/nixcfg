@@ -15,6 +15,7 @@
     gh
     ghorg
     glab
+    gnumake
     htop
     ipcalc
     jq
@@ -39,6 +40,8 @@
     tealdeer
     trash-cli
     tree
+    unzip
+    wget
     xsel
   ];
 
