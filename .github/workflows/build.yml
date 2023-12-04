@@ -28,7 +28,7 @@ jobs:
             accept-flake-config = true
 
       - name: Setup cachix
-        uses: cachix/cachix-action@v12
+        uses: cachix/cachix-action@v13
         with:
           name: ${{ github.repository_owner }}
           authToken: ${{ secrets.CACHIX_TOKEN }}
