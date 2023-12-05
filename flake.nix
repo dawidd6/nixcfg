@@ -30,7 +30,7 @@
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       systems = import inputs.systems;
       flake = {
-        overlays = import ./overlays;
+        overlays = import ./overlays {inherit inputs;};
         nixosModules = import ./modules/nixos {inherit lib;};
         homeModules = import ./modules/home-manager {inherit lib;};
         nixosConfigurations = import ./hosts {inherit inputs outputs lib;};
