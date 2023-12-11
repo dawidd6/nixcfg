@@ -5,6 +5,7 @@
     gnome.gnome-tweaks
     google-chrome
     gpick
+    gscan2pdf
     inkscape
     keepassxc
     libreoffice
