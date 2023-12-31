@@ -1,4 +1,4 @@
 builds:
   exclude: []
   include:
-    - 'checks.*'
+    - 'checks.x86_64-linux.*'
