@@ -26,4 +26,6 @@
     users."dawidd6" = import "${inputs.self}/hosts/${config.networking.hostName}/home.nix";
     extraSpecialArgs = {inherit inputs outputs;};
   };
+
+  services.xserver.displayManager.autoLogin.user = "dawidd6";
 }
