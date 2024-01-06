@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 for file in $@; do
     if iconv -f UTF-8 -t WINDOWS-1250 "$file" &>/dev/null; then

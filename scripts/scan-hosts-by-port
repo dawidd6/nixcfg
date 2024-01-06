@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # scan-hosts-by-port <port> <network_interface>
 # scan-hosts-by-port 22 eth0

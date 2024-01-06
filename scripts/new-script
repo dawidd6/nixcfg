@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 
@@ -8,7 +8,7 @@ file="$HOME/bin/$name"
 test -f "$file" && echo exists && exit 1
 
 cat <<-EOF > "$file"
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 EOF

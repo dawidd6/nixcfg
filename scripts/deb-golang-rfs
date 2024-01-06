@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 package="$(dpkg-parsechangelog -S Source)"
 version="$(dpkg-parsechangelog -S Version)"
