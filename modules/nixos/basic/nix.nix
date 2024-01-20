@@ -3,6 +3,7 @@
   outputs,
   lib,
   config,
+  pkgs,
   ...
 }: {
   nix.registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
@@ -35,5 +36,16 @@
   systemd.user.timers.nix-gc-user = {
     inherit (config.systemd.timers.nix-gc) timerConfig;
     after = ["nix-gc.timer"];
+  };
+
+  system.activationScripts.diff = {
+    supportsDryActivation = true;
+    text = ''
+      if [[ -e /run/current-system ]]; then
+        echo "--- diff to current-system"
+        ${pkgs.nvd}/bin/nvd --nix-bin-dir=${config.nix.package}/bin diff /run/current-system "$systemConfig"
+        echo "---"
+      fi
+    '';
   };
 }
