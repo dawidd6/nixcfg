@@ -9,8 +9,11 @@ vm-run:
 vm-build-local: FLAGS=--override-input nixpkgs git+file://$(HOME)/nixpkgs
 vm-build-local: vm-build
 
+host-switch-local: FLAGS=--override-input nixpkgs git+file://$(HOME)/nixpkgs
+host-switch-local: host-switch
+
 host-switch:
-	sudo nixos-rebuild switch -L --flake '.#$(HOST)'
+	sudo nixos-rebuild switch -L --flake '.#$(HOST)' $(FLAGS)
 
 host-boot:
 	sudo nixos-rebuild boot -L --flake '.#$(HOST)'
