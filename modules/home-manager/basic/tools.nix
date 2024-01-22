@@ -12,6 +12,7 @@
     distrobox
     dos2unix
     file
+    fx
     gh
     ghorg
     glab
@@ -38,6 +39,7 @@
     sshpass
     strace
     tealdeer
+    tmux
     trash-cli
     tree
     unzip
