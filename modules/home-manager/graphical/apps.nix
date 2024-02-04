@@ -8,6 +8,7 @@
     gscan2pdf
     inkscape
     keepassxc
+    krita
     libreoffice
     pavucontrol
     spotify
