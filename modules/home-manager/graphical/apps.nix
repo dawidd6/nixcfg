@@ -12,7 +12,6 @@
     pavucontrol
     spotify
     virt-manager
-    vorta
     vscode
   ];
 
