@@ -1,5 +1,8 @@
 default:
 
+vm-clean-build: vm-build
+	rm -f *.qcow2
+
 vm-build:
 	nix build '.#nixosConfigurations.$(HOST).config.system.build.vm' -L $(FLAGS)
 
