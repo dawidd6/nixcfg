@@ -18,7 +18,14 @@
 
   dconf.settings = {
     "org/gnome/shell" = {
-      favorite-apps = [];
+      favorite-apps = [
+        "google-chrome.desktop"
+        "spotify.desktop"
+        "code.desktop"
+        "virt-manager.desktop"
+        "org.gnome.Nautilus.desktop"
+        "org.gnome.Console.desktop"
+      ];
     };
     "org/virt-manager/virt-manager" = {
       system-tray = true;
