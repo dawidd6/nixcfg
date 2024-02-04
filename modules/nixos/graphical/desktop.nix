@@ -7,9 +7,9 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
   services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.excludePackages = [ pkgs.xterm ];
+  services.xserver.excludePackages = [pkgs.xterm];
 
-  environment.gnome.excludePackages = [ pkgs.gnome-tour ];
+  environment.gnome.excludePackages = [pkgs.gnome-tour];
 
   # https://github.com/NixOS/nixpkgs/issues/103746
   systemd.services."getty@tty1".enable = false;
