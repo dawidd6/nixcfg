@@ -6,7 +6,7 @@ _: {
       color-scheme = "prefer-dark";
       #cursor-theme = "Yaru";
       #icon-theme = "Yaru";
-      #gtk-theme = "Yaru-dark";
+      gtk-theme = "Adwaita-dark";
     };
     #"org/gnome/desktop/sound" = {
     #  theme-name = "Yaru";
