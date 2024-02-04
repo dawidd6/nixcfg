@@ -17,7 +17,7 @@
   boot.extraModulePackages = [];
 
   fileSystems."/" = {
-    device = "/dev/dm-1";
+    device = "/dev/mapper/cryptroot";
     fsType = "ext4";
   };
 
@@ -30,7 +30,7 @@
   };
 
   swapDevices = [
-    {device = "/dev/dm-0";}
+    {device = "/dev/mapper/cryptswap";}
   ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
