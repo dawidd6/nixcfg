@@ -90,6 +90,14 @@
       " Delete, don't cut
       nnoremap x "_x
       nnoremap X "_X
+      nnoremap d "_d
+      nnoremap D "_D
+      nnoremap dd "_dd
+      vnoremap x "_x
+      vnoremap X "_X
+      vnoremap d "_d
+      vnoremap D "_D
+      vnoremap dd "_dd
       " Don't copy on paste
       vnoremap p "_dP
     '';
