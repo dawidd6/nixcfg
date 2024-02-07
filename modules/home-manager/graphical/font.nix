@@ -3,7 +3,7 @@
 
   home.packages = with pkgs; [
     ubuntu-font-family
-    (nerdfonts.override { fonts = [ "Ubuntu" "UbuntuMono" ]; })
+    (nerdfonts.override {fonts = ["Ubuntu" "UbuntuMono"];})
   ];
 
   dconf.settings = {
