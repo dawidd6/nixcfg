@@ -11,21 +11,20 @@
       lightline-vim
       lightline-bufferline
       vim-gitgutter
-      material-vim
       conflict-marker-vim
       vim-nix
+      vim-code-dark
     ];
     extraConfig = ''
       " Plugins
-      let g:lightline = { 'colorscheme': 'material' }
+      let g:lightline = { 'colorscheme': 'codedark' }
       let g:lightline.tabline          = {'left': [['buffers']], 'right': [[]]}
       let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
       let g:lightline.component_type   = {'buffers': 'tabsel'}
       let g:gitgutter_enabled=1
-      let g:material_theme_style='darker'
-      let g:material_terminal_italics=1
       let g:conflict_marker_begin = '^<<<<<<< .*$'
       let g:conflict_marker_end   = '^>>>>>>> .*$'
+      let g:codedark_term256=1
       " Indent
       set autoindent
       set smartindent
@@ -42,8 +41,7 @@
       set gdefault
       " Appearance
       syntax on
-      colorscheme material
-      set background=dark
+      colorscheme codedark
       set number
       set wildmenu
       set termguicolors
