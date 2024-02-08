@@ -30,7 +30,4 @@
     session   optional      pam_keyinit.so revoke
     session   include       login
   '';
-
-  # https://github.com/NixOS/nixpkgs/issues/171136
-  security.pam.services.login.fprintAuth = false;
 }
