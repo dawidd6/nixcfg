@@ -25,6 +25,7 @@
       let g:conflict_marker_begin = '^<<<<<<< .*$'
       let g:conflict_marker_end   = '^>>>>>>> .*$'
       let g:codedark_term256=1
+      let g:codedark_modern=1
       " Indent
       set autoindent
       set smartindent
