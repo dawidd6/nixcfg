@@ -3,6 +3,8 @@ _: {
     ELECTRON_TRASH = "gvfs-trash";
   };
 
+  programs.man.generateCaches = false;
+
   programs.fish = {
     enable = true;
     shellAliases = {
