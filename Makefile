@@ -19,13 +19,9 @@ vm-run:
 host-switch-local: FLAGS=--override-input nixpkgs $(NIXPKGS)
 host-switch-local: host-switch
 host-switch:
-	sudo nixos-rebuild dry-activate -L --flake '.#$(HOST)' $(FLAGS)
-	@read -p 'Proceed?'
 	sudo nixos-rebuild switch -L --flake '.#$(HOST)' $(FLAGS)
 
 host-boot:
-	sudo nixos-rebuild dry-activate -L --flake '.#$(HOST)' $(FLAGS)
-	@read -p 'Proceed?'
 	sudo nixos-rebuild boot -L --flake '.#$(HOST)'
 
 host-build:
