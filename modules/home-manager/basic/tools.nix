@@ -24,6 +24,7 @@
     lm_sensors
     ncdu
     nil
+    nix-diff
     nix-init
     nix-update
     nixos-shell
