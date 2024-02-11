@@ -26,3 +26,7 @@ host-boot:
 
 host-build:
 	nixos-rebuild build -L --flake '.#$(HOST)'
+
+host-diff: host-build
+host-diff:
+	nvd diff /run/current-system ./result
