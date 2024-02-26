@@ -25,6 +25,7 @@
     ncdu
     nil
     nix-diff
+    nix-index
     nix-init
     nix-update
     nixos-shell
