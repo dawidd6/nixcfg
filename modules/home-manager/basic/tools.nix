@@ -1,4 +1,12 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
+  imports = [
+    inputs.nix-index-database.hmModules.nix-index
+  ];
+
   home.packages = with pkgs; [
     alejandra
     ansible
@@ -25,7 +33,6 @@
     ncdu
     nil
     nix-diff
-    nix-index
     nix-init
     nix-update
     nixos-shell
