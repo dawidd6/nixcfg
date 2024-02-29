@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+nixpkgs="${1:-<nixpkgs>}"
+file="${2:-./default.nix}"
+
+nix-build --expr "(import "$nixpkgs" {config.allowUnfree = true;}).callPackage "$file" {}"
+
