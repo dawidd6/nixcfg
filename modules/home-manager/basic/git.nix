@@ -7,8 +7,10 @@ _: {
     userEmail = "dawidd0811@gmail.com";
     userName = "Dawid Dziurla";
     ignores = [
+      ".direnv"
       ".idea"
       "*.iml"
+      "result"
       ".vscode"
     ];
     includes = [
