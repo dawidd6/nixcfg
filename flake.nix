@@ -8,7 +8,6 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     hardware.url = "github:nixos/nixos-hardware";
-    systems.url = "github:nix-systems/default-linux";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -32,7 +31,7 @@
     inherit (inputs.nixpkgs) lib;
   in
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = import inputs.systems;
+      systems = lib.systems.flakeExposed;
       flake = {
         overlays = import ./overlays {inherit inputs;};
         nixosModules = import ./modules/nixos {inherit lib;};
