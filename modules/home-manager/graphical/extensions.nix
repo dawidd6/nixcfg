@@ -15,6 +15,7 @@ in {
       disabled-extensions = [];
     };
     "org/gnome/shell/extensions/pano" = {
+      history-length = 50;
       send-notification-on-copy = false;
     };
   };
