@@ -3,7 +3,7 @@
     appindicator
     gtk-title-bar
     hibernate-status-button
-    pano
+#    pano
     user-themes
   ];
 in {
@@ -14,11 +14,11 @@ in {
       enabled-extensions = map (extension: extension.extensionUuid) extensions;
       disabled-extensions = [];
     };
-    "org/gnome/shell/extensions/pano" = {
-      history-length = 50;
-      paste-on-select = false;
-      play-audio-on-copy = false;
-      send-notification-on-copy = false;
-    };
+#    "org/gnome/shell/extensions/pano" = {
+#      history-length = 50;
+#      paste-on-select = false;
+#      play-audio-on-copy = false;
+#      send-notification-on-copy = false;
+#    };
   };
 }
