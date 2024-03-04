@@ -1,4 +1,4 @@
-_: {
+{pkgs, ...}: {
   home.sessionVariables = {
     ELECTRON_TRASH = "gvfs-trash";
   };
@@ -11,10 +11,8 @@ _: {
       sudo = "sudo -E env \"PATH=$PATH\"";
       ls = "ls --color=always";
       rm = "trash";
-      dotfiles = "git --git-dir=$HOME/.dotfiles --work-tree=$HOME";
       ssh = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no";
       hub = "gh";
-      nix-shell = "nix-shell --command fish";
     };
     shellAbbrs = {
       e = "exit";
@@ -63,6 +61,8 @@ _: {
       set fish_color_normal normal
       set fish_color_comment brblack
       set fish_color_quote yellow
+
+      ${pkgs.nix-your-shell}/bin/nix-your-shell fish | source
     '';
   };
 }
