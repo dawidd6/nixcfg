@@ -16,6 +16,7 @@
     cpio
     curl
     deadnix
+    devbox
     diffoscopeMinimal
     distrobox
     dos2unix
