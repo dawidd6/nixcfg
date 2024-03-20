@@ -58,7 +58,7 @@
         checks = outputs.hostTops // (inputs.nixpkgs.lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations);
         devShells.default = pkgs.mkShellNoCC {
           NIX_CONFIG = "experimental-features = nix-command flakes";
-          packages = with pkgs; [git vim];
+          packages = with pkgs; [git neovim];
           shellHook = ''
             ${config.pre-commit.devShell.shellHook}
           '';
