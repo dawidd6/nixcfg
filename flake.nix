@@ -24,6 +24,11 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
+    };
   };
 
   outputs = {self, ...} @ inputs: let
@@ -31,6 +36,10 @@
     inherit (inputs.nixpkgs) lib;
   in
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [
+        inputs.pre-commit-hooks.flakeModule
+        inputs.treefmt.flakeModule
+      ];
       systems = lib.systems.flakeExposed;
       flake = {
         overlays = import ./overlays {inherit inputs;};
@@ -41,11 +50,27 @@
         hostNames = builtins.toString (builtins.attrNames outputs.hostTops);
         hostTops = inputs.nixpkgs.lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
       };
-      perSystem = {pkgs, ...}: {
-        devShells = import ./shell.nix {inherit pkgs;};
-        packages = import ./pkgs {inherit pkgs;};
-        formatter = inputs.treefmt.lib.mkWrapper pkgs ./treefmt.nix;
+      perSystem = {
+        pkgs,
+        config,
+        ...
+      }: {
         checks = outputs.hostTops // (inputs.nixpkgs.lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations);
+        devShells.default = pkgs.mkShellNoCC {
+          NIX_CONFIG = "experimental-features = nix-command flakes";
+          packages = with pkgs; [git vim];
+          shellHook = ''
+            ${config.pre-commit.devShell.shellHook}
+          '';
+        };
+        packages = import ./pkgs {inherit pkgs;};
+        pre-commit.settings.hooks.treefmt.enable = true;
+        treefmt = {
+          projectRootFile = "flake.nix";
+          programs.alejandra.enable = true;
+          programs.deadnix.enable = true;
+          programs.statix.enable = true;
+        };
       };
     };
 }
