@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     filezilla
+    fritzing
     gimp
     gnome.gnome-tweaks
     google-chrome
