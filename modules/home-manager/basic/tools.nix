@@ -35,6 +35,7 @@
     nil
     nix-diff
     nix-init
+    nix-tree
     nix-update
     nixos-shell
     nixpkgs-review
