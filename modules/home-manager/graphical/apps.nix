@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
+    element-desktop
     filezilla
     fritzing
     gimp
@@ -12,6 +13,7 @@
     krita
     libreoffice
     pavucontrol
+    signal-desktop
     spotify
     virt-manager
     vscode
