@@ -42,11 +42,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           for name in $(nix eval .#hostNames --raw); do
-            nix build github:${{ github.repository }}#hostTops.${name} .#hostTops.${name}
-            gh pr comment ${{ github.event.number }} -F - <<EOF
-            ## ${name}
-            ```
-            $(nix run nixpkgs#nvd -- diff ./result ./result-1)
-            ```
+          nix build github:${{ github.repository }}#hostTops.${name} .#hostTops.${name}
+          gh pr comment ${{ github.event.number }} -F - <<EOF
+          ## ${name}
+          \`\`\`
+          $(nix run nixpkgs#nvd -- diff ./result ./result-1)
+          \`\`\`
           EOF
           done
