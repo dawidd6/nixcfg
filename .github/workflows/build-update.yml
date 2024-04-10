@@ -43,10 +43,10 @@ jobs:
         run: |
           for name in $(nix eval .#hostNames --raw); do
             nix build github:${{ github.repository }}#hostTops.${name} .#hostTops.${name}
-            cat <<EOF | gh pr comment ${{ github.event.number }} -F -
+            gh pr comment ${{ github.event.number }} -F - <<EOF
             ## ${name}
             ```
             $(nix run nixpkgs#nvd -- diff ./result ./result-1)
             ```
-            EOF
+          EOF
           done
