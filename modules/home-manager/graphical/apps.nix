@@ -17,6 +17,7 @@
     spotify
     virt-manager
     vscode
+    yubioath-flutter
   ];
 
   services.copyq.enable = true;

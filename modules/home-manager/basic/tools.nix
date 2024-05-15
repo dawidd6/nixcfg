@@ -56,6 +56,7 @@
     unzip
     wget
     xsel
+    yubikey-manager
   ];
 
   programs.fzf.enable = true;
