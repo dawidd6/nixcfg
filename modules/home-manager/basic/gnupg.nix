@@ -4,6 +4,6 @@ _: {
     disable-ccid = true;
   };
   services.gpg-agent.enable = true;
-  services.gpg-agent.enableSshSupport = true;
+  services.gpg-agent.enableSshSupport = false;
   services.gpg-agent.pinentryFlavor = "gnome3";
 }
