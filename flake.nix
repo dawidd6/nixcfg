@@ -48,14 +48,14 @@
         nixosConfigurations = import ./hosts {inherit inputs outputs lib;};
         homeConfigurations = import ./users {inherit inputs outputs lib;};
         hostNames = builtins.toString (builtins.attrNames outputs.hostTops);
-        hostTops = inputs.nixpkgs.lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
+        hostTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
       };
       perSystem = {
         pkgs,
         config,
         ...
       }: {
-        checks = outputs.hostTops // (inputs.nixpkgs.lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations);
+        checks = outputs.hostTops // (lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations);
         devShells.default = pkgs.mkShellNoCC {
           NIX_CONFIG = "experimental-features = nix-command flakes";
           packages = with pkgs; [git neovim];
