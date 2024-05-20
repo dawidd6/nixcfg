@@ -20,8 +20,6 @@
     yubioath-flutter
   ];
 
-  services.copyq.enable = true;
-
   dconf.settings = {
     "org/gnome/shell" = {
       favorite-apps = [
