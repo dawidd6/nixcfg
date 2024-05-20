@@ -1,11 +1,14 @@
 {
   inputs,
   outputs,
+  lib,
   ...
-}: {
-  dawid = inputs.home-manager.lib.homeManagerConfiguration {
-    pkgs = import inputs.nixpkgs {system = "x86_64-linux";};
-    modules = [./dawid.nix];
-    extraSpecialArgs = {inherit inputs outputs;};
-  };
-}
+}: let
+  mkHome = username:
+    inputs.home-manager.lib.homeManagerConfiguration {
+      pkgs = import inputs.nixpkgs {system = "x86_64-linux";};
+      modules = [(./. + "/${username}/home.nix")];
+      extraSpecialArgs = {inherit inputs outputs;};
+    };
+in
+  lib.genAttrs (builtins.attrNames (lib.filterAttrs (_n: v: v == "directory") (builtins.readDir ./.))) mkHome
