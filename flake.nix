@@ -43,19 +43,21 @@
       systems = lib.systems.flakeExposed;
       flake = {
         overlays = import ./overlays {inherit inputs;};
-        nixosModules = import ./modules/nixos {inherit lib;};
-        homeModules = import ./modules/home-manager {inherit lib;};
         nixosConfigurations = import ./hosts {inherit inputs outputs lib;};
+        nixosModules = import ./modules/nixos {inherit lib;};
+        nixosNames = builtins.toString (builtins.attrNames outputs.nixosTops);
+        nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
         homeConfigurations = import ./users {inherit inputs outputs lib;};
-        hostNames = builtins.toString (builtins.attrNames outputs.hostTops);
-        hostTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
+        homeModules = import ./modules/home-manager {inherit lib;};
+        homeNames = builtins.toString (builtins.attrNames outputs.homeTops);
+        homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
       };
       perSystem = {
         pkgs,
         config,
         ...
       }: {
-        checks = outputs.hostTops // (lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations);
+        checks = outputs.nixosTops // outputs.homeTops;
         devShells.default = pkgs.mkShellNoCC {
           NIX_CONFIG = "experimental-features = nix-command flakes";
           packages = with pkgs; [git neovim];
