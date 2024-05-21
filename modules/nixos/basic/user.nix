@@ -5,7 +5,9 @@
   outputs,
   ...
 }: {
-  imports = [inputs.home-manager.nixosModules.default];
+  imports = [
+    inputs.home-manager.nixosModules.default
+  ];
 
   programs.fish.enable = true;
 
