@@ -41,8 +41,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          for name in $(nix eval .#hostNames --raw); do
-          nix build github:${{ github.repository }}#hostTops.${name} .#hostTops.${name}
+          for name in $(nix eval .#nixosNames --raw); do
+          nix build github:${{ github.repository }}#nixosTops.${name} .#nixosTops.${name}
           gh pr comment ${{ github.event.number }} -F - <<EOF
           ## ${name}
           \`\`\`
