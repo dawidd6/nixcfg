@@ -4,6 +4,7 @@
     filezilla
     fritzing
     gimp
+    gnome.dconf-editor
     gnome.gnome-tweaks
     google-chrome
     gpick
