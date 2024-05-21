@@ -36,11 +36,11 @@
     inherit (inputs.nixpkgs) lib;
   in
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = lib.systems.flakeExposed;
       imports = [
         inputs.pre-commit-hooks.flakeModule
         inputs.treefmt.flakeModule
       ];
-      systems = lib.systems.flakeExposed;
       flake = {
         overlays = import ./overlays {inherit inputs;};
         nixosConfigurations = import ./hosts {inherit inputs outputs lib;};
