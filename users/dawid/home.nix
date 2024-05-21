@@ -7,11 +7,6 @@
     outputs.homeModules.basic
   ];
 
-  nixpkgs.overlays = [
-    outputs.overlays.additions
-    outputs.overlays.modifications
-  ];
-
   home.packages = [pkgs.onedrive];
 
   systemd.user.services.onedrive = {
