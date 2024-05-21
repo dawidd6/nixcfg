@@ -13,7 +13,7 @@
           outputs.overlays.modifications
         ];
       };
-      modules = [(./. + "/${username}/home.nix")];
+      modules = [./${username}/home.nix];
       extraSpecialArgs = {inherit inputs outputs;};
     };
 in
