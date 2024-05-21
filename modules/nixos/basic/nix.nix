@@ -9,6 +9,7 @@
   nix.registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
   nix.nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
+  # TODO: 24.05 - add to modules/home-manager/basic as well
   nix.gc.automatic = true;
   nix.gc.dates = "weekly";
   nix.gc.options = "--delete-older-than 14d";
@@ -26,6 +27,7 @@
     outputs.overlays.modifications
   ];
 
+  # TODO: 24.05 - replace with nix.gc.automatic from home-manager
   systemd.user.services.nix-gc-user = {
     inherit (config.systemd.services.nix-gc) description;
     inherit (config.systemd.services.nix-gc) script;
@@ -33,6 +35,7 @@
     after = ["nix-gc.service"];
   };
 
+  # TODO: 24.05 - replace with nix.gc.automatic from home-manager
   systemd.user.timers.nix-gc-user = {
     inherit (config.systemd.timers.nix-gc) timerConfig;
     after = ["nix-gc.timer"];
