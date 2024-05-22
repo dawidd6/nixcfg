@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-sudo sed 's/^AutomaticLoginEnable=.*/AutomaticLoginEnable=False/' /etc/gdm3/custom.conf
-do-release-upgrade --allow-third-party --devel-release
-sudo sed 's/^AutomaticLoginEnable=.*/AutomaticLoginEnable=True/' /etc/gdm3/custom.conf

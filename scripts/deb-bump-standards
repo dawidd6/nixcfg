@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-url="https://salsa.debian.org/lintian/lintian/raw/master/data/standards-version/release-dates"
-standards="$(curl --silent "$url" | grep -m 1 -E '^[^#].*$' | cut -d' ' -f1)"
-
-sed -i "s/Standards-Version.*/Standards-Version: $standards/g" debian/control
