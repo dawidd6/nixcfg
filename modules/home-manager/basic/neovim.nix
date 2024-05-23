@@ -4,29 +4,28 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
-    plugins = with pkgs.vimPlugins; [
+    plugins = with pkgs.unstable.vimPlugins; [
+      vim-better-whitespace
       vim-fugitive
       vim-startify
-      vim-better-whitespace
-      lightline-vim
-      lightline-bufferline
       vim-gitgutter
-      conflict-marker-vim
       vim-nix
-      # TODO: switch to vscode-nvim after 24.05
-      vim-code-dark
+      git-conflict-nvim
+      bufferline-nvim
+      lualine-nvim
+      vscode-nvim
     ];
     extraConfig = ''
       " Plugins
-      let g:lightline = { 'colorscheme': 'codedark' }
-      let g:lightline.tabline          = {'left': [['buffers']], 'right': [[]]}
-      let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
-      let g:lightline.component_type   = {'buffers': 'tabsel'}
-      let g:gitgutter_enabled=1
-      let g:conflict_marker_begin = '^<<<<<<< .*$'
-      let g:conflict_marker_end   = '^>>>>>>> .*$'
-      let g:codedark_term256=1
-      let g:codedark_modern=1
+      lua << END
+        require('git-conflict').setup({})
+        require("bufferline").setup({})
+        require('lualine').setup({
+            options = {
+                theme = 'vscode',
+            },
+        })
+      END
       " Indent
       set autoindent
       set smartindent
@@ -43,7 +42,7 @@
       set gdefault
       " Appearance
       syntax on
-      colorscheme codedark
+      colorscheme vscode
       set number
       set wildmenu
       set termguicolors

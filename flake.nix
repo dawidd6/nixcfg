@@ -60,7 +60,6 @@
         checks = outputs.nixosTops // outputs.homeTops;
         devShells.default = pkgs.mkShellNoCC {
           NIX_CONFIG = "experimental-features = nix-command flakes";
-          packages = with pkgs; [git neovim];
           shellHook = ''
             ${config.pre-commit.devShell.shellHook}
           '';
