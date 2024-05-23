@@ -41,10 +41,6 @@
           {name = "path";}
         ];
       };
-      treesitter = {
-        enable = true;
-        indent = true;
-      };
       which-key.enable = true;
     };
     extraPlugins = [
