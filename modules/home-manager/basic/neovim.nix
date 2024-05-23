@@ -13,6 +13,7 @@
       vim-gitgutter
       conflict-marker-vim
       vim-nix
+      # TODO: switch to vscode-nvim after 24.05
       vim-code-dark
     ];
     extraConfig = ''
