@@ -24,7 +24,6 @@
       lsp = {
         enable = true;
         servers = {
-          #ansiblels.enable = true;
           bashls.enable = true;
           nil_ls.enable = true;
         };
@@ -120,40 +119,20 @@
       }
     ];
     opts = {
-      autoindent = true;
-      autoread = true;
-      backspace = "indent,eol,start";
-      backup = false;
-      compatible = false;
-      encoding = "utf-8";
-      errorbells = false;
       expandtab = true;
       gdefault = true;
-      hidden = true;
-      hlsearch = true;
       ignorecase = true;
-      incsearch = true;
-      laststatus = 2;
-      magic = true;
       number = true;
-      ruler = true;
       shiftwidth = 4;
-      showcmd = true;
       showmatch = true;
-      showmode = true;
       showtabline = 2;
       smartcase = true;
       smartindent = true;
-      smarttab = true;
       softtabstop = 4;
-      startofline = false;
       swapfile = false;
       tabstop = 4;
       termguicolors = true;
-      ttimeoutlen = 10;
-      updatetime = 100;
       visualbell = true;
-      wildmenu = true;
       writebackup = false;
     };
   };
