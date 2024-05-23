@@ -21,14 +21,6 @@
     plugins = {
       bufferline.enable = true;
       gitsigns.enable = true;
-      lint = {
-        enable = true;
-        lintersByFt = {
-          ansible = ["ansible-lint"];
-          bash = ["shellcheck"];
-          sh = ["shellcheck"];
-        };
-      };
       lsp = {
         enable = true;
         servers = {
