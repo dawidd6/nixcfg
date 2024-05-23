@@ -1,6 +1,8 @@
 _: {
   programs.starship = {
     enable = true;
+    # TODO: https://github.com/nix-community/home-manager/issues/5445
+    enableFishIntegration = false;
     settings = {
       command_timeout = 5000;
       add_newline = false;

@@ -54,13 +54,17 @@
       p = "podman";
       hm = "home-manager";
     };
-    interactiveShellInit = ''
+    shellInit = ''
       set fish_color_command green
       set fish_color_param normal
       set fish_color_error red --bold
       set fish_color_normal normal
       set fish_color_comment brblack
       set fish_color_quote yellow
+
+      source ${pkgs.fishPlugins.async-prompt}/share/fish/vendor_conf.d/__async_prompt.fish
+
+      ${pkgs.starship}/bin/starship init fish | source
 
       ${pkgs.nix-your-shell}/bin/nix-your-shell fish | source
     '';
