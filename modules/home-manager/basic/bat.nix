@@ -3,7 +3,7 @@ _: {
     enable = true;
     config = {
       pager = "less -FR";
-      theme = "TwoDark";
+      theme = "Visual Studio Dark+";
     };
   };
 }
