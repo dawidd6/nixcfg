@@ -16,8 +16,15 @@
     clipboard.register = "unnamedplus";
     # TODO: after 24.05
     colorscheme = "vscode";
-    #colorschemes.vscode.package = pkgs.unstable.vimPlugins.vscode-nvim;
     #colorschemes.vscode.enable = true;
+    highlight = {
+      ExtraWhitespace.bg = "red";
+      ExtraNewline.bg = "red";
+    };
+    match = {
+      ExtraWhitespace = "\\s\\+$";
+      ExtraNewline = "\\n\\%$";
+    };
     plugins = {
       bufferline.enable = true;
       gitsigns.enable = true;
