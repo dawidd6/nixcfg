@@ -1,142 +1,132 @@
-{
-  pkgs,
-  inputs,
-  ...
-}: {
-  imports = [
-    inputs.nixvim.homeManagerModules.nixvim
-  ];
-
-  programs.nixvim = {
+{pkgs, ...}: {
+  programs.neovim = {
     enable = true;
-    enableMan = false;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
-    clipboard.register = "unnamedplus";
-    # TODO: after 24.05
-    colorscheme = "vscode";
-    #colorschemes.vscode.enable = true;
-    highlight = {
-      ExtraWhitespace.bg = "red";
-      ExtraNewline.bg = "red";
-    };
-    match = {
-      ExtraWhitespace = "\\s\\+$";
-      ExtraNewline = "\\n\\%$";
-    };
-    plugins = {
-      bufferline.enable = true;
-      gitsigns.enable = true;
-      lsp = {
-        enable = true;
-        servers = {
-          bashls.enable = true;
-          nil_ls.enable = true;
-        };
-      };
-      lspkind.enable = true;
-      lualine.enable = true;
-      noice.enable = true;
-      nvim-autopairs.enable = true;
-      nvim-cmp = {
-        enable = true;
-        sources = [
-          {name = "buffer";}
-          {name = "cmdline";}
-          {name = "nvim_lsp";}
-          {name = "path";}
-        ];
-      };
-      which-key.enable = true;
-    };
-    extraPlugins = [
-      {
-        # TODO: switch to indent-o-matic after 24.05
-        plugin = pkgs.vimPlugins.guess-indent-nvim;
-        config = ''
-          lua << EOF
-          require('guess-indent').setup()
-          EOF
-        '';
-      }
-      {
-        # TODO: https://github.com/nix-community/nixvim/issues/1553
-        plugin = pkgs.vimPlugins.git-conflict-nvim;
-        config = ''
-          lua << EOF
-          require('git-conflict').setup()
-          EOF
-        '';
-      }
-      {
-        # TODO: replace with module after 24.05
-        plugin = pkgs.unstable.vimPlugins.vscode-nvim;
-        config = ''
-          lua << EOF
-          require('vscode').setup()
-          EOF
-        '';
-      }
+    plugins = with pkgs.unstable.vimPlugins; [
+      # Appearance
+      bufferline-nvim
+      lualine-nvim
+      noice-nvim
+      # SCM
+      git-conflict-nvim
+      gitsigns-nvim
+      # Completion
+      cmp-buffer
+      cmp-cmdline
+      cmp-nvim-lsp
+      cmp-path
+      lspkind-nvim
+      nvim-cmp
+      nvim-lspconfig
+      # Convenience
+      guess-indent-nvim
+      nvim-autopairs
+      trim-nvim
+      which-key-nvim
+      # Colorscheme
+      vscode-nvim
     ];
-    keymaps = [
-      {
-        mode = ["n"];
-        key = ".";
-        action = ":bn<CR>";
-        options = {
-          desc = "Next buffer";
-        };
-      }
-      {
-        mode = ["n"];
-        key = ",";
-        action = ":bp<CR>";
-        options = {
-          desc = "Previous buffer";
-        };
-      }
-      {
-        mode = ["n" "v"];
-        key = "x";
-        action = "\"_x";
-        options = {
-          desc = "Delete character, don't cut";
-        };
-      }
-      {
-        mode = ["n" "v"];
-        key = "X";
-        action = "\"_X";
-        options = {
-          desc = "Delete character, don't cut";
-        };
-      }
-      {
-        mode = ["v"];
-        key = "p";
-        action = "\"_dP";
-        options = {
-          desc = "Don' copy on paste";
-        };
-      }
-    ];
-    opts = {
-      expandtab = true;
-      gdefault = true;
-      ignorecase = true;
-      number = true;
-      shiftwidth = 4;
-      showmatch = true;
-      showtabline = 2;
-      smartcase = true;
-      smartindent = true;
-      softtabstop = 4;
-      swapfile = false;
-      tabstop = 4;
-      termguicolors = true;
-      visualbell = true;
-      writebackup = false;
-    };
+    extraLuaConfig = ''
+      vim.opt.clipboard = "unnamedplus"
+
+      vim.keymap.set("n", ".", ":bn<CR>", { desc = "Next buffer" })
+      vim.keymap.set("n", ",", ":bp<CR>", { desc = "Previous buffer" })
+      vim.keymap.set({"n","v"}, "x", "\"_x", { desc = "Don't cut character, just delete" })
+      vim.keymap.set({"n","v"}, "X", "\"_X", { desc = "Don't cut character, just delete" })
+      vim.keymap.set("v", "p", "\"_dP", { desc = "Don't copy on paste" })
+
+      if not vim.g.vscode then
+        vim.opt.expandtab = true
+        vim.opt.gdefault = true
+        vim.opt.ignorecase = true
+        vim.opt.number = true
+        vim.opt.shiftwidth = 4
+        vim.opt.showmatch = true
+        vim.opt.showtabline = 2
+        vim.opt.smartcase = true
+        vim.opt.smartindent = true
+        vim.opt.softtabstop = 4
+        vim.opt.swapfile = false
+        vim.opt.tabstop = 4
+        vim.opt.termguicolors = true
+        vim.opt.visualbell = true
+        vim.opt.writebackup = false
+
+        -- Appearance
+        require("bufferline").setup()
+        require("lualine").setup()
+        require("noice").setup()
+
+        -- SCM
+        require("git-conflict").setup()
+        require("gitsigns").setup()
+
+        -- Completion
+        local cmp = require("cmp")
+        local lspkind = require("lspkind")
+        cmp.setup({
+          formatting = {
+            format = lspkind.cmp_format({
+              mode = 'symbol',
+              maxwidth = 50,
+              ellipsis_char = '...',
+              show_labelDetails = true,
+            })
+          },
+          window = {
+            completion = cmp.config.window.bordered(),
+            documentation = cmp.config.window.bordered(),
+          },
+          mapping = cmp.mapping.preset.insert({
+            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+            ['<C-f>'] = cmp.mapping.scroll_docs(4),
+            ['<C-Space>'] = cmp.mapping.complete(),
+            ['<C-e>'] = cmp.mapping.abort(),
+            ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          }),
+          sources = cmp.config.sources({
+            { name = 'nvim_lsp' },
+          }, {
+            { name = 'path' },
+          }, {
+            { name = 'buffer' },
+          })
+        })
+        cmp.setup.cmdline({ '/', '?' }, {
+          mapping = cmp.mapping.preset.cmdline(),
+          sources = {
+            { name = 'buffer' }
+          }
+        })
+        cmp.setup.cmdline(':', {
+          mapping = cmp.mapping.preset.cmdline(),
+          sources = cmp.config.sources({
+            { name = 'path' }
+          }, {
+            { name = 'cmdline' }
+          }),
+          matching = { disallow_symbol_nonprefix_matching = false }
+        })
+        local capabilities = require("cmp_nvim_lsp").default_capabilities()
+        require("lspconfig")["nil_ls"].setup {
+          capabilities = capabilities
+        }
+
+        -- Convenience
+        require("guess-indent").setup()
+        require("nvim-autopairs").setup()
+        require("trim").setup({
+          trim_on_write = false,
+          highlight = true
+        })
+        require("which-key").setup()
+
+        -- Colorscheme
+        require("vscode").setup()
+        vim.cmd.colorscheme "vscode"
+      end
+    '';
   };
 }
