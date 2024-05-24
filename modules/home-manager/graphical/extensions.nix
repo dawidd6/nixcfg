@@ -2,7 +2,6 @@
   extensions = with pkgs.gnomeExtensions; [
     appindicator
     clipboard-indicator
-    gtk-title-bar
   ];
 in {
   home.packages = extensions;
