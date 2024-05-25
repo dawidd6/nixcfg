@@ -2,3 +2,4 @@
 /*.qcow2
 /.pre-commit-config.yaml
 /.direnv
+/devels/*/
