@@ -8,7 +8,6 @@
   programs.fish = {
     enable = true;
     shellAliases = {
-      sudo = "sudo -E --preserve-env=PATH";
       ls = "ls --color=always";
       rm = "trash";
       ssh = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no";
