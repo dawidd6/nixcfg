@@ -3,8 +3,8 @@
   username ? builtins.getEnv "USER",
   homedir ? builtins.getEnv "HOME",
   desktop ? true,
-  nixpkgs ? "${homedir}/nixpkgs",
-  home-manager ? "${homedir}/home-manager",
+  nixpkgs ? ./nixpkgs,
+  home-manager ? ./home-manager,
   ...
 }: rec {
   vmBuild = vmSystem.config.system.build.vm;
