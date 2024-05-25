@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   config,
   username,
   desktop,
@@ -7,18 +8,19 @@
   ...
 }: {
   environment.systemPackages = with pkgs; [
+    gpt4all
   ];
 
   home-manager.users.${username} = ./home.nix;
 
   security.sudo.wheelNeedsPassword = false;
 
-  services.getty.autologinUser = username;
+  services.xserver.enable = desktop;
   services.displayManager.autoLogin.enable = config.services.xserver.enable;
   services.displayManager.autoLogin.user = username;
-  services.xserver.enable = desktop;
   services.xserver.displayManager.gdm.enable = config.services.xserver.enable;
   services.xserver.desktopManager.gnome.enable = config.services.xserver.enable;
+  services.getty.autologinUser = lib.mkIf (!config.services.xserver.enable) username;
 
   system.stateVersion = config.system.nixos.release;
 
