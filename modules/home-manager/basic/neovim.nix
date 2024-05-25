@@ -12,14 +12,6 @@
       # SCM
       git-conflict-nvim
       gitsigns-nvim
-      # Completion
-      cmp-buffer
-      cmp-cmdline
-      cmp-nvim-lsp
-      cmp-path
-      lspkind-nvim
-      nvim-cmp
-      nvim-lspconfig
       # Convenience
       guess-indent-nvim
       nvim-autopairs
@@ -63,63 +55,12 @@
         require("git-conflict").setup()
         require("gitsigns").setup()
 
-        -- Completion
-        local cmp = require("cmp")
-        local lspkind = require("lspkind")
-        cmp.setup({
-          formatting = {
-            format = lspkind.cmp_format({
-              mode = 'symbol',
-              maxwidth = 50,
-              ellipsis_char = '...',
-              show_labelDetails = true,
-            })
-          },
-          window = {
-            completion = cmp.config.window.bordered(),
-            documentation = cmp.config.window.bordered(),
-          },
-          mapping = cmp.mapping.preset.insert({
-            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-            ['<C-f>'] = cmp.mapping.scroll_docs(4),
-            ['<C-Space>'] = cmp.mapping.complete(),
-            ['<C-e>'] = cmp.mapping.abort(),
-            ['<CR>'] = cmp.mapping.confirm({ select = true }),
-          }),
-          sources = cmp.config.sources({
-            { name = 'nvim_lsp' },
-          }, {
-            { name = 'path' },
-          }, {
-            { name = 'buffer' },
-          })
-        })
-        cmp.setup.cmdline({ '/', '?' }, {
-          mapping = cmp.mapping.preset.cmdline(),
-          sources = {
-            { name = 'buffer' }
-          }
-        })
-        cmp.setup.cmdline(':', {
-          mapping = cmp.mapping.preset.cmdline(),
-          sources = cmp.config.sources({
-            { name = 'path' }
-          }, {
-            { name = 'cmdline' }
-          }),
-          matching = { disallow_symbol_nonprefix_matching = false }
-        })
-        local capabilities = require("cmp_nvim_lsp").default_capabilities()
-        require("lspconfig")["nil_ls"].setup {
-          capabilities = capabilities
-        }
-
         -- Convenience
         require("guess-indent").setup()
         require("nvim-autopairs").setup()
         require("trim").setup({
           trim_on_write = false,
-          highlight = true
+          highlight = true,
         })
         require("which-key").setup()
 
