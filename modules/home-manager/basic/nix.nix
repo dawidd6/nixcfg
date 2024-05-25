@@ -13,4 +13,8 @@
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreePredicate = _: true;
+
+  xdg.configFile."nixpkgs/config.nix".text = ''
+    { allowUnfree = true; }
+  '';
 }
