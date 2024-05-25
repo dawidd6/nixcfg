@@ -1,7 +1,5 @@
 _: {
-  documentation.nixos.enable = false;
+  documentation.doc.enable = false;
   documentation.info.enable = false;
-  documentation.man.generateCaches = false;
-
-  programs.command-not-found.enable = false;
+  documentation.nixos.enable = false;
 }
