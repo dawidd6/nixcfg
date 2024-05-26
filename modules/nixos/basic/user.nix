@@ -21,9 +21,6 @@
   };
 
   home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    backupFileExtension = "hmbkp";
     users."dawidd6" = import "${inputs.self}/hosts/${config.networking.hostName}/home.nix";
     extraSpecialArgs = {inherit inputs outputs;};
   };
