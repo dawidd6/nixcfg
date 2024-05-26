@@ -3,6 +3,10 @@
     ELECTRON_TRASH = "gvfs-trash";
   };
 
+  home.sessionPath = [
+    "$HOME/nix/scripts"
+  ];
+
   programs.fish = {
     enable = true;
     shellAliases = {
