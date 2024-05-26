@@ -6,13 +6,7 @@
 }: let
   mkHome = username:
     inputs.home-manager.lib.homeManagerConfiguration {
-      pkgs = import inputs.nixpkgs {
-        system = "x86_64-linux";
-        overlays = [
-          outputs.overlays.additions
-          outputs.overlays.modifications
-        ];
-      };
+      pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
       modules = [./${username}/home.nix];
       extraSpecialArgs = {inherit inputs outputs;};
     };

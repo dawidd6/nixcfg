@@ -1,6 +1,5 @@
 {
   inputs,
-  outputs,
   lib,
   config,
   pkgs,
@@ -20,12 +19,6 @@
   nix.settings.trusted-public-keys = ["dawidd6.cachix.org-1:dvy2Br48mAee39Yit5P+jLLIUR3gOa1ts4w4DTJw+XQ="];
   nix.settings.trusted-users = ["@wheel" "root"];
   nix.settings.warn-dirty = false;
-
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [
-    outputs.overlays.additions
-    outputs.overlays.modifications
-  ];
 
   # TODO: 24.05 - replace with nix.gc.automatic from home-manager
   systemd.user.services.nix-gc-user = {
