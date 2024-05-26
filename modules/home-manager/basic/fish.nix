@@ -63,10 +63,6 @@
       set fish_color_comment brblack
       set fish_color_quote yellow
 
-      source ${pkgs.fishPlugins.async-prompt}/share/fish/vendor_conf.d/__async_prompt.fish
-
-      ${pkgs.starship}/bin/starship init fish | source
-
       ${pkgs.nix-your-shell}/bin/nix-your-shell fish | source
     '';
   };
