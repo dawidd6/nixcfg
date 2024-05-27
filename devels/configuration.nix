@@ -8,7 +8,6 @@
   ...
 }: {
   environment.systemPackages = with pkgs; [
-    gpt4all
   ];
 
   home-manager.users.${username} = ./home.nix;
