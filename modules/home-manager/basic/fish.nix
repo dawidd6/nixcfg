@@ -64,7 +64,7 @@
       ${pkgs.nix-your-shell}/bin/nix-your-shell fish | source
 
       # TODO: workaround for duplicating PATH entries
-      fish_add_path "$HOME/nix/scripts"
+      fish_add_path "$HOME/nixcfg/scripts"
     '';
   };
 }

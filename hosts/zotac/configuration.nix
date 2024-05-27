@@ -15,7 +15,7 @@
     enable = true;
     allowReboot = true;
     dates = "06:00";
-    flake = "github:dawidd6/nix";
+    flake = "github:dawidd6/nixcfg";
     flags = ["--verbose"];
   };
 
