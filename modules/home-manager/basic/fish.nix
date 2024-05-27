@@ -1,11 +1,9 @@
 {pkgs, ...}: {
   home.sessionVariables = {
     ELECTRON_TRASH = "gvfs-trash";
+    # TODO: remove this workaround
+    __HM_SESS_VARS_SOURCED = "";
   };
-
-  home.sessionPath = [
-    "$HOME/nix/scripts"
-  ];
 
   programs.fish = {
     enable = true;
@@ -64,6 +62,9 @@
       set fish_color_quote yellow
 
       ${pkgs.nix-your-shell}/bin/nix-your-shell fish | source
+
+      # TODO: workaround for duplicating PATH entries
+      fish_add_path "$HOME/nix/scripts"
     '';
   };
 }

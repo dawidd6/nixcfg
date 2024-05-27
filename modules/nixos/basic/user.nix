@@ -9,15 +9,12 @@
     inputs.home-manager.nixosModules.default
   ];
 
-  programs.fish.enable = true;
-
-  users.defaultUserShell = pkgs.fish;
-
   users.users."dawidd6" = {
     isNormalUser = true;
     description = "dawidd6";
     extraGroups = ["networkmanager" "wheel" "libvirtd" "lp"];
     initialPassword = "dawidd6";
+    shell = pkgs.fish;
   };
 
   home-manager = {
