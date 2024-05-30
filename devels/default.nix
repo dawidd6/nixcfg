@@ -36,6 +36,10 @@
           ];
         };
 
+        nix.nixPath = [
+          "nixpkgs=${pkgs.path}"
+        ];
+
         security.pam.services.sshd.allowNullPassword = true;
         security.sudo.wheelNeedsPassword = false;
 
