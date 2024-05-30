@@ -22,8 +22,9 @@
           ./configuration.nix
         ];
 
-        environment.systemPackages = [
-          pkgs.xterm
+        environment.systemPackages = with pkgs; [
+          vim
+          xterm
         ];
         environment.loginShellInit = ''
           eval "$(resize)"
