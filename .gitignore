@@ -4,3 +4,4 @@
 /.direnv
 /devels/configuration.nix
 /devels/home.nix
+/devels/*.qcow2
