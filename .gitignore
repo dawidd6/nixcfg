@@ -2,3 +2,5 @@
 /*.qcow2
 /.pre-commit-config.yaml
 /.direnv
+/devels/configuration.nix
+/devels/home.nix
