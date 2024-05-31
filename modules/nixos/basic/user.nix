@@ -20,6 +20,8 @@
   home-manager = {
     users."dawidd6" = import "${inputs.self}/hosts/${config.networking.hostName}/home.nix";
     extraSpecialArgs = {inherit inputs outputs;};
+    useUserPackages = true;
+    useGlobalPkgs = true;
   };
 
   services.xserver.displayManager.autoLogin.user = "dawidd6";
