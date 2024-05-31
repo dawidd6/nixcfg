@@ -1,7 +1,11 @@
-{outputs, ...}: {
+{
+  outputs,
+  lib,
+  ...
+} @ args: {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreePredicate = _: true;
-  nixpkgs.overlays = [
+  nixpkgs.overlays = lib.mkIf (!args ? osConfig) [
     outputs.overlays.additions
     outputs.overlays.modifications
     outputs.overlays.unstable-packages
