@@ -1,4 +1,4 @@
-_: {
+{lib, ...}: {
   programs.bat = {
     enable = true;
     config = {
@@ -6,4 +6,6 @@ _: {
       theme = "Visual Studio Dark+";
     };
   };
+
+  home.activation.batCache = lib.mkForce "";
 }
