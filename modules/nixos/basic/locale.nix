@@ -5,6 +5,5 @@ _: {
 
   console.keyMap = "pl2";
 
-  services.xserver.layout = "pl";
-  services.xserver.xkbVariant = "";
+  services.xserver.xkb.layout = "pl";
 }

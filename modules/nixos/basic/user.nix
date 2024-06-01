@@ -24,5 +24,5 @@
     useGlobalPkgs = true;
   };
 
-  services.xserver.displayManager.autoLogin.user = "dawidd6";
+  services.displayManager.autoLogin.user = "dawidd6";
 }

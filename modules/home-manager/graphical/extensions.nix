@@ -2,6 +2,7 @@
   extensions = with pkgs.gnomeExtensions; [
     appindicator
     clipboard-indicator
+    user-themes
   ];
 in {
   home.packages = extensions;

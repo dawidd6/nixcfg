@@ -8,7 +8,6 @@
   nix.registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
   nix.nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
-  # TODO: 24.05 - add to modules/home-manager/basic as well
   nix.gc.automatic = true;
   nix.gc.dates = "weekly";
   nix.gc.options = "--delete-older-than 14d";
@@ -19,20 +18,6 @@
   nix.settings.trusted-public-keys = ["dawidd6.cachix.org-1:dvy2Br48mAee39Yit5P+jLLIUR3gOa1ts4w4DTJw+XQ="];
   nix.settings.trusted-users = ["@wheel" "root"];
   nix.settings.warn-dirty = false;
-
-  # TODO: 24.05 - replace with nix.gc.automatic from home-manager
-  systemd.user.services.nix-gc-user = {
-    inherit (config.systemd.services.nix-gc) description;
-    inherit (config.systemd.services.nix-gc) script;
-    inherit (config.systemd.services.nix-gc) startAt;
-    after = ["nix-gc.service"];
-  };
-
-  # TODO: 24.05 - replace with nix.gc.automatic from home-manager
-  systemd.user.timers.nix-gc-user = {
-    inherit (config.systemd.timers.nix-gc) timerConfig;
-    after = ["nix-gc.timer"];
-  };
 
   system.activationScripts.diff = {
     supportsDryActivation = true;

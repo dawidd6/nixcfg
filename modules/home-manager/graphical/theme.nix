@@ -1,18 +1,17 @@
 _: {
-  #home.packages = [pkgs.yaru-theme];
-
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
-      #cursor-theme = "Yaru";
-      #icon-theme = "Yaru";
-      gtk-theme = "Adwaita-dark";
     };
-    #"org/gnome/desktop/sound" = {
-    #  theme-name = "Yaru";
-    #};
-    #"org/gnome/shell/extensions/user-theme" = {
-    #  name = "Yaru-dark";
-    #};
+  };
+
+  gtk = {
+    enable = true;
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
   };
 }
