@@ -7,5 +7,6 @@
     };
   };
 
+  # TODO: https://github.com/nix-community/home-manager/issues/5481
   home.activation.batCache = lib.mkForce "";
 }
