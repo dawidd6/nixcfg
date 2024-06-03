@@ -105,18 +105,17 @@
       }
     ];
     extraLuaConfig = ''
-      vim.opt.clipboard = "unnamedplus"
-
-      vim.keymap.set("n", ".", ":bn<CR>", { desc = "Next buffer" })
-      vim.keymap.set("n", ",", ":bp<CR>", { desc = "Previous buffer" })
       vim.keymap.set({"n","v"}, "x", "\"_x", { desc = "Don't cut character, just delete" })
       vim.keymap.set({"n","v"}, "X", "\"_X", { desc = "Don't cut character, just delete" })
       vim.keymap.set("v", "p", "\"_dP", { desc = "Don't copy on paste" })
+      vim.opt.clipboard = "unnamedplus"
 
       if vim.g.vscode then
         return
       end
 
+      vim.keymap.set("n", ".", ":bn<CR>", { desc = "Next buffer" })
+      vim.keymap.set("n", ",", ":bp<CR>", { desc = "Previous buffer" })
       vim.opt.expandtab = true
       vim.opt.gdefault = true
       vim.opt.ignorecase = true
