@@ -10,7 +10,9 @@
   home.homeDirectory = "/home/${config.home.username}";
 
   home.activation.report-changes = config.lib.dag.entryAnywhere ''
-    ${pkgs.nvd}/bin/nvd --nix-bin-dir=${pkgs.nix}/bin diff $oldGenPath $newGenPath
+    if [[ -v oldGenPath ]]; then
+      ${pkgs.nvd}/bin/nvd --nix-bin-dir=${pkgs.nix}/bin diff $oldGenPath $newGenPath
+    fi
   '';
 
   news.display = "silent";
