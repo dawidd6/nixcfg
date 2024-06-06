@@ -5,6 +5,7 @@
 } @ args: {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreePredicate = _: true;
+
   nixpkgs.overlays = lib.mkIf (!args ? osConfig) [
     outputs.overlays.additions
     outputs.overlays.modifications
