@@ -2,8 +2,10 @@
   home.packages = with pkgs; [
     element-desktop
     filezilla
+    firefox
     fritzing
     gimp
+    gnome.gnome-boxes
     gnome.dconf-editor
     gnome.gnome-tweaks
     google-chrome
