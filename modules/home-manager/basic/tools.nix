@@ -44,7 +44,11 @@
     nurl
     nvd
     openstackclient
-    python3
+    (python3.withPackages (ps:
+      with ps; [
+        ps.requests
+        ps.pyvmomi
+      ]))
     ruby
     shellcheck
     sshpass
