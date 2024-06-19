@@ -1,9 +1,16 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   home.sessionVariables = {
     ELECTRON_TRASH = "gvfs-trash";
     # TODO: remove this workaround
     __HM_SESS_VARS_SOURCED = "";
   };
+
+  # TODO: upstream this (disable completions generation)
+  xdg.dataFile."fish/home-manager_generated_completions".source = lib.mkForce (builtins.toFile "empty" "");
 
   programs.fish = {
     enable = true;
