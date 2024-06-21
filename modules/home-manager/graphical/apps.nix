@@ -16,6 +16,7 @@
       keepassxc
       krita
       libreoffice
+      mission-center
       pavucontrol
       signal-desktop
       spotify
