@@ -1,7 +1,7 @@
 {
   nixConfig = {
-    extra-substituters = ["https://dawidd6.cachix.org"];
-    extra-trusted-public-keys = ["dawidd6.cachix.org-1:dvy2Br48mAee39Yit5P+jLLIUR3gOa1ts4w4DTJw+XQ="];
+    extra-substituters = [ "https://dawidd6.cachix.org" ];
+    extra-trusted-public-keys = [ "dawidd6.cachix.org-1:dvy2Br48mAee39Yit5P+jLLIUR3gOa1ts4w4DTJw+XQ=" ];
   };
 
   inputs = {
@@ -31,50 +31,48 @@
     };
   };
 
-  outputs = {self, ...} @ inputs: let
-    inherit (self) outputs;
-    inherit (inputs.nixpkgs) lib;
-  in
-    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs =
+    { self, ... }@inputs:
+    let
+      inherit (self) outputs;
+      inherit (inputs.nixpkgs) lib;
+    in
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = lib.systems.flakeExposed;
       imports = [
         inputs.pre-commit-hooks.flakeModule
         inputs.treefmt.flakeModule
       ];
       flake = {
-        overlays = import ./overlays {inherit inputs;};
-        nixosConfigurations = import ./hosts {inherit inputs outputs lib;};
-        nixosModules = import ./modules/nixos {inherit lib;};
+        overlays = import ./overlays { inherit inputs; };
+        nixosConfigurations = import ./hosts { inherit inputs outputs lib; };
+        nixosModules = import ./modules/nixos { inherit lib; };
         nixosNames = builtins.toString (builtins.attrNames outputs.nixosTops);
         nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
-        homeConfigurations = import ./users {inherit inputs outputs lib;};
-        homeModules = import ./modules/home-manager {inherit lib;};
+        homeConfigurations = import ./users { inherit inputs outputs lib; };
+        homeModules = import ./modules/home-manager { inherit lib; };
         homeNames = builtins.toString (builtins.attrNames outputs.homeTops);
         homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
       };
-      perSystem = {
-        pkgs,
-        config,
-        ...
-      }: {
-        checks = outputs.nixosTops // outputs.homeTops;
-        devShells.default = pkgs.mkShellNoCC {
-          NIX_CONFIG = "experimental-features = nix-command flakes";
-          shellHook = ''
-            ${config.pre-commit.devShell.shellHook}
-          '';
+      perSystem =
+        { pkgs, config, ... }:
+        {
+          checks = outputs.nixosTops // outputs.homeTops;
+          devShells.default = pkgs.mkShellNoCC {
+            NIX_CONFIG = "experimental-features = nix-command flakes";
+            shellHook = ''
+              ${config.pre-commit.devShell.shellHook}
+            '';
+          };
+          packages = import ./pkgs { inherit pkgs; };
+          pre-commit.settings.hooks.treefmt.enable = true;
+          treefmt = {
+            projectRootFile = "flake.nix";
+            programs.deadnix.enable = true;
+            programs.nixfmt-rfc-style.enable = true;
+            programs.statix.enable = true;
+            settings.global.excludes = [ "./devels/**" ];
+          };
         };
-        packages = import ./pkgs {inherit pkgs;};
-        pre-commit.settings.hooks.treefmt.enable = true;
-        treefmt = {
-          projectRootFile = "flake.nix";
-          programs.alejandra.enable = true;
-          programs.deadnix.enable = true;
-          programs.statix.enable = true;
-          settings.global.excludes = [
-            "./devels/**"
-          ];
-        };
-      };
     };
 }

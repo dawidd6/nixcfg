@@ -1,14 +1,8 @@
+{ pkgs, inputs, ... }:
 {
-  pkgs,
-  inputs,
-  ...
-}: {
-  imports = [
-    inputs.nix-index-database.hmModules.nix-index
-  ];
+  imports = [ inputs.nix-index-database.hmModules.nix-index ];
 
   home.packages = with pkgs; [
-    alejandra
     ansible
     ansible-lint
     btop
@@ -33,6 +27,7 @@
     lm_sensors
     ncdu
     nil
+    nixfmt-rfc-style
     nix-diff
     nix-init
     nix-tree
@@ -44,11 +39,6 @@
     nurl
     nvd
     openstackclient
-    (python3.withPackages (ps:
-      with ps; [
-        ps.requests
-        ps.pyvmomi
-      ]))
     ruby
     shellcheck
     sshpass
