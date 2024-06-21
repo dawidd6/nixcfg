@@ -41,7 +41,7 @@
       yubikey-manager
     ])
     ++ (with pkgs.unstable; [
-      nil
+      nixd
       nix-diff
       nix-init
       nix-tree
