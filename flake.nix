@@ -55,8 +55,17 @@
         homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
       };
       perSystem =
-        { pkgs, config, ... }:
         {
+          pkgs,
+          config,
+          system,
+          ...
+        }:
+        {
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [ outputs.overlays.unstable-packages ];
+          };
           checks = outputs.nixosTops // outputs.homeTops;
           devShells.default = pkgs.mkShellNoCC {
             NIX_CONFIG = "experimental-features = nix-command flakes";
@@ -70,6 +79,7 @@
             projectRootFile = "flake.nix";
             programs.deadnix.enable = true;
             programs.nixfmt-rfc-style.enable = true;
+            programs.nixfmt-rfc-style.package = pkgs.unstable.nixfmt-rfc-style;
             programs.statix.enable = true;
             settings.global.excludes = [ "./devels/**" ];
           };

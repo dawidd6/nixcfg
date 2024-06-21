@@ -26,8 +26,8 @@
     lazygit
     lm_sensors
     ncdu
-    nil
-    nixfmt-rfc-style
+    unstable.nil
+    unstable.nixfmt-rfc-style
     nix-diff
     nix-init
     nix-tree
