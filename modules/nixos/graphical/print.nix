@@ -1,6 +1,7 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   services.printing.enable = true;
-  services.printing.drivers = [pkgs.hplip];
+  services.printing.drivers = [ pkgs.hplip ];
 
   services.avahi.enable = true;
   services.avahi.nssmdns4 = true;
@@ -11,5 +12,5 @@
 
   hardware.sane.enable = true;
   hardware.sane.openFirewall = true;
-  hardware.sane.extraBackends = [pkgs.hplip];
+  hardware.sane.extraBackends = [ pkgs.hplip ];
 }

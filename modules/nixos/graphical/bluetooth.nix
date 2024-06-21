@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   hardware.bluetooth.powerOnBoot = false;
   hardware.bluetooth.enable = true;
   hardware.bluetooth.package = pkgs.bluez5-experimental;

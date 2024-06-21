@@ -1,4 +1,5 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       clock-show-weekday = true;
@@ -25,11 +26,11 @@
       idle-delay = lib.hm.gvariant.mkUint32 0;
     };
     "org/gnome/desktop/wm/keybindings" = {
-      switch-applications = [];
-      switch-applications-backward = [];
-      switch-windows = ["<Alt>Tab"];
-      switch-windows-backward = ["<Shift><Alt>Tab"];
-      show-desktop = ["<Super>d"];
+      switch-applications = [ ];
+      switch-applications-backward = [ ];
+      switch-windows = [ "<Alt>Tab" ];
+      switch-windows-backward = [ "<Shift><Alt>Tab" ];
+      show-desktop = [ "<Super>d" ];
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
       custom-keybindings = [

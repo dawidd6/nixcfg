@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.gpg.enable = true;
   programs.gpg.scdaemonSettings = {
     disable-ccid = true;

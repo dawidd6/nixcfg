@@ -1,8 +1,5 @@
+{ lib, config, ... }:
 {
-  lib,
-  config,
-  ...
-}: {
   boot.tmp.cleanOnBoot = true;
 
   boot.loader.systemd-boot.enable = true;

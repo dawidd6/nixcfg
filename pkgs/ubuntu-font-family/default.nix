@@ -1,9 +1,6 @@
 # Pinning this font to v0.83,
 # because newer version of it is garbage IMO
-{
-  stdenvNoCC,
-  fetchzip,
-}:
+{ stdenvNoCC, fetchzip }:
 stdenvNoCC.mkDerivation rec {
   pname = "ubuntu-font-family";
   version = "0.83";

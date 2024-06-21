@@ -4,8 +4,9 @@
   config,
   pkgs,
   ...
-}: {
-  nix.registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
+}:
+{
+  nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
   nix.nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
   nix.gc.automatic = true;
@@ -14,9 +15,14 @@
 
   nix.settings.auto-optimise-store = true;
   nix.settings.experimental-features = "nix-command flakes";
-  nix.settings.substituters = ["https://dawidd6.cachix.org"];
-  nix.settings.trusted-public-keys = ["dawidd6.cachix.org-1:dvy2Br48mAee39Yit5P+jLLIUR3gOa1ts4w4DTJw+XQ="];
-  nix.settings.trusted-users = ["@wheel" "root"];
+  nix.settings.substituters = [ "https://dawidd6.cachix.org" ];
+  nix.settings.trusted-public-keys = [
+    "dawidd6.cachix.org-1:dvy2Br48mAee39Yit5P+jLLIUR3gOa1ts4w4DTJw+XQ="
+  ];
+  nix.settings.trusted-users = [
+    "@wheel"
+    "root"
+  ];
   nix.settings.warn-dirty = false;
 
   system.activationScripts.diff = {

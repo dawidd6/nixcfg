@@ -1,17 +1,12 @@
+{ outputs, pkgs, ... }:
 {
-  outputs,
-  pkgs,
-  ...
-}: {
-  imports = [
-    outputs.homeModules.basic
-  ];
+  imports = [ outputs.homeModules.basic ];
 
-  home.packages = [pkgs.onedrive];
+  home.packages = [ pkgs.onedrive ];
 
   systemd.user.services.onedrive = {
     Unit.Description = "Onedrive sync service";
-    Install.WantedBy = ["default.target"];
+    Install.WantedBy = [ "default.target" ];
     Service = {
       Environment = [
         "Environment=HTTP_PROXY=http://10.144.1.10:8080"

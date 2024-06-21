@@ -1,8 +1,5 @@
+{ outputs, lib, ... }@args:
 {
-  outputs,
-  lib,
-  ...
-} @ args: {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreePredicate = _: true;
 

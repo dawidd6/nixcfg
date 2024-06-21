@@ -3,15 +3,16 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   services.displayManager.autoLogin.enable = true;
 
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.excludePackages = [pkgs.xterm];
+  services.xserver.excludePackages = [ pkgs.xterm ];
 
-  environment.gnome.excludePackages = [pkgs.gnome-tour];
+  environment.gnome.excludePackages = [ pkgs.gnome-tour ];
 
   programs.dconf.profiles.gdm.databases = [
     {
