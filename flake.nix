@@ -77,11 +77,18 @@
           pre-commit.settings.hooks.treefmt.enable = true;
           treefmt = {
             projectRootFile = "flake.nix";
-            programs.deadnix.enable = true;
-            programs.nixfmt-rfc-style.enable = true;
-            programs.nixfmt-rfc-style.package = pkgs.unstable.nixfmt-rfc-style;
-            programs.statix.enable = true;
-            settings.global.excludes = [ "./devels/**" ];
+            programs.deadnix = {
+              enable = true;
+              package = pkgs.unstable.deadnix;
+            };
+            programs.nixfmt-rfc-style = {
+              enable = true;
+              package = pkgs.unstable.nixfmt-rfc-style;
+            };
+            programs.statix = {
+              enable = true;
+              package = pkgs.unstable.statix;
+            };
           };
         };
     };
