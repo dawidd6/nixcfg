@@ -6,7 +6,8 @@
   homedir,
   desktop,
   ...
-}: {
+}:
+{
   environment.systemPackages = with pkgs; [
     vim
     xterm
@@ -17,16 +18,12 @@
 
   home-manager = {
     users.${username} = ./home.nix;
-    sharedModules = [
-      {home.stateVersion = config.system.stateVersion;}
-    ];
+    sharedModules = [ { home.stateVersion = config.system.stateVersion; } ];
     useUserPackages = true;
     useGlobalPkgs = true;
   };
 
-  nix.nixPath = [
-    "nixpkgs=${pkgs.path}"
-  ];
+  nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
 
   security.pam.services.sshd.allowNullPassword = true;
   security.sudo.wheelNeedsPassword = false;
@@ -44,7 +41,7 @@
 
   users.users.${username} = {
     isNormalUser = true;
-    extraGroups = ["wheel"];
+    extraGroups = [ "wheel" ];
     hashedPassword = "";
   };
 

@@ -6,7 +6,8 @@
   nixpkgs ? "${homedir}/nixpkgs",
   home-manager ? "${homedir}/home-manager",
   ...
-}: rec {
+}:
+rec {
   vmBuild = vmSystem.config.system.build.vm;
   vmSystem = import (nixpkgs + "/nixos/lib/eval-config.nix") {
     inherit system;
@@ -16,7 +17,12 @@
       ./vm.nix
     ];
     specialArgs = {
-      inherit system username homedir desktop;
+      inherit
+        system
+        username
+        homedir
+        desktop
+        ;
     };
   };
 }
