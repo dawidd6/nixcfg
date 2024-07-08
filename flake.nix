@@ -81,7 +81,7 @@
               enable = true;
               package = pkgs.unstable.deadnix;
             };
-            programs.nixfmt-rfc-style = {
+            programs.nixfmt = {
               enable = true;
               package = pkgs.unstable.nixfmt-rfc-style;
             };
