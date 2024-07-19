@@ -21,7 +21,7 @@
   services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
 
   services.logind.lidSwitch = "suspend-then-hibernate";
-  systemd.sleep.extraConfig = "HibernateDelaySec=60m";
+  systemd.sleep.extraConfig = "HibernateDelaySec=2h";
 
   boot.binfmt.emulatedSystems = [
     "armv7l-linux"
