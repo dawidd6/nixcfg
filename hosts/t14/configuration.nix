@@ -28,8 +28,5 @@
     "aarch64-linux"
   ];
 
-  # Fix touchpad not working properly after resume sometimes.
-  boot.kernelParams = [ "psmouse.synaptics_intertouch=0" ];
-
   system.stateVersion = "23.11";
 }
