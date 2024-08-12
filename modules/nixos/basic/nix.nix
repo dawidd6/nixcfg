@@ -5,14 +5,15 @@
   pkgs,
   ...
 }:
+let
+  asGB = size: toString (size * 1024 * 1024 * 1024);
+in
 {
   nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
   nix.nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
-  nix.gc.automatic = true;
-  nix.gc.dates = "weekly";
-  nix.gc.options = "--delete-older-than 14d";
-
+  nix.settings.min-free = asGB 10;
+  nix.settings.max-free = asGB 50;
   nix.settings.auto-optimise-store = true;
   nix.settings.experimental-features = "nix-command flakes";
   nix.settings.substituters = [ "https://dawidd6.cachix.org" ];
