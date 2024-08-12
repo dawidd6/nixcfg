@@ -16,6 +16,7 @@
       keepassxc
       krita
       libreoffice
+      lutris
       mission-center
       pavucontrol
       signal-desktop
