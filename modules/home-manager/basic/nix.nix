@@ -10,9 +10,6 @@ in
 {
   nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
 
-  # https://github.com/nix-community/home-manager/issues/5465
-  systemd.user.timers.nix-gc.Timer.Persistent = true;
-
   nix.package = lib.mkIf (!args ? osConfig) pkgs.nix;
 
   nix.settings.min-free = asGB 10;
