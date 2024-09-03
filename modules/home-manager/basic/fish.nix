@@ -16,7 +16,7 @@
     shellAliases = {
       ls = "ls --color=always";
       rm = "trash";
-      ssh = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no";
+      ssh = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=ERROR";
       hub = "gh";
       nix-edit = "nix edit -f .";
     };
