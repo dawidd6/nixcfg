@@ -26,11 +26,11 @@
     fsType = "ext4";
   };
 
-  boot.initrd.luks.devices.cryptroot.device = "/dev/nvme0n1p2";
-  boot.initrd.luks.devices.cryptswap.device = "/dev/nvme0n1p3";
+  boot.initrd.luks.devices.cryptroot.device = "/dev/disk/by-diskseq/1-part2";
+  boot.initrd.luks.devices.cryptswap.device = "/dev/disk/by-diskseq/1-part3";
 
   fileSystems."/boot" = {
-    device = "/dev/nvme0n1p1";
+    device = "/dev/disk/by-diskseq/1-part1";
     fsType = "vfat";
   };
 
