@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "disko": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1726524467,
+        "narHash": "sha256-xkPPPvfHhHK7BNX5ZrQ9N6AIEixCmFzRZHduDf0zv30=",
+        "owner": "nix-community",
+        "repo": "disko",
+        "rev": "22ee467a54a3ab7fa9d637ccad5330c6c087e9dc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "disko",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -172,6 +192,7 @@
     },
     "root": {
       "inputs": {
+        "disko": "disko",
         "flake-parts": "flake-parts",
         "hardware": "hardware",
         "home-manager": "home-manager",
