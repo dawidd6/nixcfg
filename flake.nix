@@ -29,10 +29,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -77,7 +73,7 @@
               ${config.pre-commit.devShell.shellHook}
             '';
           };
-          packages = import ./pkgs { inherit pkgs; };
+          packages = import ./pkgs { inherit self pkgs; };
           pre-commit.settings.hooks.treefmt.enable = true;
           treefmt = {
             projectRootFile = "flake.nix";
