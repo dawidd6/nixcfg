@@ -1,6 +1,9 @@
 { pkgs, ... }:
 {
-  home.packages = with pkgs; [ podman ];
+  home.packages = with pkgs; [
+    podman
+    podman-compose
+  ];
 
   xdg.configFile = {
     "containers/policy.json".text = ''
