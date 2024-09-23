@@ -73,7 +73,7 @@
               ${config.pre-commit.devShell.shellHook}
             '';
           };
-          packages = import ./pkgs { inherit self pkgs; };
+          packages = import ./pkgs { inherit pkgs; };
           pre-commit.settings.hooks.treefmt.enable = true;
           treefmt = {
             projectRootFile = "flake.nix";
