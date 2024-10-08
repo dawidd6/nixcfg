@@ -1,35 +1,55 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -xeuo pipefail
 
-if ! type deb-get; then
-    wget -O /tmp/deb-get.deb https://github.com/wimpysworld/deb-get/releases/download/0.3.8/deb-get_0.3.8-1_all.deb
-    sudo apt install /tmp/deb-get.deb
-fi
+case "${1:-}" in
+    hibernation)
+        if [[ "$USER" == 'ubuntu' ]]; then
+            lsblk
+            read -p 'Enter vgubuntu device: ' device
+            sudo cryptsetup open "$device" crypt
+            sudo lvresize --verbose --resizefs -L -1G /dev/mapper/vgubuntu-root
+            sudo e2fsck -f /dev/mapper/vgubuntu-root
+            sudo lvresize --verbose -L +1G /dev/mapper/vgubuntu-swap_1
+            echo 'Remember to run the same command on installed system!'
+        else
+            sudo tee /etc/polkit-1/localauthority/50-local.d/com.ubuntu.enable-hibernate.pkla <<-EOF
+            [Re-enable hibernate by default in upower]
+            Identity=unix-user:*
+            Action=org.freedesktop.upower.hibernate
+            ResultActive=yes
+            [Re-enable hibernate by default in logind]
+            Identity=unix-user:*
+            Action=org.freedesktop.login1.hibernate;org.freedesktop.login1.handle-hibernate-key;org.freedesktop.login1;org.freedesktop.login1.hibernate-multiple-sessions;org.freedesktop.login1.hibernate-ignore-inhibit
+            ResultActive=yes
+            EOF
+            sudo swapoff -a
+            sudo cryptsetup resize vgubuntu-swap_1
+            sudo mkswap /dev/mapper/vgubuntu-swap_1
+            sudo swapon -a
+            sudo tee 'RESUME=/dev/mapper/vgubuntu-swap_1' /etc/initramfs-tools/conf.d/resume
+            if ! grep -q 'resume=/dev/mapper/vgubuntu-swap_1' /etc/default/grub; then
+                sudo sed -i -E 's@^(GRUB_CMDLINE_LINUX_DEFAULT)="(.+)"$@\1="\2 resume=/dev/mapper/vgubuntu-swap_1"@g' /etc/default/grub
+            fi
+            sudo update-initramfs -u -k all
+            sudo update-grub
+            echo 'Reboot might be needed now!'
+        fi
+        ;;
+    autounlock)
+        sudo apt install keyutils
+        if ! grep -q 'decrypt_keyctl' /etc/crypttab; then
+            sed -i -E 's@^(.+)$@\1,keyscript=decrypt_keyctl@g' /etc/crypttab
+        fi
+        if ! grep -q 'pam_gnome_keyring.so use_authtok' /etc/pam.d/common-password; then
+            sudo sed -i -E 's@(pam_gnome_keyring.so)@\1 use_authtok@g' /etc/pam.d/common-password
+        fi
+        sudo update-initramfs -u -k all
+        echo 'Reboot might be needed now!'
+        ;;
+    *)
+        echo 'Unrecognized command!'
+        exit 127
+        ;;
+esac
 
-deb-get update
-deb-get install \
-    code \
-    google-chrome-stable \
-    spotify-client
-
-sudo apt purge snapd
-sudo apt-mark hold snapd
-sudo apt update
-sudo apt install \
-    copyq \
-    filezilla \
-    gimp \
-    gnome-clocks \
-    gnome-tweaks \
-    gnome-weather \
-    gnome-shell-extension-manager \
-    gpick \
-    inkscape \
-    keepassxc \
-    network-manager-openconnect-gnome \
-    network-manager-vpnc-gnome \
-    pavucontrol \
-    uidmap \
-    virt-manager \
-    vorta
