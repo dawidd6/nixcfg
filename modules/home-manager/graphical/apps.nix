@@ -6,8 +6,9 @@
       firefox
       fritzing
       gimp
-      gnome.gnome-boxes
       gnome.dconf-editor
+      gnome.gnome-boxes
+      gnome.gnome-power-manager
       gnome.gnome-tweaks
       google-chrome
       gpick
