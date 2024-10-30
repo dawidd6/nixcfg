@@ -1,6 +1,7 @@
 {
   inputs,
   outputs,
+  username,
   lib,
   ...
 }:
@@ -9,7 +10,12 @@ let
     hostname:
     inputs.nixpkgs.lib.nixosSystem {
       specialArgs = {
-        inherit inputs outputs;
+        inherit
+          inputs
+          outputs
+          hostname
+          username
+          ;
       };
       modules = [ ./${hostname}/configuration.nix ];
     };

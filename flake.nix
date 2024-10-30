@@ -32,9 +32,10 @@
   };
 
   outputs =
-    { self, ... }@inputs:
+    inputs:
     let
-      inherit (self) outputs;
+      username = "dawidd6";
+      inherit (inputs.self) outputs;
       inherit (inputs.nixpkgs) lib;
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
@@ -45,11 +46,24 @@
       ];
       flake = {
         overlays = import ./overlays { inherit inputs; };
-        nixosConfigurations = import ./hosts { inherit inputs outputs lib; };
+        nixosConfigurations = import ./hosts {
+          inherit
+            inputs
+            outputs
+            lib
+            username
+            ;
+        };
         nixosModules = import ./modules/nixos { inherit lib; };
         nixosNames = builtins.toString (builtins.attrNames outputs.nixosTops);
         nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
-        homeConfigurations = import ./users { inherit inputs outputs lib; };
+        homeConfigurations = import ./users {
+          inherit
+            inputs
+            outputs
+            lib
+            ;
+        };
         homeModules = import ./modules/home-manager { inherit lib; };
         homeNames = builtins.toString (builtins.attrNames outputs.homeTops);
         homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;

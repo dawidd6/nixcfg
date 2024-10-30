@@ -28,5 +28,4 @@
     "aarch64-linux"
   ];
 
-  system.stateVersion = "23.11";
 }

@@ -19,6 +19,4 @@
     flake = "github:dawidd6/nixcfg";
     flags = [ "--verbose" ];
   };
-
-  system.stateVersion = "22.11";
 }

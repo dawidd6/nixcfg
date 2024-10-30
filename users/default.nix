@@ -11,7 +11,7 @@ let
       pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
       modules = [ ./${username}/home.nix ];
       extraSpecialArgs = {
-        inherit inputs outputs;
+        inherit inputs outputs username;
       };
     };
 in

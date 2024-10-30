@@ -1,14 +1,14 @@
 {
-  lib,
   pkgs,
   config,
+  username,
   ...
 }:
 {
   programs.home-manager.enable = true;
 
-  home.username = lib.mkDefault "dawidd6";
-  home.homeDirectory = "/home/${config.home.username}";
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
 
   home.activation.report-changes = config.lib.dag.entryAnywhere ''
     if [[ -v oldGenPath ]]; then

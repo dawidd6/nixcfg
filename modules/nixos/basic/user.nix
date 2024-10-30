@@ -1,34 +1,35 @@
 {
   pkgs,
-  config,
   inputs,
   outputs,
+  username,
+  hostname,
   ...
 }:
 {
   imports = [ inputs.home-manager.nixosModules.default ];
 
-  users.users."dawidd6" = {
+  users.users."${username}" = {
     isNormalUser = true;
-    description = "dawidd6";
+    description = username;
     extraGroups = [
       "networkmanager"
       "wheel"
       "libvirtd"
       "lp"
     ];
-    initialPassword = "dawidd6";
+    initialPassword = username;
     shell = pkgs.fish;
   };
 
   home-manager = {
-    users."dawidd6" = import "${inputs.self}/hosts/${config.networking.hostName}/home.nix";
+    users."${username}" = import "${inputs.self}/hosts/${hostname}/home.nix";
     extraSpecialArgs = {
-      inherit inputs outputs;
+      inherit inputs outputs username;
     };
     useUserPackages = true;
     useGlobalPkgs = true;
   };
 
-  services.displayManager.autoLogin.user = "dawidd6";
+  services.displayManager.autoLogin.user = username;
 }
