@@ -1,6 +1,6 @@
-{ lib, ... }:
+{ lib, hostName, ... }:
 {
-  networking.hostName = lib.mkDefault null;
+  networking.hostName = hostName;
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.powersave = lib.mkDefault true;
 }

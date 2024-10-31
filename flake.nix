@@ -34,7 +34,7 @@
   outputs =
     inputs:
     let
-      username = "dawidd6";
+      userName = "dawidd6";
       inherit (inputs.self) outputs;
       inherit (inputs.nixpkgs) lib;
     in
@@ -51,7 +51,7 @@
             inputs
             outputs
             lib
-            username
+            userName
             ;
         };
         nixosModules = import ./modules/nixos { inherit lib; };

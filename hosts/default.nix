@@ -1,23 +1,27 @@
 {
   inputs,
   outputs,
-  username,
+  userName,
   lib,
   ...
 }:
 let
   mkNixOS =
-    hostname:
+    hostName:
+    let
+      hostDir = ./${hostName};
+    in
     inputs.nixpkgs.lib.nixosSystem {
       specialArgs = {
         inherit
           inputs
           outputs
-          hostname
-          username
+          hostName
+          hostDir
+          userName
           ;
       };
-      modules = [ ./${hostname}/configuration.nix ];
+      modules = [ /${hostDir}/configuration.nix ];
     };
 in
 lib.genAttrs (builtins.attrNames (

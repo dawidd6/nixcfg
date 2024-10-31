@@ -6,12 +6,20 @@
 }:
 let
   mkHome =
-    username:
+    userName:
+    let
+      userDir = ./${userName};
+    in
     inputs.home-manager.lib.homeManagerConfiguration {
       pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-      modules = [ ./${username}/home.nix ];
+      modules = [ /${userDir}/home.nix ];
       extraSpecialArgs = {
-        inherit inputs outputs username;
+        inherit
+          inputs
+          outputs
+          userName
+          userDir
+          ;
       };
     };
 in

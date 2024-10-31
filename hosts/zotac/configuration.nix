@@ -6,7 +6,6 @@
     outputs.nixosModules.basic
   ];
 
-  networking.hostName = "zotac";
   networking.networkmanager.wifi.powersave = false;
 
   services.openssh.enable = true;

@@ -1,13 +1,9 @@
 {
-  inputs,
-  username,
+  userDir,
   ...
 }@args:
 {
 
   home.stateVersion =
-    if (args ? osConfig) then
-      args.osConfig.system.stateVersion
-    else
-      import "${inputs.self}/users/${username}/version.nix";
+    if (args ? osConfig) then args.osConfig.system.stateVersion else import "${userDir}/version.nix";
 }

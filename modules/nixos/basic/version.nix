@@ -1,8 +1,7 @@
 {
-  inputs,
-  hostname,
+  hostDir,
   ...
 }:
 {
-  system.stateVersion = import "${inputs.self}/hosts/${hostname}/version.nix";
+  system.stateVersion = import "${hostDir}/version.nix";
 }

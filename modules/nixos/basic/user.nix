@@ -2,34 +2,34 @@
   pkgs,
   inputs,
   outputs,
-  username,
-  hostname,
+  userName,
+  hostDir,
   ...
 }:
 {
   imports = [ inputs.home-manager.nixosModules.default ];
 
-  users.users."${username}" = {
+  users.users."${userName}" = {
     isNormalUser = true;
-    description = username;
+    description = userName;
     extraGroups = [
       "networkmanager"
       "wheel"
       "libvirtd"
       "lp"
     ];
-    initialPassword = username;
+    initialPassword = userName;
     shell = pkgs.fish;
   };
 
   home-manager = {
-    users."${username}" = import "${inputs.self}/hosts/${hostname}/home.nix";
+    users."${userName}" = import "${hostDir}/home.nix";
     extraSpecialArgs = {
-      inherit inputs outputs username;
+      inherit inputs outputs userName;
     };
     useUserPackages = true;
     useGlobalPkgs = true;
   };
 
-  services.displayManager.autoLogin.user = username;
+  services.displayManager.autoLogin.user = userName;
 }
