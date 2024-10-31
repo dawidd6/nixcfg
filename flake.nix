@@ -57,6 +57,7 @@
         nixosModules = import ./modules/nixos { inherit lib; };
         nixosNames = builtins.toString (builtins.attrNames outputs.nixosTops);
         nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
+        nixosTopsVM = lib.mapAttrs (_: c: c.config.system.build.vm) outputs.nixosConfigurations;
         homeConfigurations = import ./users {
           inherit
             inputs
