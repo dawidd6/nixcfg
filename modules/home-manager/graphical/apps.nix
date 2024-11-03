@@ -20,6 +20,7 @@
       lutris
       mission-center
       pavucontrol
+      remmina
       signal-desktop
       spotify
       virt-manager
