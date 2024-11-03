@@ -23,7 +23,6 @@
       remmina
       signal-desktop
       spotify
-      virt-manager
       yubioath-flutter
     ])
     ++ (with pkgs.unstable; [ vscode ]);

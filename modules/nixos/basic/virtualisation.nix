@@ -6,7 +6,6 @@
   ...
 }:
 {
-  virtualisation.libvirtd.enable = true;
   virtualisation.multipass.enable = true;
 
   virtualisation.vmVariant = {
