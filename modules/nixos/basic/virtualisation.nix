@@ -40,4 +40,9 @@
       '';
     in
     [ "L+ /var/lib/qemu/firmware - - - - ${firmware}" ];
+
+  environment.systemPackages = with pkgs; [
+    qemu
+    libvirt
+  ];
 }
