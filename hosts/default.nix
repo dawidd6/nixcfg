@@ -9,7 +9,8 @@ let
   mkNixOS =
     hostName:
     let
-      hostDir = ./${hostName};
+      version = import ./${hostName}/version.nix;
+      home = import ./${hostName}/home.nix;
     in
     inputs.nixpkgs.lib.nixosSystem {
       specialArgs = {
@@ -17,11 +18,12 @@ let
           inputs
           outputs
           hostName
-          hostDir
           userName
+          version
+          home
           ;
       };
-      modules = [ /${hostDir}/configuration.nix ];
+      modules = [ ./${hostName}/configuration.nix ];
     };
 in
 lib.genAttrs (builtins.attrNames (

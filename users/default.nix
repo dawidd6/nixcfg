@@ -8,17 +8,17 @@ let
   mkHome =
     userName:
     let
-      userDir = ./${userName};
+      version = import ./${userName}/version.nix;
     in
     inputs.home-manager.lib.homeManagerConfiguration {
       pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-      modules = [ /${userDir}/home.nix ];
+      modules = [ ./${userName}/home.nix ];
       extraSpecialArgs = {
         inherit
           inputs
           outputs
           userName
-          userDir
+          version
           ;
       };
     };

@@ -1,7 +1,7 @@
 {
-  hostDir,
+  version,
   ...
 }:
 {
-  system.stateVersion = import "${hostDir}/version.nix";
+  system.stateVersion = version;
 }

@@ -3,7 +3,8 @@
   inputs,
   outputs,
   userName,
-  hostDir,
+  version,
+  home,
   ...
 }:
 {
@@ -23,9 +24,14 @@
   };
 
   home-manager = {
-    users."${userName}" = import "${hostDir}/home.nix";
+    users."${userName}" = home;
     extraSpecialArgs = {
-      inherit inputs outputs userName;
+      inherit
+        inputs
+        outputs
+        userName
+        version
+        ;
     };
     useUserPackages = true;
     useGlobalPkgs = true;
