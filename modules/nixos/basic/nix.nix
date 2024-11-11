@@ -12,6 +12,9 @@ in
   nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
   nix.nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
+  nix.daemonCPUSchedPolicy = "idle";
+  nix.daemonIOSchedClass = "idle";
+
   nix.settings.min-free = asGB 10;
   nix.settings.max-free = asGB 50;
   nix.settings.auto-optimise-store = true;
