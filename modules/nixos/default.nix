@@ -1,9 +1,5 @@
 { lib, ... }:
-{
-  basic = {
-    imports = lib.filesystem.listFilesRecursive ./basic;
-  };
-  graphical = {
-    imports = lib.filesystem.listFilesRecursive ./graphical;
-  };
-}
+lib.genAttrs (builtins.attrNames (lib.filterAttrs (_n: v: v == "directory") (builtins.readDir ./.)))
+  (dir: {
+    imports = lib.filesystem.listFilesRecursive ./${dir};
+  })
