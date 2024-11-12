@@ -17,6 +17,4 @@
   '';
 
   news.display = "silent";
-
-  manual.manpages.enable = false;
 }
