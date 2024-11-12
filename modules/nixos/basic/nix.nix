@@ -12,6 +12,8 @@ in
   nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
   nix.nixPath = lib.mapAttrsToList (name: _: "${name}=flake:${name}") inputs;
 
+  nix.channel.enable = false;
+
   nix.daemonCPUSchedPolicy = "idle";
   nix.daemonIOSchedClass = "idle";
 
