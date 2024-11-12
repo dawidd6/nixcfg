@@ -20,5 +20,6 @@ in
     "dawidd6.cachix.org-1:dvy2Br48mAee39Yit5P+jLLIUR3gOa1ts4w4DTJw+XQ="
   ];
   nix.settings.flake-registry = "";
+  nix.settings.nix-path = lib.mapAttrsToList (name: _: "${name}=flake:${name}") inputs;
   nix.settings.warn-dirty = false;
 }
