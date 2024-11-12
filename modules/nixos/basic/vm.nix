@@ -2,12 +2,9 @@
   modulesPath,
   config,
   lib,
-  pkgs,
   ...
 }:
 {
-  virtualisation.multipass.enable = true;
-
   virtualisation.vmVariant = {
     imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
@@ -30,19 +27,4 @@
 
     services.sshd.enable = true;
   };
-
-  systemd.tmpfiles.rules =
-    let
-      firmware = pkgs.runCommandLocal "qemu-firmware" { } ''
-        mkdir $out
-        cp ${pkgs.qemu}/share/qemu/firmware/*.json $out
-        substituteInPlace $out/*.json --replace ${pkgs.qemu} /run/current-system/sw
-      '';
-    in
-    [ "L+ /var/lib/qemu/firmware - - - - ${firmware}" ];
-
-  environment.systemPackages = with pkgs; [
-    qemu
-    libvirt
-  ];
 }
