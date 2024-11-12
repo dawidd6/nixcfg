@@ -20,6 +20,7 @@
       lutris
       mission-center
       pavucontrol
+      quickemu
       remmina
       signal-desktop
       spotify
