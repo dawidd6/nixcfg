@@ -44,6 +44,7 @@
       nixd
       nix-diff
       nix-init
+      nix-inspect
       nix-tree
       nix-update
       nixfmt-rfc-style
