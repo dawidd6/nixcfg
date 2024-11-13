@@ -27,14 +27,18 @@
   };
 
   boot.initrd.luks.devices.cryptroot.device = "/dev/disk/by-diskseq/1-part2";
-  boot.initrd.luks.devices.cryptswap.device = "/dev/disk/by-diskseq/1-part3";
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-diskseq/1-part1";
     fsType = "vfat";
   };
 
-  swapDevices = [ { device = "/dev/mapper/cryptswap"; } ];
+  swapDevices = [
+    {
+      device = "/swap";
+      size = 20480;
+    }
+  ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
