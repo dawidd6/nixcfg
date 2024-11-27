@@ -7,6 +7,7 @@
       ansible
       ansible-lint
       btop
+      carapace
       cloc
       cpio
       curl
