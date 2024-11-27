@@ -18,6 +18,7 @@
       "wheel"
       "libvirtd"
       "lp"
+      "incus"
     ];
     initialPassword = userName;
     shell = pkgs.fish;
