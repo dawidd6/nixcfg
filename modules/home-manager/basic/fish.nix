@@ -60,7 +60,7 @@
       p = "podman";
       hm = "home-manager";
     };
-    shellInit = ''
+    interactiveShellInit = ''
       set fish_color_command green
       set fish_color_param normal
       set fish_color_error red --bold
