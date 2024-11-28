@@ -1,4 +1,7 @@
-_: {
+{ pkgs, ... }:
+{
+  home.packages = [ pkgs.git-extras ];
+
   programs.git = {
     enable = true;
     diff-so-fancy.enable = true;
