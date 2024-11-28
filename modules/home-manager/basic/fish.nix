@@ -70,10 +70,6 @@
 
       ${pkgs.nix-your-shell}/bin/nix-your-shell fish | source
 
-      for cmd in nix-build nix-instantiate nix-shell nixos-rebuild
-        ${pkgs.carapace}/bin/carapace $cmd fish | source
-      end
-
       # TODO: workaround for duplicating PATH entries
       fish_add_path "$HOME/nixcfg/scripts"
     '';
