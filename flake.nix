@@ -7,9 +7,9 @@
   inputs = {
     hardware.url = "github:nixos/nixos-hardware";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-parts = {
@@ -73,15 +73,9 @@
         {
           pkgs,
           config,
-          system,
           ...
         }:
         {
-          # TODO: delete
-          _module.args.pkgs = import inputs.nixpkgs {
-            inherit system;
-            overlays = [ outputs.overlays.default ];
-          };
           checks = outputs.nixosTops // outputs.homeTops;
           devShells.default = pkgs.mkShellNoCC {
             NIX_CONFIG = "experimental-features = nix-command flakes";
@@ -93,21 +87,9 @@
           pre-commit.settings.hooks.treefmt.enable = true;
           treefmt = {
             projectRootFile = "flake.nix";
-            programs.deadnix = {
-              enable = true;
-              # TODO: delete
-              package = pkgs.unstable.deadnix;
-            };
-            programs.nixfmt = {
-              enable = true;
-              # TODO: delete
-              package = pkgs.unstable.nixfmt-rfc-style;
-            };
-            programs.statix = {
-              enable = true;
-              # TODO: delete
-              package = pkgs.unstable.statix;
-            };
+            programs.deadnix.enable = true;
+            programs.nixfmt.enable = true;
+            programs.statix.enable = true;
           };
         };
     };

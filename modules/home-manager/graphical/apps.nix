@@ -2,14 +2,14 @@
 {
   home.packages =
     (with pkgs; [
+      dconf-editor
       filezilla
       firefox
       fritzing
       gimp
-      gnome.dconf-editor
-      gnome.gnome-boxes
-      gnome.gnome-power-manager
-      gnome.gnome-tweaks
+      gnome-boxes
+      gnome-power-manager
+      gnome-tweaks
       google-chrome
       gpick
       gscan2pdf
