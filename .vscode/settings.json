@@ -1,0 +1,10 @@
+{
+  "nix.formatterPath": ["nix", "fmt", "--", "--"],
+  "nix.serverSettings": {
+    "nixd": {
+      "formatting": {
+        "command": ["nix", "fmt", "--", "--"]
+      }
+    }
+  }
+}
