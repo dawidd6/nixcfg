@@ -27,6 +27,7 @@
       nmap
       nodejs
       nurl
+      python3
       ruby
       shellcheck
       sshpass
