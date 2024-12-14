@@ -124,6 +124,7 @@
           };
         };
       };
+      lspkind.enable = true;
       lualine.enable = true;
       noice.enable = true;
       nvim-autopairs.enable = true;
