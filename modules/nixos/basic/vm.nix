@@ -25,6 +25,8 @@
       "-display gtk,grab-on-hover=on"
     ];
 
+    services.qemuGuest.enable = true;
+    services.spice-vdagentd.enable = true;
     services.sshd.enable = true;
   };
 }
