@@ -29,6 +29,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
+    nixvim = {
+      url = "github:nix-community/nixvim/nixos-24.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.nuschtosSearch.follows = "";
+      inputs.devshell.follows = "";
+      inputs.flake-compat.follows = "";
+      inputs.git-hooks.follows = "";
+      inputs.home-manager.follows = "";
+      inputs.nix-darwin.follows = "";
+      inputs.treefmt-nix.follows = "";
+    };
   };
 
   outputs =
