@@ -4,9 +4,7 @@
   nixpkgs.config.allowUnfreePredicate = _: true;
 
   nixpkgs.overlays = lib.mkIf (!args ? osConfig) [
-    outputs.overlays.additions
-    outputs.overlays.modifications
-    outputs.overlays.unstable-packages
+    outputs.overlays.default
   ];
 
   xdg.configFile."nixpkgs/config.nix".text = ''

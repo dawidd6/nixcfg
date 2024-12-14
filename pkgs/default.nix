@@ -1,6 +1,8 @@
 {
   pkgs,
+  lib,
+  ...
 }:
-{
-  ubuntu-font-family = pkgs.callPackage ./ubuntu-font-family { };
-}
+lib.genAttrs (builtins.attrNames (
+  lib.filterAttrs (_n: v: v == "directory") (builtins.readDir ./.)
+)) (dir: pkgs.callPackage ./${dir}/package.nix { })

@@ -77,9 +77,10 @@
           ...
         }:
         {
+          # TODO: delete
           _module.args.pkgs = import inputs.nixpkgs {
             inherit system;
-            overlays = [ outputs.overlays.unstable-packages ];
+            overlays = [ outputs.overlays.default ];
           };
           checks = outputs.nixosTops // outputs.homeTops;
           devShells.default = pkgs.mkShellNoCC {
@@ -88,20 +89,23 @@
               ${config.pre-commit.devShell.shellHook}
             '';
           };
-          packages = import ./pkgs { inherit pkgs; };
+          packages = import ./pkgs { inherit pkgs lib; };
           pre-commit.settings.hooks.treefmt.enable = true;
           treefmt = {
             projectRootFile = "flake.nix";
             programs.deadnix = {
               enable = true;
+              # TODO: delete
               package = pkgs.unstable.deadnix;
             };
             programs.nixfmt = {
               enable = true;
+              # TODO: delete
               package = pkgs.unstable.nixfmt-rfc-style;
             };
             programs.statix = {
               enable = true;
+              # TODO: delete
               package = pkgs.unstable.statix;
             };
           };
