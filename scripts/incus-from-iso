@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+vm_name="$1"
+iso_path="$2"
+
+incus init "$vm_name" --empty --vm -c limits.cpu=4 -c limits.memory=8GiB -d root,size=50GiB
+
+incus config device add "$vm_name" iso disk source="$iso_path" boot.priority=10
+
+echo "Shut down the VM once installation is done in order to remove ISO and start it again automatically."
+
+incus start --console=vga "$vm_name"
+
+incus config device remove "$vm_name" iso
+
+incus start "$vm_name"
