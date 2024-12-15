@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 {
   home.sessionVariables = {
     ELECTRON_TRASH = "gvfs-trash";
@@ -6,13 +6,9 @@
     __HM_SESS_VARS_SOURCED = "";
   };
 
-  # TODO: upstream this (disable completions generation)
-  xdg.dataFile."fish/home-manager_generated_completions".source = lib.mkForce (
-    builtins.toFile "empty" ""
-  );
-
   programs.fish = {
     enable = true;
+    generateCompletions = false;
     shellAliases = {
       rm = "trash";
       ssh = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=ERROR";
