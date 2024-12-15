@@ -64,77 +64,24 @@
       }
     ];
     plugins = {
-      alpha = {
-        enable = true;
-        theme = "startify";
-      };
-      barbecue.enable = true;
       bufferline.enable = true;
-      cmp = {
+      coq-nvim = {
         enable = true;
-        settings = {
-          sources = [
-            {
-              name = "buffer";
-            }
-            {
-              name = "nvim_lsp";
-            }
-            {
-              name = "path";
-            }
-          ];
-          mapping = {
-            "<Down>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
-            "<Up>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
-            "<Tab>" = "cmp.mapping.confirm({ select = true })";
-            "<Enter>" = "cmp.mapping.confirm({ select = true })";
-          };
-        };
+        installArtifacts = true;
+        settings.auto_start = "shut-up";
       };
+      cursorline.enable = true;
       git-conflict.enable = true;
       gitsigns.enable = true;
       guess-indent.enable = true;
-      lsp = {
-        enable = true;
-        servers = {
-          ansiblels = {
-            enable = true;
-          };
-          bashls = {
-            enable = true;
-          };
-          dartls = {
-            enable = true;
-          };
-          gopls = {
-            enable = true;
-          };
-          nixd = {
-            enable = true;
-          };
-          rubocop = {
-            enable = true;
-          };
-          ruby_lsp = {
-            enable = true;
-          };
-          ruff = {
-            enable = true;
-          };
-        };
-      };
-      lspkind.enable = true;
       lualine.enable = true;
       noice.enable = true;
       nvim-autopairs.enable = true;
       rainbow-delimiters.enable = true;
+      startify.enable = true;
       treesitter = {
         enable = true;
-        settings = {
-          highlight.enable = true;
-          indent.enable = true;
-        };
+        settings.highlight.enable = true;
       };
       trim.enable = true;
       web-devicons.enable = true;
