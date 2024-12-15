@@ -62,6 +62,8 @@
       set fish_color_comment brblack
       set fish_color_quote yellow
 
+      export CARAPACE_EXCLUDES="nix"
+      ${pkgs.carapace}/bin/carapace _carapace fish | source
       ${pkgs.nix-your-shell}/bin/nix-your-shell fish | source
 
       # TODO: workaround for duplicating PATH entries
@@ -69,24 +71,6 @@
     '';
   };
 
-  xdg.configFile =
-    let
-      commands = [
-        "nix-build"
-        "nix-instantiate"
-        "nix-shell"
-        "nixos-rebuild"
-      ];
-      genAttr = cmd: {
-        name = "fish/completions/${cmd}.fish";
-        value.source = pkgs.runCommand "${cmd}-fish-completion" { } ''
-          ${pkgs.carapace}/bin/carapace ${cmd} fish > $out
-          if [ ! -s $out ]; then
-            echo "'${cmd}' not recognized by carapace!"
-            exit 1
-          fi
-        '';
-      };
-    in
-    builtins.listToAttrs (builtins.map genAttr commands);
+  programs.carapace.enable = true;
+  programs.carapace.enableFishIntegration = false;
 }
