@@ -12,7 +12,7 @@
           type = "gpt";
           partitions = {
             boot = {
-              end = "1G";
+              size = "500M";
               type = "EF00";
               content = {
                 type = "filesystem";
@@ -21,7 +21,7 @@
               };
             };
             root = {
-              end = "-16G";
+              size = "100%";
               content = {
                 type = "luks";
                 name = "cryptroot";
@@ -29,16 +29,6 @@
                   type = "filesystem";
                   format = "ext4";
                   mountpoint = "/";
-                };
-              };
-            };
-            swap = {
-              end = "-0";
-              content = {
-                type = "luks";
-                name = "cryptswap";
-                content = {
-                  type = "swap";
                 };
               };
             };
