@@ -5,7 +5,7 @@ set -euo pipefail
 vm_name="$1"
 iso_path="$2"
 
-incus init "$vm_name" --empty --vm -c limits.cpu=4 -c limits.memory=8GiB -d root,size=50GiB
+incus init "$vm_name" --empty --vm -c limits.cpu=4 -c limits.memory=8GiB -d root,size=50GiB -d root,io.bus=nvme
 
 incus config device add "$vm_name" iso disk source="$iso_path" boot.priority=10
 
