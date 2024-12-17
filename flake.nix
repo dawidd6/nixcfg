@@ -41,6 +41,10 @@
       inputs.nix-darwin.follows = "";
       inputs.treefmt-nix.follows = "";
     };
+    disko = {
+      url = "github:nix-community/disko/latest";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

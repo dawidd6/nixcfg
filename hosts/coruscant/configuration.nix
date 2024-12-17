@@ -7,8 +7,11 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./disko-config.nix
 
     inputs.hardware.nixosModules.lenovo-thinkpad-t14-amd-gen1
+
+    inputs.disko.nixosModules.default
 
     outputs.nixosModules.basic
     outputs.nixosModules.graphical
@@ -26,4 +29,10 @@
     "aarch64-linux"
   ];
 
+  swapDevices = [
+    {
+      device = "/swap";
+      size = 20480;
+    }
+  ];
 }

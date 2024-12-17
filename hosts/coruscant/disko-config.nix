@@ -1,13 +1,9 @@
 {
-  disk ? "/dev/sda",
-  ...
-}:
-{
   disko.devices = {
     disk = {
       main = {
         type = "disk";
-        device = disk;
+        device = "/dev/nvme0n1";
         content = {
           type = "gpt";
           partitions = {
