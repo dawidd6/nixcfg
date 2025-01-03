@@ -1,12 +1,14 @@
 {
   pkgs,
   config,
+  lib,
   userName,
   ...
-}:
+}@args:
 {
   programs.home-manager.enable = true;
 
+  home.stateVersion = lib.mkIf (args ? osConfig) args.osConfig.system.stateVersion;
   home.username = userName;
   home.homeDirectory = "/home/${userName}";
 

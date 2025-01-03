@@ -2,41 +2,46 @@
   pkgs,
   inputs,
   outputs,
-  userName,
-  version,
-  home,
+  lib,
+  config,
   ...
 }:
+let
+  userName = "dawidd6";
+in
 {
   imports = [ inputs.home-manager.nixosModules.default ];
 
-  users.users."${userName}" = {
-    isNormalUser = true;
-    description = userName;
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "libvirtd"
-      "lp"
-      "incus"
-    ];
-    initialPassword = userName;
-    shell = pkgs.fish;
-  };
+  options.home = lib.mkOption { };
 
-  home-manager = {
-    users."${userName}" = home;
-    extraSpecialArgs = {
-      inherit
-        inputs
-        outputs
-        userName
-        version
-        ;
+  config = {
+    users.users."${userName}" = {
+      isNormalUser = true;
+      description = userName;
+      extraGroups = [
+        "networkmanager"
+        "wheel"
+        "libvirtd"
+        "lp"
+        "incus"
+      ];
+      initialPassword = userName;
+      shell = pkgs.fish;
     };
-    useUserPackages = true;
-    useGlobalPkgs = true;
-  };
 
-  services.displayManager.autoLogin.user = userName;
+    home-manager = {
+      users."${userName}" = config.home;
+      extraSpecialArgs = {
+        inherit
+          inputs
+          outputs
+          userName
+          ;
+      };
+      useUserPackages = true;
+      useGlobalPkgs = true;
+    };
+
+    services.displayManager.autoLogin.user = userName;
+  };
 }

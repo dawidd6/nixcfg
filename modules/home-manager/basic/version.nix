@@ -1,7 +1,0 @@
-{
-  version,
-  ...
-}:
-{
-  home.stateVersion = version;
-}

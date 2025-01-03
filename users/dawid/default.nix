@@ -21,4 +21,6 @@
       RestartPreventExitStatus = 3;
     };
   };
+
+  home.stateVersion = "22.11";
 }

@@ -7,18 +7,14 @@
 let
   mkHome =
     userName:
-    let
-      version = import ./${userName}/version.nix;
-    in
     inputs.home-manager.lib.homeManagerConfiguration {
       pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-      modules = [ ./${userName}/home.nix ];
+      modules = [ ./${userName} ];
       extraSpecialArgs = {
         inherit
           inputs
           outputs
           userName
-          version
           ;
       };
     };
