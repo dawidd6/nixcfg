@@ -12,10 +12,6 @@
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
     treefmt = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -32,7 +28,6 @@
     nixvim = {
       url = "github:nix-community/nixvim/nixos-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-parts.follows = "flake-parts";
       inputs.nuschtosSearch.follows = "";
       inputs.devshell.follows = "";
       inputs.flake-compat.follows = "";
@@ -52,47 +47,45 @@
     let
       inherit (inputs.self) outputs;
       inherit (inputs.nixpkgs) lib;
-    in
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = lib.systems.flakeExposed;
-      imports = [
-        inputs.pre-commit-hooks.flakeModule
-        inputs.treefmt.flakeModule
-      ];
-      flake = {
-        overlays = import ./overlays { inherit inputs; };
-        nixosConfigurations = import ./hosts { inherit inputs outputs lib; };
-        nixosModules = import ./modules/nixos { inherit lib; };
-        nixosNames = builtins.toString (builtins.attrNames outputs.nixosTops);
-        nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
-        nixosTopsVM = lib.mapAttrs (_: c: c.config.system.build.vm) outputs.nixosConfigurations;
-        homeConfigurations = import ./users { inherit inputs outputs lib; };
-        homeModules = import ./modules/home-manager { inherit lib; };
-        homeNames = builtins.toString (builtins.attrNames outputs.homeTops);
-        homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
+      system = "x86_64-linux";
+      pkgs = import inputs.nixpkgs {
+        inherit system;
+        overlays = [ outputs.overlays.default ];
       };
-      perSystem =
-        {
-          pkgs,
-          config,
-          ...
-        }:
-        {
-          checks = outputs.nixosTops // outputs.homeTops;
-          devShells.default = pkgs.mkShellNoCC {
-            NIX_CONFIG = "experimental-features = nix-command flakes";
-            shellHook = ''
-              ${config.pre-commit.devShell.shellHook}
-            '';
-          };
-          packages = import ./pkgs { inherit pkgs lib; };
-          pre-commit.settings.hooks.treefmt.enable = true;
-          treefmt = {
-            projectRootFile = "flake.nix";
-            programs.deadnix.enable = true;
-            programs.nixfmt.enable = true;
-            programs.statix.enable = true;
+    in
+    {
+      overlays = import ./overlays { inherit inputs; };
+      nixosConfigurations = import ./hosts { inherit inputs outputs lib; };
+      nixosModules = import ./modules/nixos { inherit lib; };
+      nixosNames = builtins.toString (builtins.attrNames outputs.nixosTops);
+      nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
+      nixosTopsVM = lib.mapAttrs (_: c: c.config.system.build.vm) outputs.nixosConfigurations;
+      homeConfigurations = import ./users { inherit inputs outputs lib; };
+      homeModules = import ./modules/home-manager { inherit lib; };
+      homeNames = builtins.toString (builtins.attrNames outputs.homeTops);
+      homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
+      checks.${system} =
+        outputs.nixosTops
+        // outputs.homeTops
+        // {
+          pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
+            src = ./.;
+            hooks.treefmt.enable = true;
+            hooks.treefmt.package = outputs.formatter.${system};
           };
         };
+      devShells.${system}.default = pkgs.mkShellNoCC {
+        NIX_CONFIG = "experimental-features = nix-command flakes";
+        shellHook = ''
+          ${outputs.checks.${system}.pre-commit.shellHook}
+        '';
+      };
+      formatter.${system} = inputs.treefmt.lib.mkWrapper pkgs {
+        projectRootFile = "flake.nix";
+        programs.deadnix.enable = true;
+        programs.nixfmt.enable = true;
+        programs.statix.enable = true;
+      };
+      packages.${system} = import ./pkgs { inherit pkgs lib; };
     };
 }
