@@ -158,9 +158,5 @@
           programs.statix.enable = true;
         }
       );
-
-      packages = forAllPkgs inputs.nixpkgs-unstable (pkgs: {
-        ubuntu-font-family = pkgs.callPackage ./pkgs/ubuntu-font-family { };
-      });
     };
 }

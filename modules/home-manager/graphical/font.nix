@@ -1,9 +1,9 @@
-{ pkgs, outputs, ... }:
+{ pkgs, ... }:
 {
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    outputs.packages.${system}.ubuntu-font-family
+    ubuntu-classic
     (nerdfonts.override {
       fonts = [
         "Ubuntu"
