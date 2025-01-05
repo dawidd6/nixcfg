@@ -24,6 +24,7 @@
     glab
     gnumake
     htop
+    hydra-check
     ipcalc
     jq
     lm_sensors
