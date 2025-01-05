@@ -119,6 +119,7 @@
       homeNames = builtins.toString (builtins.attrNames outputs.homeTops);
       homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
 
+      allNames = builtins.toString (builtins.attrNames outputs.allTops);
       allTops = outputs.nixosTops // outputs.homeTops;
 
       checks = forAllSystems (
