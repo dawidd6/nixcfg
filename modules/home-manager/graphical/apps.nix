@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgsUnstable, ... }:
 {
   home.packages =
     (with pkgs; [
@@ -26,5 +26,5 @@
       spotify
       yubioath-flutter
     ])
-    ++ (with pkgs.unstable; [ vscode ]);
+    ++ (with pkgsUnstable; [ vscode ]);
 }

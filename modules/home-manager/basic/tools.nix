@@ -1,4 +1,9 @@
-{ pkgs, inputs, ... }:
+{
+  pkgs,
+  pkgsUnstable,
+  inputs,
+  ...
+}:
 {
   imports = [ inputs.nix-index-database.hmModules.nix-index ];
 
@@ -42,7 +47,7 @@
       xsel
       yubikey-manager
     ])
-    ++ (with pkgs.unstable; [
+    ++ (with pkgsUnstable; [
       nixd
       nix-diff
       nix-init
