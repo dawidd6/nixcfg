@@ -158,5 +158,12 @@
           programs.statix.enable = true;
         }
       );
+
+      packages = forAllPkgs inputs.nixpkgs-unstable (pkgs: {
+        scripts = pkgs.runCommandNoCCLocal "scripts" { } ''
+          mkdir -p $out
+          cp -R ${./scripts} $out/bin
+        '';
+      });
     };
 }

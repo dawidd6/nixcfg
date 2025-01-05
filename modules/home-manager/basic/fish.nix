@@ -65,10 +65,8 @@
       set fish_color_comment brblack
       set fish_color_quote yellow
 
+      # TODO: use module when it's ready
       ${pkgs.nix-your-shell}/bin/nix-your-shell fish | source
-
-      # TODO: workaround for duplicating PATH entries
-      fish_add_path "$HOME/nixcfg/scripts"
     '';
   };
 

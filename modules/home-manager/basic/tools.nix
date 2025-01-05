@@ -1,6 +1,7 @@
 {
   pkgsUnstable,
   inputs,
+  outputs,
   ...
 }:
 {
@@ -53,6 +54,7 @@
     wget
     xsel
     yubikey-manager
+    outputs.packages.${system}.scripts
   ];
 
   programs.fzf.enable = true;
