@@ -6,6 +6,9 @@
     __HM_SESS_VARS_SOURCED = "";
   };
 
+  programs.carapace.enable = true;
+  programs.carapace.enableFishIntegration = false;
+
   programs.fish = {
     enable = true;
     generateCompletions = false;
@@ -69,6 +72,7 @@
     '';
   };
 
+  # TODO: contribute this upstream?
   xdg.configFile =
     let
       commands = [
