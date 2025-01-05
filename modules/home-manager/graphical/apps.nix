@@ -26,4 +26,6 @@
     vscode
     yubioath-flutter
   ];
+
+  services.copyq.enable = true;
 }
