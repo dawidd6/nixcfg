@@ -3,7 +3,7 @@
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    outputs.packages.${pkgs.system}.ubuntu-font-family
+    outputs.packages.${system}.ubuntu-font-family
     (nerdfonts.override {
       fonts = [
         "Ubuntu"
