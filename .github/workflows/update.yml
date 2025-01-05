@@ -21,9 +21,20 @@ jobs:
           extra_nix_config: |
             accept-flake-config = true
 
-      # TODO: https://github.com/DeterminateSystems/update-flake-lock/pull/81
       - name: Update flake
-        #uses: DeterminateSystems/update-flake-lock@v19
-        uses: dawidd6/update-flake-lock@main
+        id: update
+        uses: dawidd6/action-nix-flake-update@master
+
+      - name: Format flake
+        run: nix fmt
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.TOKEN }}
+          delete-branch: true
+          branch: flake-update
+          commit-message: "flake: update"
+          title: "flake: update"
+          body: |
+            ${{ steps.update.outputs.markdown }}
