@@ -50,21 +50,13 @@
       forAllPkgs = input: function: forAllSystems (system: function (import input { inherit system; }));
     in
     {
-      inherit lib;
-
       nixpkgs = forAllPkgs inputs.nixpkgs (pkgs: pkgs);
       nixpkgsUnstable = forAllPkgs inputs.nixpkgs-unstable (pkgs: pkgs);
 
       overlays.default = final: prev: {
         # https://github.com/NixOS/nixpkgs/pull/173364
         ansible = prev.ansible.overrideAttrs (oldAttrs: {
-          propagatedBuildInputs =
-            oldAttrs.propagatedBuildInputs
-            ++ (with final.python3Packages; [
-              jmespath
-              pyvmomi
-              requests
-            ]);
+          propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ final.python3Packages.jmespath;
         });
       };
 
@@ -127,10 +119,11 @@
       homeNames = builtins.toString (builtins.attrNames outputs.homeTops);
       homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
 
+      allTops = outputs.nixosTops // outputs.homeTops;
+
       checks = forAllSystems (
         system:
-        outputs.nixosTops
-        // outputs.homeTops
+        outputs.allTops
         // {
           pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
             src = ./.;
