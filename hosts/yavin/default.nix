@@ -1,7 +1,14 @@
-{ outputs, modulesPath, ... }:
+{
+  inputs,
+  outputs,
+  modulesPath,
+  ...
+}:
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+
+    inputs.hardware.nixosModules.common-cpu-intel
 
     outputs.nixosModules.basic
   ];
@@ -34,10 +41,6 @@
     device = "/dev/disk/by-uuid/404E-91CE";
     fsType = "vfat";
   };
-
-  nixpkgs.hostPlatform = "x86_64-linux";
-
-  hardware.cpu.intel.updateMicrocode = true;
 
   system.stateVersion = "22.11";
 }

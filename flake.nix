@@ -14,20 +14,19 @@
     };
     treefmt = {
       url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nixvim = {
       url = "github:nix-community/nixvim/nixos-24.11";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.nuschtosSearch.follows = "";
       inputs.devshell.follows = "";
       inputs.flake-compat.follows = "";
@@ -38,7 +37,7 @@
     };
     disko = {
       url = "github:nix-community/disko/latest";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };
 
@@ -47,24 +46,90 @@
     let
       inherit (inputs.self) outputs;
       inherit (inputs.nixpkgs) lib;
-      system = "x86_64-linux";
-      pkgs = import inputs.nixpkgs {
-        inherit system;
-        overlays = [ outputs.overlays.default ];
-      };
+      forAllSystems = function: lib.genAttrs lib.systems.flakeExposed function;
+      forAllPkgs = input: function: forAllSystems (system: function (import input { inherit system; }));
     in
     {
-      overlays = import ./overlays { inherit inputs; };
-      nixosConfigurations = import ./hosts { inherit inputs outputs lib; };
-      nixosModules = import ./modules/nixos { inherit lib; };
+      inherit lib;
+
+      nixpkgs = forAllPkgs inputs.nixpkgs (pkgs: pkgs);
+      nixpkgsUnstable = forAllPkgs inputs.nixpkgs-unstable (pkgs: pkgs);
+
+      overlays.default = final: prev: {
+        # TODO: change to _module.args.pkgsUnstable
+        # When applied, the unstable nixpkgs set (declared in the flake inputs) will
+        # be accessible through 'pkgs.unstable'
+        unstable = import inputs.nixpkgs-unstable {
+          inherit (final) system;
+          config.allowUnfree = true;
+        };
+        # https://github.com/NixOS/nixpkgs/pull/173364
+        ansible = prev.ansible.overrideAttrs (oldAttrs: {
+          propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ final.python3Packages.jmespath ];
+        });
+      };
+
+      nixosConfigurations = {
+        alderaan = inputs.nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [ ./hosts/alderaan ];
+          specialArgs = {
+            inherit inputs outputs;
+            hostName = "alderaan";
+          };
+        };
+        coruscant = inputs.nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [ ./hosts/coruscant ];
+          specialArgs = {
+            inherit inputs outputs;
+            hostName = "coruscant";
+          };
+        };
+        yavin = inputs.nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [ ./hosts/yavin ];
+          specialArgs = {
+            inherit inputs outputs;
+            hostName = "yavin";
+          };
+        };
+      };
+      nixosModules = {
+        basic = {
+          imports = lib.filesystem.listFilesRecursive ./modules/nixos/basic;
+        };
+        graphical = {
+          imports = lib.filesystem.listFilesRecursive ./modules/nixos/graphical;
+        };
+      };
       nixosNames = builtins.toString (builtins.attrNames outputs.nixosTops);
       nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
       nixosTopsVM = lib.mapAttrs (_: c: c.config.system.build.vm) outputs.nixosConfigurations;
-      homeConfigurations = import ./users { inherit inputs outputs lib; };
-      homeModules = import ./modules/home-manager { inherit lib; };
+
+      homeConfigurations = {
+        dawid = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+          modules = [ ./users/dawid ];
+          extraSpecialArgs = {
+            inherit inputs outputs;
+            userName = "dawid";
+          };
+        };
+      };
+      homeModules = {
+        basic = {
+          imports = lib.filesystem.listFilesRecursive ./modules/home-manager/basic;
+        };
+        graphical = {
+          imports = lib.filesystem.listFilesRecursive ./modules/home-manager/graphical;
+        };
+      };
       homeNames = builtins.toString (builtins.attrNames outputs.homeTops);
       homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
-      checks.${system} =
+
+      checks = forAllSystems (
+        system:
         outputs.nixosTops
         // outputs.homeTops
         // {
@@ -73,19 +138,30 @@
             hooks.treefmt.enable = true;
             hooks.treefmt.package = outputs.formatter.${system};
           };
+        }
+      );
+
+      devShells = forAllPkgs inputs.nixpkgs-unstable (pkgs: {
+        default = pkgs.mkShellNoCC {
+          NIX_CONFIG = "experimental-features = nix-command flakes";
+          shellHook = ''
+            ${outputs.checks.${pkgs.system}.pre-commit.shellHook}
+          '';
         };
-      devShells.${system}.default = pkgs.mkShellNoCC {
-        NIX_CONFIG = "experimental-features = nix-command flakes";
-        shellHook = ''
-          ${outputs.checks.${system}.pre-commit.shellHook}
-        '';
-      };
-      formatter.${system} = inputs.treefmt.lib.mkWrapper pkgs {
-        projectRootFile = "flake.nix";
-        programs.deadnix.enable = true;
-        programs.nixfmt.enable = true;
-        programs.statix.enable = true;
-      };
-      packages.${system} = import ./pkgs { inherit pkgs lib; };
+      });
+
+      formatter = forAllPkgs inputs.nixpkgs-unstable (
+        pkgs:
+        inputs.treefmt.lib.mkWrapper pkgs {
+          projectRootFile = "flake.nix";
+          programs.deadnix.enable = true;
+          programs.nixfmt.enable = true;
+          programs.statix.enable = true;
+        }
+      );
+
+      packages = forAllPkgs inputs.nixpkgs-unstable (pkgs: {
+        ubuntu-font-family = pkgs.callPackage ./pkgs/ubuntu-font-family { };
+      });
     };
 }

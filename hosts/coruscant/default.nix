@@ -52,11 +52,6 @@
   ];
   boot.kernelModules = [ "kvm-amd" ];
 
-  # TODO: ???
-  nixpkgs.hostPlatform = "x86_64-linux";
-
-  hardware.cpu.amd.updateMicrocode = true;
-
   disko = {
     memSize = 4096;
     devices = {
