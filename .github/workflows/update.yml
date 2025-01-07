@@ -35,9 +35,9 @@ jobs:
         with:
           script: |
             const fs = require('fs')
-            core.setOutput('update', fs.readFileSync('/tmp/update.txt', 'utf8'))
-            core.setOutput('format', fs.readFileSync('/tmp/format.txt', 'utf8'))
-            core.setOutput('compare', fs.readFileSync('/tmp/compare.txt', 'utf8'))
+            core.setOutput('update', fs.readFileSync('/tmp/update.txt', 'utf8').trim())
+            core.setOutput('format', fs.readFileSync('/tmp/format.txt', 'utf8').trim())
+            core.setOutput('compare', fs.readFileSync('/tmp/compare.txt', 'utf8').trim())
         id: outputs
 
       - name: Create PR
