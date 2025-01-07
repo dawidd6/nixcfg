@@ -2,6 +2,7 @@
 {
   home.packages = with pkgsUnstable; [
     dconf-editor
+    eyedropper
     filezilla
     firefox
     fritzing
@@ -10,7 +11,6 @@
     gnome-power-manager
     gnome-tweaks
     google-chrome
-    gpick
     gscan2pdf
     inkscape
     keepassxc
