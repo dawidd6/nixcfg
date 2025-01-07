@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+nodes1="$(git show master:flake.lock | jq -e '.nodes')"
+nodes2="$(cat flake.lock | jq -e '.nodes')"
+keys1="$(echo "${nodes1}" | jq -er 'keys[]')"
+keys2="$(echo "${nodes2}" | jq -er 'keys[]')"
+
+for key in ${keys2}; do
+    if echo "${keys1}" | grep -q "^${key}$"; then
+        rev1="$(echo "${nodes1}" | jq -er ".\"${key}\".locked.rev")"
+        rev2="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.rev")"
+        owner="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.owner")"
+        repo="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.repo")"
+        type="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.type")"
+        host="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.host" || true)"
+        if [[ "${rev1}" != "${rev2}" ]]; then
+            case "${type}" in
+                github)
+                    echo "- https://github.com/${owner}/${repo}/compare/${rev1}...${rev2}"
+                    ;;
+                gitlab)
+                    if [[ -z "${host}" ]]; then
+                        host=gitlab.com
+                    fi
+                    echo "- https://${host}/${owner}/${repo}/-/compare/${rev1}...${rev2}"
+
+                    ;;
+                *)
+                    true
+                    ;;
+            esac
+        fi
+    fi
+done
