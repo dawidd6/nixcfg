@@ -5,9 +5,11 @@ on:
     branches:
       - master
   pull_request:
+    branches:
+      - master
 
 concurrency:
-  group: build-flake-${{ github.ref }}
+  group: build-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -38,6 +40,7 @@ jobs:
             accept-flake-config = true
 
       - name: Setup cachix
+        if: github.event_name != 'pull_request'
         uses: cachix/cachix-action@v15
         with:
           name: ${{ github.repository_owner }}
@@ -45,3 +48,29 @@ jobs:
 
       - name: Build flake
         run: nix flake check
+
+      - name: Build diff
+        if: github.event_name == 'pull_request'
+        run: |
+          for name in $(nix eval .#allNames --raw); do
+            nix build ".#allTops.${name}?ref=master" --out-link result-${name}-old
+            nix build ".#allTops.${name}" --out-link result-${name}-new
+            nix run nixpkgs#nvd -- diff ./result-${name}-old ./result-${name}-new |& tee -a /tmp/diff.txt
+          done
+
+      - name: Set outputs
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs')
+            core.setOutput('diff', fs.readFileSync('/tmp/diff.txt', 'utf8'))
+        id: outputs
+
+      - name: Post comment
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.number }}
+          body: |
+            ${{ steps.outputs.outputs.diff }}
