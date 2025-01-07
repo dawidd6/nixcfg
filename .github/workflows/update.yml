@@ -49,14 +49,15 @@ jobs:
           commit-message: "flake: update"
           title: "flake: update"
           body: |
-            `nix flake update`:
+            Output of `nix flake update`:
             ```
             ${{ steps.outputs.outputs.update }}
             ```
 
-            `nix fmt`:
+            Output of `nix fmt`:
             ```
             ${{ steps.outputs.outputs.format }}
             ```
 
+            Comparison URLs:
             ${{ steps.outputs.outputs.compare }}
