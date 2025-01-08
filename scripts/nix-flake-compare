@@ -15,21 +15,22 @@ echo "${keys2}" | while read -r key; do
     if echo "${keys1}" | grep -q "^${key}$" && test "${key}" != "root"; then
         rev1="$(echo "${nodes1}" | jq -er ".\"${key}\".locked.rev")"
         rev2="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.rev")"
-        owner="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.owner")"
-        repo="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.repo")"
-        type="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.type")"
-        host="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.host" || true)"
-        cover="${key}@${rev1}...${rev2}"
         if [[ "${rev1}" != "${rev2}" ]]; then
+            owner="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.owner")"
+            repo="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.repo")"
+            type="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.type")"
+            host="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.host" || true)"
+            r1="$(echo "${rev1}" | cut -c 1-7)"
+            r2="$(echo "${rev2}" | cut -c 1-7)"
             case "${type}" in
                 github)
-                    echo "- [${cover}](https://github.com/${owner}/${repo}/compare/${rev1}...${rev2})"
+                    echo "- [**${key}**@*${r1}...${r2}*](https://github.com/${owner}/${repo}/compare/${rev1}...${rev2})"
                     ;;
                 gitlab)
                     if [[ -z "${host}" ]]; then
                         host=gitlab.com
                     fi
-                    echo "- [${cover}](https://${host}/${owner}/${repo}/-/compare/${rev1}...${rev2})"
+                    echo "- [**${key}**@*${r1}...${r2}*](https://${host}/${owner}/${repo}/-/compare/${rev1}...${rev2})"
                     ;;
             esac
         fi
