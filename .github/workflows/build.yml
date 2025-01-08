@@ -51,12 +51,7 @@ jobs:
 
       - name: Build diff
         if: github.event_name == 'pull_request'
-        run: |
-          for name in $(nix eval .#allNames --raw); do
-            nix build ".#allTops.${name}?ref=master" --out-link result-${name}-old
-            nix build ".#allTops.${name}" --out-link result-${name}-new
-            nix run nixpkgs#nvd -- diff ./result-${name}-old ./result-${name}-new |& tee -a /tmp/diff.txt
-          done
+        run: scripts/nix-flake-build-diff |& tee /tmp/diff.txt
 
       - name: Set outputs
         if: github.event_name == 'pull_request'
