@@ -20,6 +20,7 @@ jobs:
         with:
           extra_nix_config: |
             accept-flake-config = true
+            warn-dirty = false
 
       - name: Update flake
         run: nix flake update --quiet |& tee /tmp/update.txt
