@@ -2,33 +2,31 @@
 
 set -euo pipefail
 
-nodes1="$(git show master:flake.lock | jq -e '.nodes')"
-nodes2="$(cat flake.lock | jq -e '.nodes')"
+nodes1="$(git show master:flake.lock | jq -er '.nodes')"
+nodes2="$(cat flake.lock | jq -er '.nodes')"
 keys1="$(echo "${nodes1}" | jq -er 'keys[]')"
 keys2="$(echo "${nodes2}" | jq -er 'keys[]')"
 
-for key in ${keys2}; do
-    if echo "${keys1}" | grep -q "^${key}$"; then
+# TODO: factor this out into separate project repo?
+echo "${keys2}" | while read -r key; do
+    if echo "${keys1}" | grep -q "^${key}$" && test "${key}" != "root"; then
         rev1="$(echo "${nodes1}" | jq -er ".\"${key}\".locked.rev")"
         rev2="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.rev")"
         owner="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.owner")"
         repo="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.repo")"
         type="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.type")"
         host="$(echo "${nodes2}" | jq -er ".\"${key}\".locked.host" || true)"
+        cover="${key}@${rev1}...${rev2}"
         if [[ "${rev1}" != "${rev2}" ]]; then
             case "${type}" in
                 github)
-                    echo "- https://github.com/${owner}/${repo}/compare/${rev1}...${rev2}"
+                    echo "- [${cover}](https://github.com/${owner}/${repo}/compare/${rev1}...${rev2})"
                     ;;
                 gitlab)
                     if [[ -z "${host}" ]]; then
                         host=gitlab.com
                     fi
-                    echo "- https://${host}/${owner}/${repo}/-/compare/${rev1}...${rev2}"
-
-                    ;;
-                *)
-                    true
+                    echo "- [${cover}](https://${host}/${owner}/${repo}/-/compare/${rev1}...${rev2})"
                     ;;
             esac
         fi
