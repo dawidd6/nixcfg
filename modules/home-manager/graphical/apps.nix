@@ -1,6 +1,6 @@
-{ pkgsUnstable, ... }:
+{ pkgs, ... }:
 {
-  home.packages = with pkgsUnstable; [
+  home.packages = with pkgs; [
     dconf-editor
     eyedropper
     filezilla
