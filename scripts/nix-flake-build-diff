@@ -9,6 +9,7 @@ function build_diff() {
     flake_dir="${1}"
     output_attr="${2}"
     toplevel_attr="${3}"
+    echo ---------------------------------
     nix eval "${flake_dir}#${output_attr}" --apply builtins.attrNames --json | jq -re .[] | while read -r name; do
         old_result="${flake_dir}/result-${output_attr}.${name}-old"
         new_result="${flake_dir}/result-${output_attr}.${name}-new"
