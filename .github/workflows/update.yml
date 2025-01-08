@@ -23,23 +23,22 @@ jobs:
             warn-dirty = false
 
       - name: Update flake
-        run: nix flake update --quiet |& tee /tmp/update.txt
+        id: update
+        uses: dawidd6/action-command-output@v1
+        with:
+          command: nix flake update --quiet
 
       - name: Format flake
-        run: nix fmt --quiet |& tee /tmp/format.txt
+        id: format
+        uses: dawidd6/action-command-output@v1
+        with:
+          command: nix fmt --quiet
 
       - name: Compare flake
-        run: scripts/nix-flake-compare |& tee /tmp/compare.txt
-
-      - name: Set outputs
-        uses: actions/github-script@v7
+        id: compare
+        uses: dawidd6/action-command-output@v1
         with:
-          script: |
-            const fs = require('fs')
-            core.setOutput('update', fs.readFileSync('/tmp/update.txt', 'utf8').trim())
-            core.setOutput('format', fs.readFileSync('/tmp/format.txt', 'utf8').trim())
-            core.setOutput('compare', fs.readFileSync('/tmp/compare.txt', 'utf8').trim())
-        id: outputs
+          command: scripts/nix-flake-compare
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v7
@@ -52,13 +51,13 @@ jobs:
           body: |
             Output of `nix flake update`:
             ```
-            ${{ steps.outputs.outputs.update }}
+            ${{ steps.update.outputs.output }}
             ```
 
             Output of `nix fmt`:
             ```
-            ${{ steps.outputs.outputs.format }}
+            ${{ steps.format.outputs.output }}
             ```
 
             Comparison URLs:
-            ${{ steps.outputs.outputs.compare }}
+            ${{ steps.compare.outputs.output }}

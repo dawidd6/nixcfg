@@ -38,6 +38,7 @@ jobs:
         with:
           extra_nix_config: |
             accept-flake-config = true
+            warn-dirty = false
 
       - name: Setup cachix
         if: github.event_name != 'pull_request'
@@ -51,16 +52,10 @@ jobs:
 
       - name: Build diff
         if: github.event_name == 'pull_request'
-        run: scripts/nix-flake-build-diff |& tee /tmp/diff.txt
-
-      - name: Set outputs
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
+        id: diff
+        uses: dawidd6/action-command-output@v1
         with:
-          script: |
-            const fs = require('fs')
-            core.setOutput('diff', fs.readFileSync('/tmp/diff.txt', 'utf8').trim())
-        id: outputs
+          command: scripts/nix-flake-build-diff
 
       - name: Post comment
         if: github.event_name == 'pull_request'
@@ -69,5 +64,5 @@ jobs:
           issue-number: ${{ github.event.number }}
           body: |
             ```
-            ${{ steps.outputs.outputs.diff }}
+            ${{ steps.diff.outputs.output }}
             ```
