@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# TODO: get from git?
+branch=master
+
+function build_diff() {
+    flake_dir="${1}"
+    output_attr="${2}"
+    toplevel_attr="${3}"
+    nix eval "${flake_dir}#${output_attr}" --apply builtins.attrNames --json | jq -re .[] | while read -r name; do
+        old_result="${flake_dir}/result-${output_attr}.${name}-old"
+        new_result="${flake_dir}/result-${output_attr}.${name}-new"
+        old_installable="${flake_dir}?ref=${branch}#${output_attr}.${name}.${toplevel_attr}"
+        new_installable="${flake_dir}#${output_attr}.${name}.${toplevel_attr}"
+        nix build --quiet --out-link "${old_result}" "${old_installable}"
+        nix build --quiet --out-link "${new_result}" "${new_installable}"
+        nix run --quiet nixpkgs#nvd -- diff "${old_result}" "${new_result}"
+        rm "${old_result}" "${new_result}"
+    done
+}
+
+build_diff . nixosConfigurations config.system.build.toplevel
+build_diff . homeConfigurations activationPackage
