@@ -31,13 +31,10 @@ jobs:
           remove-docker-images: true
 
       - name: Checkout repository
-        if: github.event_name == 'pull_request'
         uses: actions/checkout@v4
         with:
-          ref: master
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
+          fetch-depth: 0
+          filter: tree:0
 
       - name: Install Nix
         uses: cachix/install-nix-action@v30
