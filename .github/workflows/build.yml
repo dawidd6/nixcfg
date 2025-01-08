@@ -33,9 +33,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Pull master
+      - name: Fetch master
         if: github.event_name == 'pull_request'
-        run: git pull origin master
+        run: git fetch origin master:master
 
       - name: Install Nix
         uses: cachix/install-nix-action@v30
