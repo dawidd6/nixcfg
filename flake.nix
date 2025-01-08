@@ -95,9 +95,6 @@
           imports = lib.filesystem.listFilesRecursive ./modules/nixos/graphical;
         };
       };
-      nixosNames = builtins.toString (builtins.attrNames outputs.nixosTops);
-      nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
-      nixosTopsVM = lib.mapAttrs (_: c: c.config.system.build.vm) outputs.nixosConfigurations;
 
       homeConfigurations = {
         dawid = inputs.home-manager.lib.homeManagerConfiguration {
@@ -117,23 +114,24 @@
           imports = lib.filesystem.listFilesRecursive ./modules/home-manager/graphical;
         };
       };
-      homeNames = builtins.toString (builtins.attrNames outputs.homeTops);
-      homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
 
-      allNames = builtins.toString (builtins.attrNames outputs.allTops);
-      allTops = outputs.nixosTops // outputs.homeTops;
-
-      checks = forAllSystems (
-        system:
-        outputs.allTops
-        // {
-          pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
-            src = ./.;
-            hooks.treefmt.enable = true;
-            hooks.treefmt.package = outputs.formatter.${system};
-          };
-        }
-      );
+      checks =
+        let
+          nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
+          homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
+          allTops = nixosTops // homeTops;
+        in
+        forAllSystems (
+          system:
+          allTops
+          // {
+            pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
+              src = ./.;
+              hooks.treefmt.enable = true;
+              hooks.treefmt.package = outputs.formatter.${system};
+            };
+          }
+        );
 
       devShells = forAllPkgs inputs.nixpkgs-unstable (pkgs: {
         default = pkgs.mkShellNoCC {
