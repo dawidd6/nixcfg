@@ -1,5 +1,5 @@
 {
-  pkgsUnstable,
+  pkgs,
   inputs,
   outputs,
   ...
@@ -7,7 +7,7 @@
 {
   imports = [ inputs.nix-index-database.hmModules.nix-index ];
 
-  home.packages = with pkgsUnstable; [
+  home.packages = with pkgs; [
     ansible
     ansible-lint
     btop
