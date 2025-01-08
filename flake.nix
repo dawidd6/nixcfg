@@ -50,8 +50,9 @@
       forAllPkgs = input: function: forAllSystems (system: function (import input { inherit system; }));
     in
     {
-      nixpkgs = forAllPkgs inputs.nixpkgs (pkgs: pkgs);
-      nixpkgsUnstable = forAllPkgs inputs.nixpkgs-unstable (pkgs: pkgs);
+      inherit lib;
+      pkgs = forAllPkgs inputs.nixpkgs (pkgs: pkgs);
+      pkgsUnstable = forAllPkgs inputs.nixpkgs-unstable (pkgs: pkgs);
 
       overlays.default = final: prev: {
         # https://github.com/NixOS/nixpkgs/pull/173364
