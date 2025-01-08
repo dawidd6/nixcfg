@@ -32,12 +32,10 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Unshallow repository
+      - name: Pull master
         if: github.event_name == 'pull_request'
-        run: git fetch --prune --unshallow
+        run: git pull origin master
 
       - name: Install Nix
         uses: cachix/install-nix-action@v30
