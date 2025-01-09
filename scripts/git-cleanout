@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+read -r -p '==> Clean?'
+
+git clean -fd
+git checkout -- .
