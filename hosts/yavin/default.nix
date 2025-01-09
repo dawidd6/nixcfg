@@ -33,13 +33,10 @@
     device = "/dev/disk/by-uuid/76fee5e5-78de-4203-af82-0dc3be4ad74b";
     fsType = "ext4";
   };
-
   fileSystems."/boot/efi" = {
     device = "/dev/disk/by-uuid/404E-91CE";
     fsType = "vfat";
   };
-
-  nixpkgs.hostPlatform = "x86_64-linux";
 
   system.stateVersion = "22.11";
 }
