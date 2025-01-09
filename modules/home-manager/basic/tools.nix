@@ -8,6 +8,7 @@
   imports = [ inputs.nix-index-database.hmModules.nix-index ];
 
   home.packages = with pkgs; [
+    ack
     ansible
     ansible-lint
     btop
@@ -43,6 +44,7 @@
     nurl
     nvd
     python3
+    ripgrep
     ruby
     shellcheck
     sshpass
