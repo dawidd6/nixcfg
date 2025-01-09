@@ -70,7 +70,6 @@
         installArtifacts = true;
         settings.auto_start = "shut-up";
       };
-      cursorline.enable = true;
       git-conflict.enable = true;
       gitsigns.enable = true;
       guess-indent.enable = true;
