@@ -2,13 +2,10 @@
   inputs,
   outputs,
   pkgs,
-  modulesPath,
   ...
 }:
 {
   imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-
     inputs.hardware.nixosModules.lenovo-thinkpad-t14-amd-gen1
 
     inputs.disko.nixosModules.default

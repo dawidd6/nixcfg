@@ -1,13 +1,10 @@
 {
   inputs,
   outputs,
-  modulesPath,
   ...
 }:
 {
   imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-
     inputs.hardware.nixosModules.lenovo-thinkpad-t440s
     inputs.hardware.nixosModules.common-pc-ssd
 
