@@ -2,8 +2,7 @@
 
 set -euo pipefail
 
-# TODO: get from git?
-branch=master
+branch="${1}"
 
 function build_diff() {
     flake_dir="${1}"

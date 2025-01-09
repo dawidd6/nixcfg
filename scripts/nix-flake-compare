@@ -2,8 +2,7 @@
 
 set -euo pipefail
 
-# TODO: get from git?
-branch=master
+branch="${1}"
 
 nodes1="$(git show "${branch}:flake.lock" | jq -er '.nodes')"
 nodes2="$(cat flake.lock | jq -er '.nodes')"
