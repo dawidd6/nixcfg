@@ -93,6 +93,16 @@
         };
       };
 
+      homeConfigurations = {
+        dawid = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+          modules = [ ./users/dawid ];
+          extraSpecialArgs = {
+            inherit inputs outputs;
+            userName = "dawid";
+          };
+        };
+      };
       homeModules = {
         basic = {
           imports = lib.filesystem.listFilesRecursive ./modules/home-manager/basic;
@@ -106,7 +116,7 @@
         system:
         let
           nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
-          homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.packages.${system}.homeConfigurations;
+          homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
           allTops = nixosTops // homeTops;
         in
         allTops
@@ -139,16 +149,6 @@
       );
 
       packages = forAllPkgs inputs.nixpkgs (pkgs: {
-        homeConfigurations = {
-          dawid = inputs.home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
-            modules = [ ./users/dawid ];
-            extraSpecialArgs = {
-              inherit inputs outputs;
-              userName = "dawid";
-            };
-          };
-        };
         scripts = pkgs.runCommandNoCCLocal "scripts" { } ''
           mkdir -p $out
           cp -R ${./scripts} $out/bin
