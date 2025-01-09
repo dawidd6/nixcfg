@@ -38,7 +38,7 @@ jobs:
         id: compare
         uses: dawidd6/action-command-output@v1
         with:
-          command: scripts/nix-flake-compare
+          command: scripts/nix-flake-compare '${{ github.ref }}'
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v7

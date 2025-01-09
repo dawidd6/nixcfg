@@ -34,7 +34,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Fetch master
-        if: github.event_name == 'pull_request'
         run: git fetch origin master:master
 
       - name: Install Nix
@@ -55,11 +54,10 @@ jobs:
         run: nix flake check
 
       - name: Build diff
-        if: github.event_name == 'pull_request'
         id: diff
         uses: dawidd6/action-command-output@v1
         with:
-          command: scripts/nix-flake-build-diff
+          command: scripts/nix-flake-build-diff '${{ github.base_ref || github.ref }}'
 
       - name: Post comment
         if: github.event_name == 'pull_request'
