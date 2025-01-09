@@ -63,7 +63,6 @@
 
       nixosConfigurations = {
         alderaan = inputs.nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
           modules = [ ./hosts/alderaan ];
           specialArgs = {
             inherit inputs outputs;
@@ -71,7 +70,6 @@
           };
         };
         coruscant = inputs.nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
           modules = [ ./hosts/coruscant ];
           specialArgs = {
             inherit inputs outputs;
@@ -79,7 +77,6 @@
           };
         };
         yavin = inputs.nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
           modules = [ ./hosts/yavin ];
           specialArgs = {
             inherit inputs outputs;
@@ -96,16 +93,6 @@
         };
       };
 
-      homeConfigurations = {
-        dawid = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-          modules = [ ./users/dawid ];
-          extraSpecialArgs = {
-            inherit inputs outputs;
-            userName = "dawid";
-          };
-        };
-      };
       homeModules = {
         basic = {
           imports = lib.filesystem.listFilesRecursive ./modules/home-manager/basic;
@@ -115,23 +102,22 @@
         };
       };
 
-      checks =
+      checks = forAllSystems (
+        system:
         let
           nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
-          homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
+          homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.packages.${system}.homeConfigurations;
           allTops = nixosTops // homeTops;
         in
-        forAllSystems (
-          system:
-          allTops
-          // {
-            pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
-              src = ./.;
-              hooks.treefmt.enable = true;
-              hooks.treefmt.package = outputs.formatter.${system};
-            };
-          }
-        );
+        allTops
+        // {
+          pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
+            src = ./.;
+            hooks.treefmt.enable = true;
+            hooks.treefmt.package = outputs.formatter.${system};
+          };
+        }
+      );
 
       devShells = forAllPkgs inputs.nixpkgs-unstable (pkgs: {
         default = pkgs.mkShellNoCC {
@@ -152,7 +138,17 @@
         }
       );
 
-      packages = forAllPkgs inputs.nixpkgs-unstable (pkgs: {
+      packages = forAllPkgs inputs.nixpkgs (pkgs: {
+        homeConfigurations = {
+          dawid = inputs.home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            modules = [ ./users/dawid ];
+            extraSpecialArgs = {
+              inherit inputs outputs;
+              userName = "dawid";
+            };
+          };
+        };
         scripts = pkgs.runCommandNoCCLocal "scripts" { } ''
           mkdir -p $out
           cp -R ${./scripts} $out/bin
