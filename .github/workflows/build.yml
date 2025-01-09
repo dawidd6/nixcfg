@@ -56,9 +56,10 @@ jobs:
 
       - name: Build diff
         id: diff
+        if: github.event_name == 'pull_request'
         uses: dawidd6/action-command-output@v1
         with:
-          command: scripts/nix-flake-build-diff '${{ github.base_ref || github.ref }}'
+          command: scripts/nix-flake-build-diff '${{ github.base_ref }}'
 
       - name: Post comment
         if: github.event_name == 'pull_request'
