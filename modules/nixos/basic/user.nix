@@ -12,7 +12,7 @@ in
 {
   imports = [ inputs.home-manager.nixosModules.default ];
 
-  options.home = lib.mkOption { };
+  options.home = lib.mkOption { default = { }; };
 
   config = {
     users.users."${userName}" = {
@@ -29,7 +29,7 @@ in
       shell = pkgs.fish;
     };
 
-    home-manager = {
+    home-manager = lib.mkIf (config.home != { }) {
       users."${userName}" = config.home;
       extraSpecialArgs = {
         inherit
