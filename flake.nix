@@ -63,7 +63,6 @@
 
       nixosConfigurations = {
         alderaan = inputs.nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
           modules = [ ./hosts/alderaan ];
           specialArgs = {
             inherit inputs outputs;
@@ -71,7 +70,6 @@
           };
         };
         coruscant = inputs.nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
           modules = [ ./hosts/coruscant ];
           specialArgs = {
             inherit inputs outputs;
@@ -79,7 +77,6 @@
           };
         };
         yavin = inputs.nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
           modules = [ ./hosts/yavin ];
           specialArgs = {
             inherit inputs outputs;
