@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# TODO: pin this in flake?
+nix run github:nix-community/nixos-anywhere -- \
+    --flake ".#$1" \
+    --generate-hardware-config nixos-generate-config "./hosts/$1/hardware-configuration.nix" \
+    --no-substitute-on-destination \
+    --target-host "$2"
