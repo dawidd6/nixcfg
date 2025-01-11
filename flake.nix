@@ -76,6 +76,13 @@
             hostName = "coruscant";
           };
         };
+        hoth = inputs.nixpkgs.lib.nixosSystem {
+          modules = [ ./hosts/hoth ];
+          specialArgs = {
+            inherit inputs outputs;
+            hostName = "hoth";
+          };
+        };
         yavin = inputs.nixpkgs.lib.nixosSystem {
           modules = [ ./hosts/yavin ];
           specialArgs = {
