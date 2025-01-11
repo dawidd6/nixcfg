@@ -65,17 +65,26 @@
     ];
     plugins = {
       bufferline.enable = true;
-      # TODO: find better solution for autocompletion? neovim hanging?
-      coq-nvim = {
+      cmp = {
         enable = true;
-        installArtifacts = true;
-        settings.auto_start = "shut-up";
+        settings = {
+          mapping = {
+            "<CR>" = "cmp.mapping.confirm({ select = true })";
+            "<Tab>" = "cmp.mapping.confirm({ select = true })";
+            "<Up>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+            "<Down>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+          };
+          sources = [
+            { name = "path"; }
+            { name = "buffer"; }
+          ];
+        };
       };
       git-conflict.enable = true;
       gitsigns.enable = true;
       guess-indent.enable = true;
       lualine.enable = true;
-      #noice.enable = true;
+      noice.enable = true;
       nvim-autopairs.enable = true;
       rainbow-delimiters.enable = true;
       startify.enable = true;
