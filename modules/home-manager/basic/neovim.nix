@@ -65,6 +65,7 @@
     ];
     plugins = {
       bufferline.enable = true;
+      # TODO: find better solution for autocompletion? neovim hanging?
       coq-nvim = {
         enable = true;
         installArtifacts = true;
@@ -74,7 +75,7 @@
       gitsigns.enable = true;
       guess-indent.enable = true;
       lualine.enable = true;
-      noice.enable = true;
+      #noice.enable = true;
       nvim-autopairs.enable = true;
       rainbow-delimiters.enable = true;
       startify.enable = true;
