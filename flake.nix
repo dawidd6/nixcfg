@@ -114,9 +114,6 @@
         basic = {
           imports = lib.filesystem.listFilesRecursive ./modules/home-manager/basic;
         };
-        graphical = {
-          imports = lib.filesystem.listFilesRecursive ./modules/home-manager/graphical;
-        };
       };
 
       checks = forAllSystems (
