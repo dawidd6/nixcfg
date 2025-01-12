@@ -37,12 +37,6 @@ in
   networking.networkmanager.wifi.powersave = lib.mkDefault true;
   networking.nftables.enable = true;
 
-  # power
-  powerManagement.enable = true;
-  powerManagement.powertop.enable = true;
-  services.thermald.enable = true;
-  services.upower.enable = true;
-
   # user
   users.users."${userName}" = {
     isNormalUser = true;
@@ -65,10 +59,6 @@ in
   environment.etc."fish/generated_completions".text = lib.mkForce "";
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;
-
-  # nix-ld
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = [ ];
 
   # nix
   nix.channel.enable = false;

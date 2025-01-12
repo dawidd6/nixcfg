@@ -184,6 +184,16 @@ in
     };
   };
 
+  # power
+  powerManagement.enable = true;
+  powerManagement.powertop.enable = true;
+  services.thermald.enable = true;
+  services.upower.enable = true;
+
+  # nix-ld
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = [ ];
+
   # smartcard
   services.pcscd.enable = true;
   hardware.gpgSmartcards.enable = true;
