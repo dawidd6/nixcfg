@@ -48,11 +48,13 @@
       inherit (inputs.nixpkgs) lib;
       forAllSystems = function: lib.genAttrs lib.systems.flakeExposed function;
       forAllPkgs = input: function: forAllSystems (system: function (import input { inherit system; }));
+      userName = "dawidd6";
+      specialArgs = {
+        inherit inputs outputs userName;
+      };
     in
     {
       inherit lib;
-      pkgs = forAllPkgs inputs.nixpkgs (pkgs: pkgs);
-      pkgsUnstable = forAllPkgs inputs.nixpkgs-unstable (pkgs: pkgs);
 
       overlays.default = final: prev: {
         # https://github.com/NixOS/nixpkgs/pull/173364
@@ -62,57 +64,71 @@
       };
 
       nixosConfigurations = {
-        alderaan = inputs.nixpkgs.lib.nixosSystem {
-          modules = [ ./hosts/alderaan ];
-          specialArgs = {
-            inherit inputs outputs;
-            hostName = "alderaan";
-          };
-        };
         coruscant = inputs.nixpkgs.lib.nixosSystem {
-          modules = [ ./hosts/coruscant ];
-          specialArgs = {
-            inherit inputs outputs;
+          modules = [
+            ./hosts/_common/core.nix
+            ./hosts/_common/desktop.nix
+            ./hosts/coruscant/configuration.nix
+            ./hosts/coruscant/disko-config.nix
+            ./hosts/coruscant/hardware-configuration.nix
+            inputs.hardware.nixosModules.lenovo-thinkpad-t14-amd-gen1
+            inputs.disko.nixosModules.default
+            inputs.home-manager.nixosModules.default
+            {
+              home-manager = {
+                users.${userName} = { };
+                sharedModules = [
+                  ./users/_common/core.nix
+                  inputs.nix-index-database.hmModules.nix-index
+                  inputs.nixvim.homeManagerModules.nixvim
+                ];
+                extraSpecialArgs = specialArgs;
+                useUserPackages = true;
+                useGlobalPkgs = true;
+              };
+            }
+          ];
+          specialArgs = specialArgs // {
             hostName = "coruscant";
           };
         };
         hoth = inputs.nixpkgs.lib.nixosSystem {
-          modules = [ ./hosts/hoth ];
-          specialArgs = {
-            inherit inputs outputs;
+          modules = [
+            ./hosts/_common/core.nix
+            ./hosts/hoth/configuration.nix
+            ./hosts/hoth/disko-config.nix
+            ./hosts/hoth/hardware-configuration.nix
+            inputs.disko.nixosModules.default
+          ];
+          specialArgs = specialArgs // {
             hostName = "hoth";
           };
         };
         yavin = inputs.nixpkgs.lib.nixosSystem {
-          modules = [ ./hosts/yavin ];
-          specialArgs = {
-            inherit inputs outputs;
+          modules = [
+            ./hosts/_common/core.nix
+            ./hosts/yavin/configuration.nix
+            ./hosts/yavin/hardware-configuration.nix
+            inputs.hardware.nixosModules.common-cpu-intel
+          ];
+          specialArgs = specialArgs // {
             hostName = "yavin";
           };
-        };
-      };
-      nixosModules = {
-        basic = {
-          imports = lib.filesystem.listFilesRecursive ./modules/nixos/basic;
-        };
-        graphical = {
-          imports = lib.filesystem.listFilesRecursive ./modules/nixos/graphical;
         };
       };
 
       homeConfigurations = {
         dawid = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-          modules = [ ./users/dawid ];
-          extraSpecialArgs = {
-            inherit inputs outputs;
+          modules = [
+            ./users/_common/core.nix
+            ./users/dawid/home.nix
+            inputs.nix-index-database.hmModules.nix-index
+            inputs.nixvim.homeManagerModules.nixvim
+          ];
+          extraSpecialArgs = specialArgs // {
             userName = "dawid";
           };
-        };
-      };
-      homeModules = {
-        basic = {
-          imports = lib.filesystem.listFilesRecursive ./modules/home-manager/basic;
         };
       };
 
