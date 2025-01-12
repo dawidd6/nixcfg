@@ -9,6 +9,7 @@
 
   environment.systemPackages = with pkgs; [
     htop
+    lm_sensors
   ];
 
   security.sudo.wheelNeedsPassword = false;
