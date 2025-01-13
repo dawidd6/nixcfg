@@ -1,0 +1,61 @@
+{
+  outputs,
+  pkgs,
+  ...
+}:
+{
+  home.packages = with pkgs; [
+    ack
+    ansible
+    ansible-lint
+    btop
+    carapace
+    cloc
+    cpio
+    curl
+    diffoscopeMinimal
+    distrobox
+    dos2unix
+    file
+    fx
+    gh
+    ghorg
+    git-extras
+    glab
+    gnumake
+    htop
+    hydra-check
+    ipcalc
+    jq
+    lm_sensors
+    ncdu
+    nix-diff
+    nix-init
+    nix-inspect
+    nix-tree
+    nix-update
+    nixd
+    nixfmt-rfc-style
+    nixos-shell
+    nixpkgs-review
+    nmap
+    nodejs
+    nurl
+    nvd
+    outputs.packages.${system}.scripts
+    python3
+    ripgrep
+    ruby
+    shellcheck
+    sshpass
+    strace
+    tealdeer
+    tmux
+    trash-cli
+    tree
+    unzip
+    wget
+    xsel
+    yubikey-manager
+  ];
+}

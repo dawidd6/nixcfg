@@ -1,8 +1,22 @@
 {
+  inputs,
+  outputs,
   pkgs,
+  userName,
   ...
 }:
 {
+  imports = [
+    ./disko-config.nix
+    ./hardware-configuration.nix
+
+    inputs.hardware.nixosModules.lenovo-thinkpad-t14-amd-gen1
+
+    outputs.nixosModules.graphical
+  ];
+
+  home-manager.users.${userName} = ./home.nix;
+
   services.fprintd.enable = true;
   services.fprintd.tod.enable = true;
   services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;

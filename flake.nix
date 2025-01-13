@@ -49,9 +49,32 @@
       forAllSystems = function: lib.genAttrs lib.systems.flakeExposed function;
       forAllPkgs = input: function: forAllSystems (system: function (import input { inherit system; }));
       userName = "dawidd6";
-      specialArgs = {
-        inherit inputs outputs userName;
-      };
+      mkHome =
+        system: userName:
+        inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages.${system};
+          modules = [
+            ./configs/home/${userName}/home.nix
+          ];
+          extraSpecialArgs = {
+            inherit inputs outputs userName;
+          };
+        };
+      mkNixos =
+        hostName:
+        inputs.nixpkgs.lib.nixosSystem {
+          modules = [
+            ./configs/nixos/${hostName}/configuration.nix
+          ];
+          specialArgs = {
+            inherit
+              inputs
+              outputs
+              userName
+              hostName
+              ;
+          };
+        };
     in
     {
       inherit lib;
@@ -64,72 +87,28 @@
       };
 
       nixosConfigurations = {
-        coruscant = inputs.nixpkgs.lib.nixosSystem {
-          modules = [
-            ./hosts/_common/core.nix
-            ./hosts/_common/desktop.nix
-            ./hosts/coruscant/configuration.nix
-            ./hosts/coruscant/disko-config.nix
-            ./hosts/coruscant/hardware-configuration.nix
-            inputs.hardware.nixosModules.lenovo-thinkpad-t14-amd-gen1
-            inputs.disko.nixosModules.default
-            inputs.home-manager.nixosModules.default
-            {
-              home-manager = {
-                users.${userName} = { };
-                sharedModules = [
-                  ./users/_common/core.nix
-                  inputs.nix-index-database.hmModules.nix-index
-                  inputs.nixvim.homeManagerModules.nixvim
-                ];
-                extraSpecialArgs = specialArgs;
-                useUserPackages = true;
-                useGlobalPkgs = true;
-              };
-            }
-          ];
-          specialArgs = specialArgs // {
-            hostName = "coruscant";
-          };
+        coruscant = mkNixos "coruscant";
+        hoth = mkNixos "hoth";
+        yavin = mkNixos "yavin";
+      };
+
+      nixosModules = {
+        basic = {
+          imports = lib.filesystem.listFilesRecursive ./modules/nixos/basic;
         };
-        hoth = inputs.nixpkgs.lib.nixosSystem {
-          modules = [
-            ./hosts/_common/core.nix
-            ./hosts/hoth/configuration.nix
-            ./hosts/hoth/disko-config.nix
-            ./hosts/hoth/hardware-configuration.nix
-            inputs.disko.nixosModules.default
+        graphical = {
+          imports = lib.filesystem.listFilesRecursive ./modules/nixos/graphical ++ [
+            outputs.nixosModules.basic
           ];
-          specialArgs = specialArgs // {
-            hostName = "hoth";
-          };
-        };
-        yavin = inputs.nixpkgs.lib.nixosSystem {
-          modules = [
-            ./hosts/_common/core.nix
-            ./hosts/yavin/configuration.nix
-            ./hosts/yavin/hardware-configuration.nix
-            inputs.hardware.nixosModules.common-cpu-intel
-          ];
-          specialArgs = specialArgs // {
-            hostName = "yavin";
-          };
         };
       };
 
       homeConfigurations = {
-        dawid = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-          modules = [
-            ./users/_common/core.nix
-            ./users/dawid/home.nix
-            inputs.nix-index-database.hmModules.nix-index
-            inputs.nixvim.homeManagerModules.nixvim
-          ];
-          extraSpecialArgs = specialArgs // {
-            userName = "dawid";
-          };
-        };
+        dawid = mkHome "x86_64-linux" "dawid";
+      };
+
+      homeModules.default = {
+        imports = lib.filesystem.listFilesRecursive ./modules/home/default;
       };
 
       checks = forAllSystems (
@@ -171,8 +150,7 @@
 
       packages = forAllPkgs inputs.nixpkgs (pkgs: {
         scripts = pkgs.runCommandNoCCLocal "scripts" { } ''
-          mkdir -p $out
-          cp -R ${./scripts} $out/bin
+          mkdir -p $out && cp -R ${./scripts} $out/bin
         '';
       });
     };

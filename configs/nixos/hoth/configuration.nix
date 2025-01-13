@@ -1,5 +1,12 @@
-{ pkgs, ... }:
+{ outputs, pkgs, ... }:
 {
+  imports = [
+    ./disko-config.nix
+    ./hardware-configuration.nix
+
+    outputs.nixosModules.basic
+  ];
+
   services.openssh.enable = true;
 
   # TODO: check if we can connect as non root

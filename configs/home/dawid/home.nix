@@ -1,5 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, outputs, ... }:
 {
+  imports = [
+    outputs.homeModules.default
+  ];
+
   home.packages = [ pkgs.onedrive ];
 
   systemd.user.services.onedrive = {
