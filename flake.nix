@@ -6,38 +6,38 @@
 
   inputs = {
     hardware.url = "github:nixos/nixos-hardware";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    #nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     home-manager = {
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    treefmt = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-    pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
     nixvim = {
       url = "github:nix-community/nixvim/nixos-24.11";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "";
       inputs.nuschtosSearch.follows = "";
       inputs.devshell.follows = "";
       inputs.flake-compat.follows = "";
       inputs.git-hooks.follows = "";
-      inputs.home-manager.follows = "";
       inputs.nix-darwin.follows = "";
       inputs.treefmt-nix.follows = "";
     };
+    treefmt = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     disko = {
       url = "github:nix-community/disko/latest";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -128,7 +128,7 @@
         }
       );
 
-      devShells = forAllPkgs inputs.nixpkgs-unstable (pkgs: {
+      devShells = forAllPkgs inputs.nixpkgs (pkgs: {
         default = pkgs.mkShellNoCC {
           NIX_CONFIG = "experimental-features = nix-command flakes";
           shellHook = ''
@@ -137,7 +137,7 @@
         };
       });
 
-      formatter = forAllPkgs inputs.nixpkgs-unstable (
+      formatter = forAllPkgs inputs.nixpkgs (
         pkgs:
         inputs.treefmt.lib.mkWrapper pkgs {
           projectRootFile = "flake.nix";
