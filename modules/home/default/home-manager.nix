@@ -15,7 +15,6 @@
   home.homeDirectory = "/home/${userName}";
 
   home.sessionVariables = {
-    ELECTRON_TRASH = "gvfs-trash";
     __HM_SESS_VARS_SOURCED = "";
   };
 }
