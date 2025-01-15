@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+nix run ".#nixosConfigurations.${1}.config.system.build.vmWithDisko"
