@@ -3,6 +3,12 @@
   ...
 }:
 {
+  environment.etc."xdg/gtk-3.0/settings.ini".text = lib.generators.toINI { } {
+    Settings = {
+      gtk-application-prefer-dark-theme = true;
+    };
+  };
+
   programs.dconf.profiles.gdm.databases = [
     {
       settings = {
@@ -15,6 +21,7 @@
       };
     }
   ];
+
   programs.dconf.profiles.user.databases = [
     {
       settings = {
