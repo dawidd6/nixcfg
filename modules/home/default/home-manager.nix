@@ -14,7 +14,6 @@
   home.username = userName;
   home.homeDirectory = "/home/${userName}";
 
-  home.sessionVariables = {
-    __HM_SESS_VARS_SOURCED = "";
-  };
+  # Always export session variables (even on relogin)
+  home.sessionVariables.__HM_SESS_VARS_SOURCED = "";
 }
