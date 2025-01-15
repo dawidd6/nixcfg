@@ -1,11 +1,12 @@
 {
   inputs,
   outputs,
-  pkgs,
+  userName,
   ...
 }:
 {
   imports = [
+    ./disko-config.nix
     ./hardware-configuration.nix
 
     inputs.hardware.nixosModules.common-cpu-intel
@@ -13,15 +14,10 @@
     outputs.nixosModules.basic
   ];
 
+  home-manager.users.${userName} = ./home.nix;
+
   services.openssh.enable = true;
   services.udisks2.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    htop
-    lm_sensors
-  ];
-
-  security.sudo.wheelNeedsPassword = false;
 
   swapDevices = [
     {
@@ -30,5 +26,5 @@
     }
   ];
 
-  system.stateVersion = "22.11";
+  system.stateVersion = "24.11";
 }

@@ -1,4 +1,4 @@
-{ outputs, ... }:
+{ outputs, userName, ... }:
 {
   imports = [
     ./disko-config.nix
@@ -6,6 +6,8 @@
 
     outputs.nixosModules.basic
   ];
+
+  home-manager.users.${userName} = ./home.nix;
 
   services.openssh.enable = true;
 
