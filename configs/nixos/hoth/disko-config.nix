@@ -1,5 +1,6 @@
 {
   disko.devices.disk.main = {
+    imageSize = "32G";
     device = "/dev/sda";
     type = "disk";
     content = {

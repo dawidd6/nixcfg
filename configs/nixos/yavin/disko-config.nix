@@ -1,5 +1,6 @@
 {
   disko.devices.disk.main = {
+    imageSize = "32G";
     device = "/dev/disk/by-id/ata-SAMSUNG_MZ7TE256HMHP-000H1_S1BCNSAG533242";
     type = "disk";
     content = {
