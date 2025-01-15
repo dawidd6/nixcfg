@@ -9,10 +9,13 @@ let
 in
 {
   nix.channel.enable = false;
+
   nix.registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
   nix.nixPath = lib.mapAttrsToList (name: _: "${name}=flake:${name}") inputs;
+
   nix.daemonCPUSchedPolicy = "idle";
   nix.daemonIOSchedClass = "idle";
+
   nix.settings.min-free = asGB 10;
   nix.settings.max-free = asGB 50;
   nix.settings.auto-optimise-store = true;
