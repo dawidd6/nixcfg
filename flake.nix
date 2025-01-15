@@ -48,7 +48,6 @@
       inherit (inputs.nixpkgs) lib;
       forAllSystems = function: lib.genAttrs lib.systems.flakeExposed function;
       forAllPkgs = input: function: forAllSystems (system: function (import input { inherit system; }));
-      userName = "dawidd6";
       mkHome =
         system: userName:
         inputs.home-manager.lib.homeManagerConfiguration {
@@ -67,12 +66,8 @@
             ./configs/nixos/${hostName}/configuration.nix
           ];
           specialArgs = {
-            inherit
-              inputs
-              outputs
-              userName
-              hostName
-              ;
+            inherit inputs outputs hostName;
+            userName = "dawidd6";
           };
         };
     in
