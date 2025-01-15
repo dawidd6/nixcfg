@@ -3,8 +3,9 @@
   config,
   ...
 }:
-{
-  virtualisation.vmVariant = {
+let
+  cfg = {
+
     virtualisation.forwardPorts = [
       {
         from = "host";
@@ -26,4 +27,8 @@
     services.spice-vdagentd.enable = true;
     services.sshd.enable = true;
   };
+in
+{
+  virtualisation.vmVariant = cfg;
+  virtualisation.vmVariantWithDisko = cfg;
 }
