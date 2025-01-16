@@ -1,6 +1,6 @@
 { outputs, ... }:
 {
   imports = [
-    outputs.homeModules.default
+    outputs.homeModules.base
   ];
 }

@@ -11,13 +11,10 @@
 
     inputs.hardware.nixosModules.common-cpu-intel
 
-    outputs.nixosModules.basic
+    outputs.nixosModules.server
   ];
 
   home-manager.users.${userName} = ./home.nix;
-
-  services.openssh.enable = true;
-  services.udisks2.enable = true;
 
   swapDevices = [
     {

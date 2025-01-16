@@ -88,12 +88,17 @@
       };
 
       nixosModules = {
-        basic = {
-          imports = lib.filesystem.listFilesRecursive ./modules/nixos/basic;
+        base = {
+          imports = lib.filesystem.listFilesRecursive ./modules/nixos/base;
         };
-        graphical = {
-          imports = lib.filesystem.listFilesRecursive ./modules/nixos/graphical ++ [
-            outputs.nixosModules.basic
+        laptop = {
+          imports = lib.filesystem.listFilesRecursive ./modules/nixos/laptop ++ [
+            outputs.nixosModules.base
+          ];
+        };
+        server = {
+          imports = lib.filesystem.listFilesRecursive ./modules/nixos/server ++ [
+            outputs.nixosModules.base
           ];
         };
       };
@@ -102,8 +107,8 @@
         dawid = mkHome "x86_64-linux" "dawid";
       };
 
-      homeModules.default = {
-        imports = lib.filesystem.listFilesRecursive ./modules/home/default;
+      homeModules.base = {
+        imports = lib.filesystem.listFilesRecursive ./modules/home/base;
       };
 
       checks = forAllSystems (

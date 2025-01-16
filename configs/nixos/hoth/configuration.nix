@@ -4,12 +4,10 @@
     ./disko-config.nix
     ./hardware-configuration.nix
 
-    outputs.nixosModules.basic
+    outputs.nixosModules.server
   ];
 
   home-manager.users.${userName} = ./home.nix;
-
-  services.openssh.enable = true;
 
   # TODO: check if we can connect as non root
   #users.users.root.openssh.authorizedKeys.keys = [

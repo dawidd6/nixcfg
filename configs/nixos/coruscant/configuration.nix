@@ -12,7 +12,7 @@
 
     inputs.hardware.nixosModules.lenovo-thinkpad-t14-amd-gen1
 
-    outputs.nixosModules.graphical
+    outputs.nixosModules.laptop
   ];
 
   home-manager.users.${userName} = ./home.nix;
