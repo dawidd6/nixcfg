@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+diff -u <(realpath /run/booted-system/{systemd,initrd,kernel,kernel-modules}) <(realpath /run/current-system/{systemd,initrd,kernel,kernel-modules})
