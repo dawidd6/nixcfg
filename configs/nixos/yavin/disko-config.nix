@@ -1,7 +1,7 @@
 {
   disko.devices.disk.main = {
     imageSize = "32G";
-    device = "/dev/disk/by-id/ata-SAMSUNG_MZ7TE256HMHP-000H1_S1BCNSAG533242";
+    device = "/dev/disk/by-id/ata-HGST_HTS541010A7E630_S0A001SSGMYASK";
     type = "disk";
     content = {
       type = "gpt";
