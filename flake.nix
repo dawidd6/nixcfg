@@ -47,7 +47,8 @@
       inherit (inputs.self) outputs;
       inherit (inputs.nixpkgs) lib;
       forAllSystems = function: lib.genAttrs lib.systems.flakeExposed function;
-      forAllPkgs = input: function: forAllSystems (system: function (import input { inherit system; }));
+      forAllPkgs =
+        input: function: forAllSystems (system: function (import input { inherit system; }) system);
       mkHome =
         system: userName:
         inputs.home-manager.lib.homeManagerConfiguration {
@@ -128,17 +129,22 @@
         }
       );
 
-      devShells = forAllPkgs inputs.nixpkgs (pkgs: {
-        default = pkgs.mkShellNoCC {
-          NIX_CONFIG = "experimental-features = nix-command flakes";
-          shellHook = ''
-            ${outputs.checks.${pkgs.system}.pre-commit.shellHook}
-          '';
-        };
-      });
+      devShells = forAllPkgs inputs.nixpkgs (
+        pkgs: system: {
+          default = pkgs.mkShellNoCC {
+            NIX_CONFIG = "experimental-features = nix-command flakes";
+            packages = [
+              outputs.formatter.${system}
+            ];
+            shellHook = ''
+              ${outputs.checks.${system}.pre-commit.shellHook}
+            '';
+          };
+        }
+      );
 
       formatter = forAllPkgs inputs.nixpkgs (
-        pkgs:
+        pkgs: _system:
         inputs.treefmt.lib.mkWrapper pkgs {
           projectRootFile = "flake.nix";
           programs.deadnix.enable = true;
@@ -148,10 +154,12 @@
         }
       );
 
-      packages = forAllPkgs inputs.nixpkgs (pkgs: {
-        scripts = pkgs.runCommandNoCCLocal "scripts" { } ''
-          mkdir -p $out && cp -R ${./scripts} $out/bin
-        '';
-      });
+      packages = forAllPkgs inputs.nixpkgs (
+        pkgs: _system: {
+          scripts = pkgs.runCommandNoCCLocal "scripts" { } ''
+            mkdir -p $out && cp -R ${./scripts} $out/bin
+          '';
+        }
+      );
     };
 }

@@ -1,9 +1,9 @@
 {
-  "nix.formatterPath": ["nix", "fmt", "--", "--"],
+  "nix.formatterPath": ["treefmt", "--"],
   "nix.serverSettings": {
     "nixd": {
       "formatting": {
-        "command": ["nix", "fmt", "--", "--"]
+        "command": ["treefmt", "--"]
       }
     }
   }
