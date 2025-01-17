@@ -15,6 +15,7 @@
     nixvim = {
       url = "github:nix-community/nixvim/nixos-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
       inputs.home-manager.follows = "";
       inputs.nuschtosSearch.follows = "";
       inputs.devshell.follows = "";
@@ -34,10 +35,24 @@
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.gitignore.follows = "";
+      inputs.flake-compat.follows = "";
     };
     disko = {
       url = "github:nix-community/disko/latest";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-anywhere = {
+      url = "github:nix-community/nixos-anywhere";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixos-stable.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.disko.follows = "disko";
+      inputs.treefmt-nix.follows = "";
+    };
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
     };
   };
 
