@@ -150,6 +150,7 @@
             NIX_CONFIG = "experimental-features = nix-command flakes";
             packages = [
               outputs.formatter.${system}
+              inputs.nixos-anywhere.packages.${system}.default
             ];
             shellHook = ''
               ${outputs.checks.${system}.pre-commit.shellHook}
