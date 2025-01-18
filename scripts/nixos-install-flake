@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
-set -xeuo pipefail
+set -euo pipefail
 
 if [[ $EUID -ne 0 ]]; then
     echo Run this as root!
     exit 127
 fi
 
-"$(nix --experimental-features "nix-command flakes" build --print-out-paths --no-link ".#nixosConfigurations.${1}.config.system.build.diskoScript")"
+set -x
 
-nixos-install --no-root-passwd --no-channel-copy --flake ".#${1}"
+nix --experimental-features "nix-command flakes" run .#disko -- --mode destroy,format,mount --flake ".#$1"
+
+nixos-install --no-root-passwd --no-channel-copy --flake ".#$1"
