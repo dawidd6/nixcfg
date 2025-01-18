@@ -89,12 +89,7 @@
       lualine.enable = true;
       noice.enable = true;
       nvim-autopairs.enable = true;
-      rainbow-delimiters.enable = true;
       startify.enable = true;
-      treesitter = {
-        enable = true;
-        settings.highlight.enable = true;
-      };
       trim.enable = true;
       web-devicons.enable = true;
       which-key.enable = true;
