@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+nix --experimental-features "nix-command flakes" run .#disko-install -- --write-efi-boot-entries --flake ".#$1" --disk main "$2"
