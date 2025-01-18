@@ -1,7 +1,7 @@
 {
   disko.devices.disk.main = {
     imageSize = "32G";
-    device = "/dev/mmcblk1";
+    device = "/dev/mmcblk0";
     type = "disk";
     content = {
       type = "gpt";
