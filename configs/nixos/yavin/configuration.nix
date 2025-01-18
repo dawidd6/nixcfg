@@ -16,12 +16,5 @@
 
   home-manager.users.${userName} = ./home.nix;
 
-  swapDevices = [
-    {
-      device = "/swap";
-      size = 4096;
-    }
-  ];
-
   system.stateVersion = "24.11";
 }
