@@ -150,9 +150,6 @@
             NIX_CONFIG = "experimental-features = nix-command flakes";
             packages = [
               outputs.formatter.${system}
-              inputs.nixos-anywhere.packages.${system}.nixos-anywhere
-              inputs.disko.packages.${system}.disko
-              inputs.disko.packages.${system}.disko-install
             ];
             shellHook = ''
               ${outputs.checks.${system}.pre-commit.shellHook}
@@ -173,7 +170,10 @@
       );
 
       packages = forAllPkgs inputs.nixpkgs (
-        pkgs: _system: {
+        pkgs: system: {
+          inherit (inputs.nixos-anywhere.packages.${system}) nixos-anywhere;
+          inherit (inputs.disko.packages.${system}) disko;
+          inherit (inputs.disko.packages.${system}) disko-install;
           scripts = pkgs.runCommandNoCCLocal "scripts" { } ''
             mkdir -p $out && cp -R ${./scripts} $out/bin
           '';
