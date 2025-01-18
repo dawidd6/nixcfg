@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -xeuo pipefail
 
-nix --experimental-features "nix-command flakes" run ".#nixosConfigurations.${1}.config.system.build.diskoScript"
+if [[ $EUID -ne 0 ]]; then
+    echo Run this as root!
+    exit 127
+fi
+
+"$(nix --experimental-features "nix-command flakes" build --print-out-paths --no-link ".#nixosConfigurations.${1}.config.system.build.diskoScript")"
 
 nixos-install --no-root-passwd --no-channel-copy --flake ".#${1}"
