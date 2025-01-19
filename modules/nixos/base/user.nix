@@ -6,7 +6,7 @@
   users.users."${userName}" = {
     isNormalUser = true;
     description = userName;
-    initialPassword = userName;
+    initialPassword = "changeme";
     extraGroups = [ "wheel" ];
   };
 }
