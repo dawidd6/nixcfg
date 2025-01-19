@@ -20,7 +20,7 @@ let
 in
 {
   services.cloudflared = {
-    enable = true;
+    enable = false;
     tunnels = {
       "${hostName}" = {
         credentialsFile = tokenFile;
