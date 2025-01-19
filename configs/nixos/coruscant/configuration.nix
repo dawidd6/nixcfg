@@ -17,13 +17,9 @@
 
   home-manager.users.${userName} = ./home.nix;
 
-  boot.kernelParams = [ "acpi.ec_no_wakeup=1" ];
-
   services.fprintd.enable = true;
   services.fprintd.tod.enable = true;
   services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
-
-  #services.logind.lidSwitch = "hibernate";
 
   boot.binfmt.emulatedSystems = [
     "armv7l-linux"
