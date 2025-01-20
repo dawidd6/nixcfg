@@ -8,7 +8,6 @@
 
   users.users."${userName}".extraGroups = [ "incus" ];
 
-  networking.nftables.enable = true;
   networking.firewall.interfaces."incusbr*" =
     let
       ports = [
