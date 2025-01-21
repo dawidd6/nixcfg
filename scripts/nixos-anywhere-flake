@@ -4,6 +4,6 @@ set -euo pipefail
 
 nix run .#nixos-anywhere -- \
     --flake ".#$1" \
-    --generate-hardware-config nixos-generate-config "./configs/nixos/$1/hardware-configuration.nix" \
+    --generate-hardware-config nixos-generate-config "$3" \
     --no-substitute-on-destination \
     --target-host "$2"

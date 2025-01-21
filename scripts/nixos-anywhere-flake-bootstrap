@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-nix run .#nixos-anywhere -- \
-    --flake ".#$1" \
-    --no-substitute-on-destination \
-    --target-host "$2"

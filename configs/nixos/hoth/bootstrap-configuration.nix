@@ -1,10 +1,10 @@
 { inputs, modulesPath, ... }:
 {
   imports = [
-    #(modulesPath + "/profiles/perlless.nix")
     (modulesPath + "/profiles/minimal.nix")
 
     ./disko-config.nix
+    ./hardware-configuration.nix
 
     inputs.disko.nixosModules.default
   ];
