@@ -1,7 +1,6 @@
 {
   inputs,
   outputs,
-  pkgs,
   userName,
   ...
 }:
@@ -16,15 +15,6 @@
   ];
 
   home-manager.users.${userName} = ./home.nix;
-
-  services.fprintd.enable = true;
-  services.fprintd.tod.enable = true;
-  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
-
-  boot.binfmt.emulatedSystems = [
-    "armv7l-linux"
-    "aarch64-linux"
-  ];
 
   swapDevices = [
     {
