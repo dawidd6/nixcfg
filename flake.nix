@@ -77,10 +77,12 @@
           };
         };
       mkNixos =
-        hostName:
+        hostName: bootstrap:
         inputs.nixpkgs.lib.nixosSystem {
           modules = [
-            ./configs/nixos/${hostName}/configuration.nix
+            ./configs/nixos/${hostName}/${
+              if bootstrap then "bootstrap-configuration.nix" else "configuration.nix"
+            }
           ];
           specialArgs = {
             inherit inputs outputs hostName;
@@ -99,9 +101,10 @@
       };
 
       nixosConfigurations = {
-        coruscant = mkNixos "coruscant";
-        hoth = mkNixos "hoth";
-        yavin = mkNixos "yavin";
+        coruscant = mkNixos "coruscant" false;
+        hoth = mkNixos "hoth" false;
+        hoth-bootstrap = mkNixos "hoth" true;
+        yavin = mkNixos "yavin" false;
       };
 
       nixosModules = {
