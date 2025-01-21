@@ -21,6 +21,21 @@
         "type": "github"
       }
     },
+    "flake-compat": {
+      "locked": {
+        "lastModified": 1733328505,
+        "narHash": "sha256-NeCCThCEP3eCl2l/+27kNNK7QrwZB1IJCrXfrbv5oqU=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "ff81ac966bb2cae68946d5ed5fc4994f96d0ffec",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -112,7 +127,9 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "treefmt-nix": []
+        "treefmt-nix": [
+          "treefmt"
+        ]
       },
       "locked": {
         "lastModified": 1735024884,
@@ -172,18 +189,26 @@
     "nixvim": {
       "inputs": {
         "devshell": [],
-        "flake-compat": [],
+        "flake-compat": [
+          "flake-compat"
+        ],
         "flake-parts": [
           "flake-parts"
         ],
-        "git-hooks": [],
-        "home-manager": [],
+        "git-hooks": [
+          "pre-commit-hooks"
+        ],
+        "home-manager": [
+          "home-manager"
+        ],
         "nix-darwin": [],
         "nixpkgs": [
           "nixpkgs"
         ],
         "nuschtosSearch": [],
-        "treefmt-nix": []
+        "treefmt-nix": [
+          "treefmt"
+        ]
       },
       "locked": {
         "lastModified": 1737141914,
@@ -202,7 +227,9 @@
     },
     "pre-commit-hooks": {
       "inputs": {
-        "flake-compat": [],
+        "flake-compat": [
+          "flake-compat"
+        ],
         "gitignore": [],
         "nixpkgs": [
           "nixpkgs"
@@ -225,6 +252,7 @@
     "root": {
       "inputs": {
         "disko": "disko",
+        "flake-compat": "flake-compat",
         "flake-parts": "flake-parts",
         "hardware": "hardware",
         "home-manager": "home-manager",

@@ -5,6 +5,7 @@
   };
 
   inputs = {
+    flake-compat.url = "github:edolstra/flake-compat";
     hardware.url = "github:nixos/nixos-hardware";
     #nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
@@ -15,14 +16,14 @@
     nixvim = {
       url = "github:nix-community/nixvim/nixos-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
       inputs.flake-parts.follows = "flake-parts";
-      inputs.home-manager.follows = "";
+      inputs.flake-compat.follows = "flake-compat";
+      inputs.git-hooks.follows = "pre-commit-hooks";
+      inputs.treefmt-nix.follows = "treefmt";
       inputs.nuschtosSearch.follows = "";
       inputs.devshell.follows = "";
-      inputs.flake-compat.follows = "";
-      inputs.git-hooks.follows = "";
       inputs.nix-darwin.follows = "";
-      inputs.treefmt-nix.follows = "";
     };
     treefmt = {
       url = "github:numtide/treefmt-nix";
@@ -35,8 +36,8 @@
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-compat.follows = "flake-compat";
       inputs.gitignore.follows = "";
-      inputs.flake-compat.follows = "";
     };
     disko = {
       url = "github:nix-community/disko/latest";
@@ -48,7 +49,7 @@
       inputs.nixos-stable.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
       inputs.disko.follows = "disko";
-      inputs.treefmt-nix.follows = "";
+      inputs.treefmt-nix.follows = "treefmt";
     };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
