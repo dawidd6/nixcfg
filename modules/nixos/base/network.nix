@@ -9,9 +9,9 @@
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.powersave = lib.mkDefault true;
 
-  networking.nftables.enable = true;
+  networking.useNetworkd = true;
 
-  services.resolved.enable = true;
+  networking.nftables.enable = true;
 
   users.users."${userName}".extraGroups = [ "networkmanager" ];
 }
