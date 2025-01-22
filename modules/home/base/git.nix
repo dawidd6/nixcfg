@@ -2,7 +2,7 @@ _: {
   programs.git = {
     enable = true;
     diff-so-fancy.enable = true;
-    signing.key = "172E9B0B";
+    signing.key = null;
     signing.signByDefault = true;
     userEmail = "dawidd0811@gmail.com";
     userName = "Dawid Dziurla";
