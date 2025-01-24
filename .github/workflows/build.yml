@@ -12,12 +12,14 @@ concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Maximize space
-        uses: easimon/maximize-build-space@v10
+        uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c # v10
         with:
           root-reserve-mb: 512
           swap-size-mb: 1024
@@ -31,14 +33,18 @@ jobs:
           remove-docker-images: true
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Fetch master
         if: github.event_name == 'pull_request'
-        run: git fetch origin '${{ github.base_ref }}:${{ github.base_ref }}'
+        env:
+          REF: ${{ github.base_ref }}
+        run: git fetch origin "${REF}:${REF}"
 
       - name: Install Nix
-        uses: cachix/install-nix-action@v30
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
         with:
           extra_nix_config: |
             accept-flake-config = true
@@ -46,7 +52,7 @@ jobs:
 
       - name: Setup cachix
         if: github.event_name != 'pull_request'
-        uses: cachix/cachix-action@v15
+        uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
         with:
           name: ${{ github.repository_owner }}
           authToken: ${{ secrets.CACHIX_TOKEN }}
@@ -57,14 +63,15 @@ jobs:
       - name: Build diff
         id: diff
         if: github.event_name == 'pull_request'
-        uses: dawidd6/action-command-output@v1
+        uses: dawidd6/action-command-output@02848b9ddafd0daf5e8fc9a2e6b46dc0b1810c79 # v1
         with:
           command: scripts/nix-flake-build-diff '${{ github.base_ref }}'
 
       - name: Post comment
         if: github.event_name == 'pull_request'
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4.0.0
         with:
+          token: ${{ secrets.TOKEN }}
           issue-number: ${{ github.event.number }}
           body: |
             ```

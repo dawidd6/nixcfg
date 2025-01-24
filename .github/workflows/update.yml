@@ -8,15 +8,19 @@ on:
 concurrency:
   group: update-${{ github.ref }}
 
+permissions: {}
+
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Install Nix
-        uses: cachix/install-nix-action@v30
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
         with:
           extra_nix_config: |
             accept-flake-config = true
@@ -24,24 +28,24 @@ jobs:
 
       - name: Update flake
         id: update
-        uses: dawidd6/action-command-output@v1
+        uses: dawidd6/action-command-output@02848b9ddafd0daf5e8fc9a2e6b46dc0b1810c79 # v1
         with:
           command: nix flake update --quiet
 
       - name: Format flake
         id: format
-        uses: dawidd6/action-command-output@v1
+        uses: dawidd6/action-command-output@02848b9ddafd0daf5e8fc9a2e6b46dc0b1810c79 # v1
         with:
           command: nix fmt --quiet
 
       - name: Compare flake
         id: compare
-        uses: dawidd6/action-command-output@v1
+        uses: dawidd6/action-command-output@02848b9ddafd0daf5e8fc9a2e6b46dc0b1810c79 # v1
         with:
           command: scripts/nix-flake-compare '${{ github.ref }}'
 
       - name: Create PR
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
         with:
           token: ${{ secrets.TOKEN }}
           delete-branch: true
