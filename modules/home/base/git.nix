@@ -2,8 +2,11 @@ _: {
   programs.git = {
     enable = true;
     diff-so-fancy.enable = true;
-    signing.key = "~/.ssh/id_ed25519.pub";
-    signing.signByDefault = true;
+    signing = {
+      key = "~/.ssh/id_ed25519.pub";
+      signByDefault = true;
+      gpgPath = "";
+    };
     userEmail = "dawidd0811@gmail.com";
     userName = "Dawid Dziurla";
     ignores = [
@@ -32,8 +35,8 @@ _: {
         pretty = "fuller";
       };
       url = {
-        "git@github.com:dawidd6" = {
-          pushInsteadOf = "https://github.com/dawidd6";
+        "git@github.com:" = {
+          pushInsteadOf = "https://github.com/";
         };
       };
     };
