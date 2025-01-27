@@ -2,7 +2,7 @@ _: {
   programs.git = {
     enable = true;
     diff-so-fancy.enable = true;
-    signing.key = null;
+    signing.key = "~/.ssh/id_ed25519.pub";
     signing.signByDefault = true;
     userEmail = "dawidd0811@gmail.com";
     userName = "Dawid Dziurla";
@@ -27,10 +27,6 @@ _: {
     extraConfig = {
       gpg = {
         format = "ssh";
-        ssh = {
-          allowedSignersFile = "~/.ssh/allowedSigners";
-          defaultKeyCommand = "sh -c 'cat ~/.ssh/signingKey'";
-        };
       };
       format = {
         pretty = "fuller";
