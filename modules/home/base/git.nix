@@ -25,6 +25,13 @@ _: {
       ls = "ls-tree -r --name-only HEAD";
     };
     extraConfig = {
+      gpg = {
+        format = "ssh";
+        ssh = {
+          allowedSignersFile = "~/.ssh/allowedSigners";
+          defaultKeyCommand = "sh -c 'cat ~/.ssh/signingKey'";
+        };
+      };
       format = {
         pretty = "fuller";
       };
