@@ -6,10 +6,13 @@
   programs.fish = {
     enable = true;
     generateCompletions = false;
-    shellAliases = {
-      rm = "trash";
-      ssh = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no";
-      hub = "gh";
+    functions = {
+      hub = {
+        body = ''
+          command op plugin run -- gh $argv
+        '';
+        wraps = "gh";
+      };
     };
     shellAbbrs = {
       e = "exit";
@@ -31,6 +34,8 @@
       clip = "xsel --clipboard";
       mic-test = "arecord -f cd - | aplay -";
       p = "podman";
+      rm = "trash";
+      ssh = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no";
     };
     interactiveShellInit = ''
       set fish_color_command green
