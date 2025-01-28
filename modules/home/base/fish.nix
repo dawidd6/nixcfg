@@ -8,9 +8,7 @@
     generateCompletions = false;
     functions = {
       hub = {
-        body = ''
-          command op plugin run -- gh $argv
-        '';
+        body = "command op plugin run -- gh $argv";
         wraps = "gh";
       };
     };
