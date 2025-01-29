@@ -57,138 +57,82 @@
     };
   };
 
-  outputs =
-    inputs:
-    let
-      inherit (inputs.self) outputs;
-      inherit (inputs.nixpkgs) lib;
-      forAllSystems = function: lib.genAttrs lib.systems.flakeExposed function;
-      forAllPkgs =
-        input: function: forAllSystems (system: function (import input { inherit system; }) system);
-      mkHome =
-        system: userName:
-        inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = inputs.nixpkgs.legacyPackages.${system};
-          modules = [
-            ./configs/home/${userName}/home.nix
-          ];
-          extraSpecialArgs = {
-            inherit inputs outputs userName;
-          };
-        };
-      mkNixos =
-        hostName:
-        inputs.nixpkgs.lib.nixosSystem {
-          modules = [
-            ./configs/nixos/${hostName}/configuration.nix
-          ];
-          specialArgs = {
-            inherit inputs outputs hostName;
-            userName = "dawidd6";
-          };
-        };
-    in
-    {
-      inherit lib;
+  outputs = inputs: rec {
+    lib = import ./lib.nix { inherit inputs; };
 
-      overlays.default = final: prev: {
-        # https://github.com/NixOS/nixpkgs/pull/173364
-        ansible = prev.ansible.overrideAttrs (oldAttrs: {
-          propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ final.python3Packages.jmespath ];
-        });
-        _1password-gui = prev._1password-gui.overrideAttrs (oldAttrs: {
-          installPhase =
-            oldAttrs.installPhase
-            + ''
-              mkdir -p $out/etc/xdg/autostart
-              cp $out/share/applications/1password.desktop $out/etc/xdg/autostart/1password.desktop
-              substituteInPlace $out/etc/xdg/autostart/1password.desktop \
-                --replace-fail 'Exec=1password %U' 'Exec=1password --silent %U'
-            '';
-        });
-      };
+    overlays.default = import ./overlay.nix;
 
-      nixosConfigurations = {
-        coruscant = mkNixos "coruscant";
-        hoth = mkNixos "hoth";
-        yavin = mkNixos "yavin";
-      };
-
-      nixosModules = {
-        base = {
-          imports = lib.filesystem.listFilesRecursive ./modules/nixos/base;
-        };
-        laptop = {
-          imports = lib.filesystem.listFilesRecursive ./modules/nixos/laptop ++ [
-            outputs.nixosModules.base
-          ];
-        };
-        server = {
-          imports = lib.filesystem.listFilesRecursive ./modules/nixos/server ++ [
-            outputs.nixosModules.base
-          ];
-        };
-      };
-
-      homeConfigurations = {
-        dawid = mkHome "x86_64-linux" "dawid";
-      };
-
-      homeModules.base = {
-        imports = lib.filesystem.listFilesRecursive ./modules/home/base;
-      };
-
-      checks = forAllSystems (
-        system:
-        let
-          nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) outputs.nixosConfigurations;
-          homeTops = lib.mapAttrs (_: c: c.activationPackage) outputs.homeConfigurations;
-          allTops = nixosTops // homeTops;
-        in
-        allTops
-        // {
-          pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
-            src = ./.;
-            hooks.treefmt.enable = true;
-            hooks.treefmt.package = outputs.formatter.${system};
-          };
-        }
-      );
-
-      devShells = forAllPkgs inputs.nixpkgs (
-        pkgs: system: {
-          default = pkgs.mkShellNoCC {
-            NIX_CONFIG = "experimental-features = nix-command flakes";
-            packages = [
-              outputs.formatter.${system}
-            ];
-            shellHook = ''
-              ${outputs.checks.${system}.pre-commit.shellHook}
-            '';
-          };
-        }
-      );
-
-      formatter = forAllPkgs inputs.nixpkgs (
-        pkgs: _system:
-        inputs.treefmt.lib.mkWrapper pkgs {
-          projectRootFile = "flake.nix";
-          programs.deadnix.enable = true;
-          programs.nixfmt.enable = true;
-          programs.statix.enable = true;
-          settings.on-unmatched = "info";
-        }
-      );
-
-      packages = forAllPkgs inputs.nixpkgs (
-        pkgs: system: {
-          inherit (inputs.nixos-anywhere.packages.${system}) nixos-anywhere;
-          inherit (inputs.disko.packages.${system}) disko;
-          inherit (inputs.disko.packages.${system}) disko-install;
-          scripts = pkgs.runCommandNoCCLocal "scripts" { } ''
-            mkdir -p $out && cp -R ${./scripts} $out/bin
-          '';
-        }
-      );
+    nixosConfigurations = {
+      coruscant = lib.mkNixos "coruscant";
+      hoth = lib.mkNixos "hoth";
+      yavin = lib.mkNixos "yavin";
     };
+
+    homeConfigurations = {
+      dawid = lib.mkHome "dawid" "x86_64-linux";
+    };
+
+    nixosModules = {
+      base = lib.mkModules ./modules/base;
+      laptop = lib.mkModules ./modules/laptop;
+      server = lib.mkModules ./modules/server;
+    };
+
+    homeModules = {
+      base = lib.mkModules ./modules/base;
+      laptop = lib.mkModules ./modules/laptop;
+      server = lib.mkModules ./modules/server;
+    };
+
+    checks = lib.forAllSystems (
+      system:
+      let
+        nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) nixosConfigurations;
+        homeTops = lib.mapAttrs (_: c: c.activationPackage) homeConfigurations;
+        allTops = nixosTops // homeTops;
+      in
+      allTops
+      // {
+        pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
+          src = ./.;
+          hooks.treefmt.enable = true;
+          hooks.treefmt.package = formatter.${system};
+        };
+      }
+    );
+
+    devShells = lib.forAllPkgs inputs.nixpkgs (
+      pkgs: system: {
+        default = pkgs.mkShellNoCC {
+          NIX_CONFIG = "experimental-features = nix-command flakes";
+          packages = [
+            formatter.${system}
+          ];
+          shellHook = ''
+            ${checks.${system}.pre-commit.shellHook}
+          '';
+        };
+      }
+    );
+
+    formatter = lib.forAllPkgs inputs.nixpkgs (
+      pkgs: _system:
+      inputs.treefmt.lib.mkWrapper pkgs {
+        projectRootFile = "flake.nix";
+        programs.deadnix.enable = true;
+        programs.nixfmt.enable = true;
+        programs.statix.enable = true;
+        settings.on-unmatched = "info";
+      }
+    );
+
+    packages = lib.forAllPkgs inputs.nixpkgs (
+      pkgs: system: {
+        inherit (inputs.nixos-anywhere.packages.${system}) nixos-anywhere;
+        inherit (inputs.disko.packages.${system}) disko;
+        inherit (inputs.disko.packages.${system}) disko-install;
+        scripts = pkgs.callPackage ./pkgs/scripts.nix { inherit inputs; };
+      }
+    );
+  };
 }

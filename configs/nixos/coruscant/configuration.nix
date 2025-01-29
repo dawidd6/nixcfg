@@ -1,7 +1,5 @@
 {
   inputs,
-  outputs,
-  userName,
   ...
 }:
 {
@@ -11,10 +9,9 @@
 
     inputs.hardware.nixosModules.lenovo-thinkpad-t14-amd-gen1
 
-    outputs.nixosModules.laptop
+    inputs.self.nixosModules.base
+    inputs.self.nixosModules.laptop
   ];
-
-  home-manager.users.${userName} = ./home.nix;
 
   swapDevices = [
     {

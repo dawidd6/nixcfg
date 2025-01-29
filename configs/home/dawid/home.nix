@@ -1,7 +1,8 @@
-{ pkgs, outputs, ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [
-    outputs.homeModules.base
+    inputs.self.homeModules.base
+    inputs.self.homeModules.laptop
   ];
 
   home.packages = [ pkgs.onedrive ];
