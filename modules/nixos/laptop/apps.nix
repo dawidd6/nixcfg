@@ -15,13 +15,11 @@
     google-chrome
     gscan2pdf
     inkscape
-    keepassxc
     krita
     libreoffice
     lutris
     mission-center
     pavucontrol
-    quickemu
     remmina
     signal-desktop
     spotify
