@@ -1,13 +1,12 @@
-{ outputs, userName, ... }:
+{ inputs, ... }:
 {
   imports = [
     ./disko-config.nix
     ./hardware-configuration.nix
 
-    outputs.nixosModules.server
+    inputs.self.nixosModules.base
+    inputs.self.nixosModules.server
   ];
-
-  home-manager.users.${userName} = ./home.nix;
 
   swapDevices = [
     {

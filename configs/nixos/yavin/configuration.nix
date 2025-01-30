@@ -1,7 +1,5 @@
 {
   inputs,
-  outputs,
-  userName,
   ...
 }:
 {
@@ -11,10 +9,9 @@
 
     inputs.hardware.nixosModules.common-cpu-intel
 
-    outputs.nixosModules.server
+    inputs.self.nixosModules.base
+    inputs.self.nixosModules.server
   ];
-
-  home-manager.users.${userName} = ./home.nix;
 
   system.stateVersion = "24.11";
 }
