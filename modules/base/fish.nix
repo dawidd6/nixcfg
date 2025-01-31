@@ -14,7 +14,6 @@
 
   programs.fish = {
     enable = true;
-    useBabelfish = true;
     interactiveShellInit = ''
       set fish_color_command green
       set fish_color_param normal
