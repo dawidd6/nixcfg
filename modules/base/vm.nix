@@ -3,7 +3,6 @@
   pkgs,
   config,
   userName,
-  mkModule,
   ...
 }:
 let
@@ -69,9 +68,8 @@ let
     '';
   };
 in
-mkModule {
-  onNixos = {
-    virtualisation.vmVariant = shared;
-    virtualisation.vmVariantWithDisko = shared;
-  };
+
+{
+  virtualisation.vmVariant = shared;
+  virtualisation.vmVariantWithDisko = shared;
 }

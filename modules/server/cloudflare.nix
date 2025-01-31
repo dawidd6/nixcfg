@@ -1,5 +1,4 @@
 {
-  mkModule,
   pkgs,
   config,
   lib,
@@ -19,19 +18,18 @@ let
     '';
   };
 in
-mkModule {
-  onNixos = {
-    services.cloudflared = {
-      enable = false;
-      tunnels = {
-        "${hostName}" = {
-          credentialsFile = tokenFile;
-          default = "";
-        };
+
+{
+  services.cloudflared = {
+    enable = false;
+    tunnels = {
+      "${hostName}" = {
+        credentialsFile = tokenFile;
+        default = "";
       };
     };
-
-    systemd.services."${serviceName}".serviceConfig.ExecStart =
-      lib.mkForce "${lib.getExe serviceScript}";
   };
+
+  systemd.services."${serviceName}".serviceConfig.ExecStart =
+    lib.mkForce "${lib.getExe serviceScript}";
 }

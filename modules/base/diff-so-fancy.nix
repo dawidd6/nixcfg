@@ -1,6 +1,10 @@
-{ pkgs, mkModule, ... }:
-let
-  settings = {
+{ pkgs, ... }:
+
+{
+  environment.systemPackages = [ pkgs.diff-so-fancy ];
+
+  programs.git.config = {
+
     core = {
       pager = "diff-so-fancy | less --tabs=4 -RFX";
     };
@@ -15,18 +19,5 @@ let
     interactive = {
       diffFilter = "diff-so-fancy --patch";
     };
-  };
-in
-mkModule {
-  onNixos = {
-    environment.systemPackages = [ pkgs.diff-so-fancy ];
-
-    programs.git.config = settings;
-  };
-
-  onHome = {
-    home.packages = [ pkgs.diff-so-fancy ];
-
-    programs.git.extraConfig = settings;
   };
 }

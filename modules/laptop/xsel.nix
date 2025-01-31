@@ -1,16 +1,9 @@
-{ pkgs, mkModule, ... }:
-mkModule {
-  onNixos = {
-    environment.systemPackages = [ pkgs.xsel ];
-  };
+{ pkgs, ... }:
 
-  onHome = {
-    home.packages = [ pkgs.xsel ];
-  };
+{
+  environment.systemPackages = [ pkgs.xsel ];
 
-  onAny = {
-    programs.fish.shellAbbrs = {
-      clip = "xsel --clipboard";
-    };
+  programs.fish.shellAbbrs = {
+    clip = "xsel --clipboard";
   };
 }

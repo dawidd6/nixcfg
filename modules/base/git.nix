@@ -1,4 +1,4 @@
-{ pkgs, mkModule, ... }:
+{ pkgs, ... }:
 let
   ignores = ''
     .direnv
@@ -7,7 +7,13 @@ let
     result
     .vscode
   '';
-  settings = {
+in
+
+{
+  environment.systemPackages = [ pkgs.git-extras ];
+
+  programs.git.enable = true;
+  programs.git.config = {
     user = {
       email = "dawidd0811@gmail.com";
       name = "Dawid Dziurla";
@@ -26,35 +32,22 @@ let
     url."git@github.com:".pushInsteadOf = "https://github.com/";
     includeIf."gitdir:~/ghorg/brcloud/**".path = "~/.config/git/nokia";
   };
-in
-mkModule {
-  onNixos = {
-    programs.git.config = settings;
-  };
 
-  onHome = {
-    programs.git.extraConfig = settings;
-  };
-
-  onAny = {
-    programs.git.enable = true;
-
-    programs.fish.shellAbbrs = {
-      g = "git";
-      ga = "git add";
-      gc = "git commit -m";
-      gca = "git commit --amend --no-edit";
-      gcae = "git commit --amend --edit";
-      gs = "git status -u";
-      gt = "git tag";
-      gd = "git diff";
-      gdc = "git diff --cached";
-      gh = "git checkout";
-      gb = "git branch -a";
-      gf = "git fetch";
-      gp = "git push";
-      gfo = "git fetch origin";
-      gpo = "git push origin -u";
-    };
+  programs.fish.shellAbbrs = {
+    g = "git";
+    ga = "git add";
+    gc = "git commit -m";
+    gca = "git commit --amend --no-edit";
+    gcae = "git commit --amend --edit";
+    gs = "git status -u";
+    gt = "git tag";
+    gd = "git diff";
+    gdc = "git diff --cached";
+    gh = "git checkout";
+    gb = "git branch -a";
+    gf = "git fetch";
+    gp = "git push";
+    gfo = "git fetch origin";
+    gpo = "git push origin -u";
   };
 }

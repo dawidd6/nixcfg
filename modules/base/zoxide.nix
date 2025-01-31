@@ -1,16 +1,9 @@
-{ pkgs, mkModule, ... }:
-mkModule {
-  onNixos = {
-    environment.systemPackages = [ pkgs.zoxide ];
-  };
+{ pkgs, ... }:
 
-  onHome = {
-    home.packages = [ pkgs.zoxide ];
-  };
+{
+  environment.systemPackages = [ pkgs.zoxide ];
 
-  onAny = {
-    programs.fish.interactiveShellInit = ''
-      ${pkgs.zoxide}/bin/zoxide init fish --cmd=cd | source
-    '';
-  };
+  programs.fish.interactiveShellInit = ''
+    ${pkgs.zoxide}/bin/zoxide init fish --cmd=cd | source
+  '';
 }

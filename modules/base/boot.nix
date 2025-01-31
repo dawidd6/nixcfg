@@ -1,9 +1,6 @@
-{ mkModule, ... }:
-mkModule {
-  onNixos = {
-    boot.tmp.cleanOnBoot = true;
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.systemd-boot.configurationLimit = 5;
-    boot.loader.efi.canTouchEfiVariables = true;
-  };
+_: {
+  boot.tmp.cleanOnBoot = true;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
+  boot.loader.efi.canTouchEfiVariables = true;
 }

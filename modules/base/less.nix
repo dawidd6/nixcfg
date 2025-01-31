@@ -1,6 +1,5 @@
-{ mkModule, ... }:
-mkModule {
-  onAny = {
-    programs.less.enable = true;
-  };
+_:
+
+{
+  programs.less.enable = true;
 }

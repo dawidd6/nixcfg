@@ -1,15 +1,8 @@
-{ mkModule, pkgs, ... }:
-mkModule {
-  onNixos = {
-    environment.systemPackages = [
-      pkgs.yubioath-flutter
-      pkgs.yubikey-manager
-    ];
-  };
+{ pkgs, ... }:
 
-  onHome = {
-    home.packages = [
-      pkgs.yubikey-manager
-    ];
-  };
+{
+  environment.systemPackages = [
+    pkgs.yubioath-flutter
+    pkgs.yubikey-manager
+  ];
 }

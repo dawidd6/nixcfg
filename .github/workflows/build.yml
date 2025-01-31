@@ -45,17 +45,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
-        with:
-          extra_nix_config: |
-            accept-flake-config = true
-            warn-dirty = false
-
-      - name: Setup cachix
-        if: github.event_name != 'pull_request'
-        uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
-        with:
-          name: ${{ github.repository_owner }}
-          authToken: ${{ secrets.CACHIX_TOKEN }}
 
       - name: Build flake
         run: nix flake check

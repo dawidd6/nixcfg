@@ -1,8 +1,7 @@
-{ mkModule, inputs, ... }:
-mkModule {
-  onNixos = {
-    imports = [
-      inputs.disko.nixosModules.default
-    ];
-  };
+{ inputs, ... }:
+
+{
+  imports = [
+    inputs.disko.nixosModules.default
+  ];
 }

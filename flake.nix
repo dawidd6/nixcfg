@@ -1,9 +1,4 @@
 {
-  nixConfig = {
-    extra-substituters = [ "https://dawidd6.cachix.org" ];
-    extra-trusted-public-keys = [ "dawidd6.cachix.org-1:dvy2Br48mAee39Yit5P+jLLIUR3gOa1ts4w4DTJw+XQ=" ];
-  };
-
   inputs = {
     flake-compat.url = "github:edolstra/flake-compat";
     hardware.url = "github:nixos/nixos-hardware";
@@ -57,82 +52,101 @@
     };
   };
 
-  outputs = inputs: rec {
-    lib = import ./lib.nix { inherit inputs; };
-
-    overlays.default = import ./overlay.nix;
-
-    nixosConfigurations = {
-      coruscant = lib.mkNixos "coruscant";
-      hoth = lib.mkNixos "hoth";
-      yavin = lib.mkNixos "yavin";
-    };
-
-    homeConfigurations = {
-      dawid = lib.mkHome "dawid" "x86_64-linux";
-    };
-
-    nixosModules = {
-      base = lib.mkModules ./modules/base;
-      laptop = lib.mkModules ./modules/laptop;
-      server = lib.mkModules ./modules/server;
-    };
-
-    homeModules = {
-      base = lib.mkModules ./modules/base;
-      laptop = lib.mkModules ./modules/laptop;
-      server = lib.mkModules ./modules/server;
-    };
-
-    checks = lib.forAllSystems (
-      system:
-      let
-        nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) nixosConfigurations;
-        homeTops = lib.mapAttrs (_: c: c.activationPackage) homeConfigurations;
-        allTops = nixosTops // homeTops;
-      in
-      allTops
-      // {
-        pre-commit = inputs.pre-commit-hooks.lib.${system}.run {
-          src = ./.;
-          hooks.treefmt.enable = true;
-          hooks.treefmt.package = formatter.${system};
-        };
-      }
-    );
-
-    devShells = lib.forAllPkgs inputs.nixpkgs (
-      pkgs: system: {
-        default = pkgs.mkShellNoCC {
-          NIX_CONFIG = "experimental-features = nix-command flakes";
-          packages = [
-            formatter.${system}
+  outputs =
+    inputs:
+    let
+      inherit (inputs.nixpkgs) lib;
+      mkHome =
+        userName: system:
+        inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = inputs.nixpkgs.legacyPackages.${system};
+          modules = [
+            ./configs/home/${userName}/home.nix
           ];
-          shellHook = ''
-            ${checks.${system}.pre-commit.shellHook}
-          '';
+          extraSpecialArgs = {
+            inherit inputs userName;
+          };
         };
-      }
-    );
+      mkNixos =
+        hostName:
+        inputs.nixpkgs.lib.nixosSystem {
+          modules = [
+            ./configs/nixos/${hostName}/configuration.nix
+          ];
+          specialArgs = {
+            inherit inputs hostName;
+          };
+        };
+      mkModules = dir: {
+        imports = inputs.nixpkgs.lib.filesystem.listFilesRecursive dir;
+      };
+    in
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = inputs.nixpkgs.lib.systems.flakeExposed;
+      imports = [
+        inputs.pre-commit-hooks.flakeModule
+        inputs.treefmt.flakeModule
+      ];
+      flake = {
+        overlays.default = import ./overlay.nix;
 
-    formatter = lib.forAllPkgs inputs.nixpkgs (
-      pkgs: _system:
-      inputs.treefmt.lib.mkWrapper pkgs {
-        projectRootFile = "flake.nix";
-        programs.deadnix.enable = true;
-        programs.nixfmt.enable = true;
-        programs.statix.enable = true;
-        settings.on-unmatched = "info";
-      }
-    );
+        homeConfigurations = {
+          dawid = mkHome "dawid" "x86_64-linux";
+        };
 
-    packages = lib.forAllPkgs inputs.nixpkgs (
-      pkgs: system: {
-        inherit (inputs.nixos-anywhere.packages.${system}) nixos-anywhere;
-        inherit (inputs.disko.packages.${system}) disko;
-        inherit (inputs.disko.packages.${system}) disko-install;
-        scripts = pkgs.callPackage ./pkgs/scripts.nix { inherit inputs; };
-      }
-    );
-  };
+        nixosConfigurations = {
+          coruscant = mkNixos "coruscant";
+          hoth = mkNixos "hoth";
+          yavin = mkNixos "yavin";
+        };
+
+        nixosModules = {
+          base = mkModules ./modules/base;
+          laptop = mkModules ./modules/laptop;
+          server = mkModules ./modules/server;
+        };
+      };
+      perSystem =
+        {
+          pkgs,
+          system,
+          config,
+          ...
+        }:
+        {
+          checks =
+            let
+              nixosTops = lib.mapAttrs (_: c: c.config.system.build.toplevel) inputs.self.nixosConfigurations;
+              homeTops = lib.mapAttrs (_: c: c.activationPackage) inputs.self.homeConfigurations;
+            in
+            nixosTops // homeTops;
+
+          devShells.default = pkgs.mkShellNoCC {
+            NIX_CONFIG = "experimental-features = nix-command flakes";
+            packages = [
+              inputs.self.formatter.${system}
+            ];
+            shellHook = ''
+              ${config.pre-commit.installationScript}
+            '';
+          };
+
+          packages = {
+            inherit (inputs.nixos-anywhere.packages.${system}) nixos-anywhere;
+            inherit (inputs.disko.packages.${system}) disko;
+            inherit (inputs.disko.packages.${system}) disko-install;
+            scripts = pkgs.callPackage ./pkgs/scripts.nix { inherit inputs; };
+          };
+
+          pre-commit.settings.hooks.treefmt.enable = true;
+
+          treefmt = {
+            projectRootFile = "flake.nix";
+            programs.deadnix.enable = true;
+            programs.nixfmt.enable = true;
+            programs.statix.enable = true;
+            settings.on-unmatched = "info";
+          };
+        };
+    };
 }

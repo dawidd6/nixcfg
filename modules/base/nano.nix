@@ -1,6 +1,5 @@
-{ mkModule, ... }:
-mkModule {
-  onNixos = {
-    programs.nano.enable = false;
-  };
+_:
+
+{
+  programs.nano.enable = false;
 }

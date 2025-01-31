@@ -21,10 +21,6 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
-        with:
-          extra_nix_config: |
-            accept-flake-config = true
-            warn-dirty = false
 
       - name: Update flake
         id: update

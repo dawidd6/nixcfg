@@ -1,5 +1,4 @@
 {
-  mkModule,
   pkgs,
   ...
 }:
@@ -19,12 +18,7 @@ let
     nvd
   ];
 in
-mkModule {
-  onNixos = {
-    environment.systemPackages = packages;
-  };
 
-  onHome = {
-    home.packages = packages;
-  };
+{
+  environment.systemPackages = packages;
 }

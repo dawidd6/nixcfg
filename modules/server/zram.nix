@@ -1,6 +1,5 @@
-{ mkModule, ... }:
-mkModule {
-  onNixos = {
-    zramSwap.enable = true;
-  };
+_:
+
+{
+  zramSwap.enable = true;
 }

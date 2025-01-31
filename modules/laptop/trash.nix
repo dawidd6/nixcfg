@@ -1,18 +1,10 @@
 {
-  mkModule,
   pkgs,
   ...
 }:
-mkModule {
-  onNixos = {
-    environment.systemPackages = [ pkgs.trash-cli ];
-  };
 
-  onHome = {
-    home.packages = [ pkgs.trash-cli ];
-  };
+{
+  environment.systemPackages = [ pkgs.trash-cli ];
 
-  onAny = {
-    programs.fish.shellAbbrs.rm = "trash";
-  };
+  programs.fish.shellAbbrs.rm = "trash";
 }
