@@ -325,6 +325,8 @@
   programs.git = {
     enable = true;
     diff-so-fancy.enable = true;
+    userEmail = "dawidd0811@gmail.com";
+    userName = "Dawid Dziurla";
     signing = {
       key = "~/.ssh/id_ed25519.pub";
       signByDefault = true;
@@ -349,6 +351,7 @@
       ls = "ls-tree -r --name-only HEAD";
     };
     extraConfig = {
+      gpg.format = "ssh";
       format.pretty = "fuller";
       url."git@github.com:".pushInsteadOf = "https://github.com/";
     };
