@@ -1,5 +1,4 @@
 {
-  userName,
   config,
   lib,
   ...
@@ -9,9 +8,9 @@
   # TODO: upstream this (disable completions generation)
   environment.etc."fish/generated_completions".text = lib.mkForce "";
 
-  documentation.man.generateCaches = false;
+  #documentation.man.generateCaches = false;
 
-  users.users."${userName}".shell = config.programs.fish.package;
+  users.defaultUserShell = config.programs.fish.package;
 
   programs.fish = {
     enable = true;
